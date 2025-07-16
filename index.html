@@ -1,9 +1,9 @@
-que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la animacion, y en el regalo que se abra y que mande su nombre en grande con muchos corazones y ya se salga de la pagina <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Una Pregunta Especial</title>
+    <title>Feliz Cumpleaños Mi Amor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -17,9 +17,13 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #ffafbd, #ffc3a0, #ffd8cb);
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden;
             color: #7a3b5e;
             position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
         .petals-container {
@@ -59,28 +63,19 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
 
         /* Estilo para la sección de propuesta */
         .proposal-section {
-            position: fixed;
-            top: 0;
-            left: 0;
+            position: relative;
+            max-width: 600px;
             width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             background: rgba(255, 255, 255, 0.95);
-            z-index: 100;
-            transition: opacity 1s, transform 1s;
-            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(122, 59, 94, 0.3);
+            padding: 40px;
             text-align: center;
+            z-index: 100;
+            transition: all 0.5s ease;
         }
 
         .proposal-content {
-            max-width: 600px;
-            padding: 30px;
-            background: linear-gradient(45deg, #f8c6d7, #ffd8cb);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(122, 59, 94, 0.3);
             position: relative;
             overflow: hidden;
         }
@@ -127,6 +122,8 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
             gap: 30px;
             flex-wrap: wrap;
             margin-top: 30px;
+            position: relative;
+            min-height: 100px;
         }
 
         .proposal-btn {
@@ -157,6 +154,9 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
         #yesBtn {
             background: linear-gradient(45deg, #e84393, #ff6b9c);
             color: white;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         #yesBtn:before {
@@ -171,6 +171,9 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
         #noBtn {
             background: linear-gradient(45deg, #bdc3c7, #ecf0f1);
             color: #7f8c8d;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         #noBtn:before {
@@ -183,19 +186,19 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
         }
 
         .proposal-btn:hover {
-            transform: translateY(-5px) scale(1.05);
+            transform: translateX(-50%) translateY(-5px) scale(1.05);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         .proposal-btn:active {
-            transform: translateY(2px);
+            transform: translateX(-50%) translateY(2px);
         }
 
         /* Estilo para el contenido principal (oculto inicialmente) */
         .main-container {
             display: none;
             max-width: 800px;
-            margin: 0 auto;
+            width: 100%;
             background: rgba(255, 255, 255, 0.92);
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(122, 59, 94, 0.3);
@@ -203,8 +206,16 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
             position: relative;
             padding: 30px;
             z-index: 20;
-            margin-top: 20px;
-            margin-bottom: 20px;
+            margin: 20px auto;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+        }
+
+        .main-container.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
 
         header {
@@ -571,6 +582,57 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
             margin-top: 10px;
         }
 
+        /* Pantalla de cierre */
+        .closing-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0, #ffd8cb);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease;
+        }
+
+        .closing-screen.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .closing-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 5rem;
+            color: white;
+            text-shadow: 0 0 20px rgba(232, 67, 147, 0.8);
+            margin-bottom: 30px;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        .closing-message {
+            font-size: 2rem;
+            color: white;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        .closing-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
         @media (max-width: 600px) {
             .proposal-title {
                 font-size: 2.2rem;
@@ -623,6 +685,14 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
             .name-inside {
                 font-size: 1.5rem;
             }
+            
+            .closing-name {
+                font-size: 3.5rem;
+            }
+            
+            .closing-message {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -656,7 +726,7 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
         
         <div class="main-content">
             <div class="photo-section">
-         
+                <div class="photo-frame">
                     <i class="fas fa-user"></i>
                 </div>
                 <p>La persona que ilumina cada uno de mis días</p>
@@ -687,13 +757,13 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
             
             <div class="time-together">
                 <div class="time-card">
-                    <div class="time-number">10+</div>
+                    <div class="time-number">7+</div>
                     <div class="time-label">Años conociéndonos</div>
                 </div>
                 
                 <div class="time-card">
                     <div class="time-number">1</div>
-                    <div class="time-label">mes juntos</div>
+                    <div class="time-label">Mes juntos</div>
                 </div>
                 
                 <div class="time-card">
@@ -722,7 +792,7 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
                     <i class="fas fa-gift"></i>
                     <div class="gift-content">
                         <div class="heart-name">
-                            <div class="name-inside" id="loverName">María del Carmen </div>
+                            <div class="name-inside" id="loverName">María del Carmen</div>
                         </div>
                     </div>
                 </div>
@@ -733,7 +803,14 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
             <p>Hecho con todo mi amor para ti en tu día especial</p>
             <div class="signature">Para siempre tuyo</div>
         </footer>
-   s
+    </div>
+    
+    <!-- Pantalla de cierre -->
+    <div class="closing-screen" id="closingScreen">
+        <div class="closing-name">María del Carmen</div>
+        <div class="closing-message">¡Te amo con todo mi corazón!</div>
+        <div class="closing-hearts" id="closingHearts"></div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -757,16 +834,23 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
             const yesBtn = document.getElementById('yesBtn');
             const noBtn = document.getElementById('noBtn');
             const giftBox = document.getElementById('giftBox');
-            const loverName = document.getElementById('loverName');
+            const closingScreen = document.getElementById('closingScreen');
+            const closingHearts = document.getElementById('closingHearts');
             
-            // Función para mover el botón "No"
+            // Función para mover el botón "No" dentro del contenedor
             function moveNoButton() {
-                const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-                const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+                const container = document.querySelector('.buttons-container');
+                const containerRect = container.getBoundingClientRect();
+                
+                const maxX = containerRect.width - noBtn.offsetWidth;
+                const maxY = containerRect.height - noBtn.offsetHeight;
+                
+                const newX = Math.random() * maxX;
+                const newY = Math.random() * maxY;
                 
                 noBtn.style.position = 'absolute';
-                noBtn.style.left = `${x}px`;
-                noBtn.style.top = `${y}px`;
+                noBtn.style.left = `${newX}px`;
+                noBtn.style.top = `${newY}px`;
                 
                 // Crear efecto de confeti rojo
                 createConfetti();
@@ -777,17 +861,14 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
                 // Animación de corazones
                 createHearts();
                 
-                // Ocultar propuesta y mostrar contenido principal
+                // Ocultar propuesta
+                proposalSection.style.opacity = '0';
+                proposalSection.style.pointerEvents = 'none';
+                
+                // Mostrar contenido principal con animación
                 setTimeout(() => {
-                    proposalSection.style.opacity = '0';
-                    proposalSection.style.pointerEvents = 'none';
-                    
-                    // Mostrar contenido principal
-                    mainContainer.style.display = 'block';
-                    setTimeout(() => {
-                        mainContainer.style.opacity = '1';
-                    }, 100);
-                }, 1000);
+                    mainContainer.classList.add('show');
+                }, 500);
             });
             
             // Evento para el botón "No"
@@ -795,21 +876,37 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
             noBtn.addEventListener('mouseover', moveNoButton);
             noBtn.addEventListener('touchstart', moveNoButton);
             
-            // Animación de regalo con corazón personalizado
-            // Nombres de ejemplo - personaliza con el nombre de tu pareja
-            const names = ["María", "Ana", "Sofía", "Laura"];
-            const randomName = names[Math.floor(Math.random() * names.length)];
-            loverName.textContent = randomName;
-            
+            // Animación de regalo
             giftBox.addEventListener('click', function() {
                 if (!giftBox.classList.contains('gift-open')) {
                     giftBox.classList.add('gift-open');
                     
-                    // Crear corazones flotantes
-                    createHearts();
-                    
-                    // Reproducir sonido de corazón
-                    playHeartSound();
+                    // Esperar un momento y mostrar la pantalla de cierre
+                    setTimeout(() => {
+                        // Ocultar contenido principal
+                        mainContainer.style.opacity = '0';
+                        mainContainer.style.pointerEvents = 'none';
+                        
+                        // Mostrar pantalla de cierre
+                        closingScreen.classList.add('show');
+                        
+                        // Crear corazones en la pantalla de cierre
+                        createClosingHearts();
+                        
+                        // Reproducir sonido de corazón
+                        playHeartSound();
+                        
+                        // Cerrar la página después de 5 segundos
+                        setTimeout(() => {
+                            // En un entorno real podrías usar window.close()
+                            // Pero por razones de seguridad mostraré un mensaje
+                            document.body.innerHTML = `
+                                <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #ffafbd; color: white; font-family: 'Dancing Script', cursive; font-size: 3rem; text-align: center; padding: 20px;">
+                                    ¡Feliz Cumpleaños! Puedes cerrar esta pestaña ahora ❤️
+                                </div>
+                            `;
+                        }, 5000);
+                    }, 1000);
                 }
             });
             
@@ -845,6 +942,34 @@ que el no solo se mueba dentro del recuardro y en cuanto seleccione el si aga la
                         }
                     `;
                     document.head.appendChild(style);
+                }
+            }
+            
+            // Crear corazones para la pantalla de cierre
+            function createClosingHearts() {
+                for (let i = 0; i < 100; i++) {
+                    setTimeout(() => {
+                        const heart = document.createElement('div');
+                        heart.innerHTML = '<i class="fas fa-heart"></i>';
+                        heart.style.position = 'absolute';
+                        heart.style.fontSize = (Math.random() * 30 + 30) + 'px';
+                        heart.style.color = '#ff3e6c';
+                        heart.style.left = Math.random() * 100 + 'vw';
+                        heart.style.top = '100vh';
+                        heart.style.animation = `riseHeart ${Math.random() * 3 + 5}s ease-in-out forwards`;
+                        heart.style.opacity = '0.8';
+                        closingHearts.appendChild(heart);
+                        
+                        // Agregar animación CSS para los corazones
+                        const style = document.createElement('style');
+                        style.textContent = `
+                            @keyframes riseHeart {
+                                0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.8; }
+                                100% { transform: translateY(-100vh) translateX(${Math.random() * 100 - 50}px) rotate(${Math.random() * 360}deg); opacity: 0; }
+                            }
+                        `;
+                        document.head.appendChild(style);
+                    }, i * 100);
                 }
             }
             
