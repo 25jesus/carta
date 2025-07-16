@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Feliz Cumpleaños Mi Amor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -23,7 +23,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
         }
 
         .petals-container {
@@ -38,7 +38,7 @@
 
         .petal {
             position: absolute;
-            font-size: 24px;
+            font-size: 18px;
             animation: fall 10s linear infinite;
             opacity: 0.8;
             z-index: 5;
@@ -69,7 +69,7 @@
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(122, 59, 94, 0.3);
-            padding: 40px;
+            padding: 30px 20px;
             text-align: center;
             z-index: 100;
             transition: all 0.5s ease;
@@ -83,9 +83,9 @@
         .proposal-content:before {
             content: """;
             position: absolute;
-            top: -30px;
-            left: 20px;
-            font-size: 8rem;
+            top: -20px;
+            left: 10px;
+            font-size: 5rem;
             color: rgba(232, 67, 147, 0.2);
             font-family: 'Dancing Script', cursive;
         }
@@ -93,9 +93,9 @@
         .proposal-content:after {
             content: """;
             position: absolute;
-            bottom: -80px;
-            right: 20px;
-            font-size: 8rem;
+            bottom: -60px;
+            right: 10px;
+            font-size: 5rem;
             color: rgba(232, 67, 147, 0.2);
             font-family: 'Dancing Script', cursive;
             transform: rotate(180deg);
@@ -103,32 +103,32 @@
 
         .proposal-title {
             font-family: 'Playfair Display', serif;
-            font-size: 2.8rem;
+            font-size: 2.2rem;
             color: #e84393;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         .proposal-text {
-            font-size: 1.4rem;
-            line-height: 1.6;
-            margin-bottom: 40px;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 30px;
             color: #7a3b5e;
         }
 
         .buttons-container {
             display: flex;
             justify-content: center;
-            gap: 30px;
+            gap: 15px;
             flex-wrap: wrap;
-            margin-top: 30px;
+            margin-top: 20px;
             position: relative;
             min-height: 100px;
         }
 
         .proposal-btn {
-            padding: 18px 45px;
-            font-size: 1.4rem;
+            padding: 14px 30px;
+            font-size: 1.1rem;
             border-radius: 50px;
             border: none;
             cursor: pointer;
@@ -138,6 +138,7 @@
             position: relative;
             overflow: hidden;
             z-index: 2;
+            min-width: 180px;
         }
 
         .proposal-btn:before {
@@ -204,9 +205,9 @@
             box-shadow: 0 10px 30px rgba(122, 59, 94, 0.3);
             overflow: hidden;
             position: relative;
-            padding: 30px;
+            padding: 20px;
             z-index: 20;
-            margin: 20px auto;
+            margin: 15px auto;
             opacity: 0;
             transform: translateY(20px);
             transition: all 1s ease;
@@ -220,14 +221,14 @@
 
         header {
             text-align: center;
-            padding: 40px 20px 20px;
+            padding: 25px 15px 15px;
             position: relative;
             z-index: 30;
         }
 
         h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 3.2rem;
+            font-size: 2.2rem;
             color: #e84393;
             margin-bottom: 15px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
@@ -239,11 +240,11 @@
         h1:after {
             content: "";
             position: absolute;
-            bottom: -10px;
+            bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
-            width: 150px;
-            height: 3px;
+            width: 120px;
+            height: 2px;
             background: linear-gradient(90deg, transparent, #e84393, transparent);
         }
 
@@ -255,8 +256,8 @@
 
         .heart-icon {
             color: #e84393;
-            font-size: 2rem;
-            margin: 0 10px;
+            font-size: 1.5rem;
+            margin: 0 8px;
             animation: beat 1s infinite;
         }
 
@@ -269,7 +270,7 @@
         .main-content {
             display: flex;
             flex-direction: column;
-            gap: 30px;
+            gap: 20px;
             position: relative;
             z-index: 30;
         }
@@ -277,12 +278,12 @@
         .photo-section {
             text-align: center;
             position: relative;
-            padding: 20px 0;
+            padding: 15px 0;
         }
 
         .photo-frame {
-            width: 220px;
-            height: 220px;
+            width: 180px;
+            height: 180px;
             margin: 0 auto;
             border-radius: 50%;
             background: linear-gradient(45deg, #ffafbd, #ffc3a0);
@@ -290,30 +291,30 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            border: 8px solid white;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border: 6px solid white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             animation: float 6s ease-in-out infinite;
             position: relative;
         }
 
         @keyframes float {
             0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
+            50% { transform: translateY(-10px); }
             100% { transform: translateY(0px); }
         }
 
         .photo-frame i {
-            font-size: 5rem;
+            font-size: 4rem;
             color: white;
         }
 
         .photo-frame:before {
             content: "";
             position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
             border: 2px solid #ffc3a0;
             border-radius: 50%;
             animation: rotate 20s linear infinite;
@@ -325,48 +326,48 @@
         }
 
         .photo-section p {
-            font-size: 1.2rem;
-            margin-top: 20px;
+            font-size: 1rem;
+            margin-top: 15px;
             font-style: italic;
             color: #e84393;
         }
 
         .poem-section {
             background: linear-gradient(45deg, #f8c6d7, #ffd8cb);
-            padding: 40px 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 25px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
             text-align: center;
             font-family: 'Dancing Script', cursive;
-            font-size: 1.8rem;
-            line-height: 1.6;
+            font-size: 1.4rem;
+            line-height: 1.5;
             color: #7a3b5e;
         }
 
         .poem-section:before {
             content: """;
-            font-size: 8rem;
+            font-size: 6rem;
             position: absolute;
-            top: -30px;
-            left: 20px;
+            top: -20px;
+            left: 10px;
             color: rgba(255, 255, 255, 0.5);
         }
 
         .poem-section:after {
             content: """;
-            font-size: 8rem;
+            font-size: 6rem;
             position: absolute;
-            bottom: -80px;
-            right: 20px;
+            bottom: -60px;
+            right: 10px;
             color: rgba(255, 255, 255, 0.5);
             transform: rotate(180deg);
         }
 
         .poem-title {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
             color: #e84393;
             font-weight: bold;
         }
@@ -374,45 +375,46 @@
         .time-together {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin-top: 30px;
+            gap: 15px;
+            margin-top: 20px;
             flex-wrap: wrap;
         }
 
         .time-card {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
-            min-width: 150px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            min-width: 120px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             text-align: center;
             animation: fadeIn 1s ease-out;
+            flex: 1;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .time-number {
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             font-weight: bold;
             color: #e84393;
             margin-bottom: 5px;
         }
 
         .time-label {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             color: #7a3b5e;
         }
 
         .special-message {
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             text-align: center;
-            margin-top: 20px;
+            margin-top: 15px;
             position: relative;
             overflow: hidden;
         }
@@ -423,20 +425,20 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 5px;
+            height: 4px;
             background: linear-gradient(90deg, #ffafbd, #ffc3a0, #ffd8cb);
         }
 
         .message-title {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
+            font-size: 1.6rem;
             color: #e84393;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .message-content {
-            font-size: 1.2rem;
-            line-height: 1.8;
+            font-size: 1rem;
+            line-height: 1.6;
             color: #7a3b5e;
         }
 
@@ -448,26 +450,26 @@
 
         .gift-section {
             text-align: center;
-            padding: 30px;
+            padding: 20px 15px;
             background: linear-gradient(45deg, #f8c6d7, #ffd8cb);
-            border-radius: 15px;
-            margin-top: 20px;
+            border-radius: 12px;
+            margin-top: 15px;
             animation: fadeIn 1s ease-out;
         }
 
         .gift-box {
-            width: 140px;
-            height: 140px;
+            width: 120px;
+            height: 120px;
             background: linear-gradient(45deg, #e84393, #ff6b9c);
-            margin: 0 auto 20px;
-            border-radius: 10px;
+            margin: 0 auto 15px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             transition: all 0.5s;
         }
 
@@ -477,19 +479,19 @@
 
         .gift-box i {
             color: white;
-            font-size: 3.5rem;
+            font-size: 2.5rem;
             position: relative;
             z-index: 2;
         }
 
         .gift-lid {
             position: absolute;
-            top: -5px;
+            top: -4px;
             left: 0;
             width: 100%;
-            height: 25px;
+            height: 20px;
             background: linear-gradient(45deg, #ff6b9c, #e84393);
-            border-radius: 5px 5px 0 0;
+            border-radius: 4px 4px 0 0;
             transition: transform 0.5s;
             z-index: 3;
         }
@@ -507,7 +509,7 @@
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(15px);
             transition: all 0.5s;
             z-index: 1;
         }
@@ -519,8 +521,8 @@
 
         .heart-name {
             position: relative;
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -540,10 +542,10 @@
             content: "";
             position: absolute;
             top: 0;
-            width: 60px;
-            height: 96px;
+            width: 50px;
+            height: 80px;
             background: #ff3e6c;
-            border-radius: 60px 60px 0 0;
+            border-radius: 50px 50px 0 0;
             transform: rotate(-45deg);
             transform-origin: 0 100%;
         }
@@ -558,28 +560,28 @@
             position: relative;
             z-index: 10;
             font-family: 'Dancing Script', cursive;
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: bold;
             color: white;
             text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
             text-align: center;
-            padding-top: 10px;
+            padding-top: 8px;
         }
 
         footer {
             text-align: center;
-            padding: 30px 0 20px;
+            padding: 20px 0 15px;
             color: #7a3b5e;
-            font-size: 1rem;
+            font-size: 0.9rem;
             position: relative;
             z-index: 30;
         }
 
         .signature {
             font-family: 'Dancing Script', cursive;
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             color: #e84393;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         /* Pantalla de cierre */
@@ -598,6 +600,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 1s ease;
+            padding: 20px;
         }
 
         .closing-screen.show {
@@ -607,19 +610,19 @@
 
         .closing-name {
             font-family: 'Dancing Script', cursive;
-            font-size: 5rem;
+            font-size: 3.5rem;
             color: white;
-            text-shadow: 0 0 20px rgba(232, 67, 147, 0.8);
-            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(232, 67, 147, 0.8);
+            margin-bottom: 20px;
             text-align: center;
             animation: pulse 2s infinite;
         }
 
         .closing-message {
-            font-size: 2rem;
+            font-size: 1.6rem;
             color: white;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            margin-bottom: 50px;
+            text-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
             text-align: center;
         }
 
@@ -633,66 +636,223 @@
             z-index: -1;
         }
 
+        /* Mejoras para dispositivos móviles */
         @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .proposal-section {
+                padding: 25px 15px;
+            }
+            
             .proposal-title {
-                font-size: 2.2rem;
+                font-size: 1.8rem;
             }
             
             .proposal-text {
-                font-size: 1.2rem;
+                font-size: 1rem;
+            }
+            
+            .buttons-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            #yesBtn, #noBtn {
+                position: relative;
+                left: auto;
+                transform: none;
+                min-width: 160px;
             }
             
             .proposal-btn {
-                padding: 15px 35px;
-                font-size: 1.2rem;
+                padding: 12px 25px;
+                font-size: 1rem;
             }
             
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            .photo-frame {
-                width: 180px;
-                height: 180px;
-            }
-            
-            .poem-section {
-                font-size: 1.5rem;
-                padding: 30px 20px;
-            }
-            
-            .poem-title {
-                font-size: 2rem;
-            }
-            
-            .time-together {
-                gap: 15px;
-            }
-            
-            .time-card {
-                min-width: 120px;
+            .main-container {
                 padding: 15px;
             }
             
-            .time-number {
-                font-size: 2rem;
+            h1 {
+                font-size: 1.8rem;
             }
             
-            .special-message {
+            .photo-frame {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .poem-section {
+                font-size: 1.2rem;
                 padding: 20px 15px;
             }
             
-            .name-inside {
+            .poem-title {
                 font-size: 1.5rem;
+            }
+            
+            .time-together {
+                gap: 10px;
+            }
+            
+            .time-card {
+                min-width: calc(33% - 10px);
+                padding: 12px;
+            }
+            
+            .time-number {
+                font-size: 1.5rem;
+            }
+            
+            .special-message {
+                padding: 18px 12px;
+            }
+            
+            .gift-box {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .heart-name {
+                width: 85px;
+                height: 85px;
+            }
+            
+            .name-inside {
+                font-size: 1.2rem;
             }
             
             .closing-name {
-                font-size: 3.5rem;
+                font-size: 2.8rem;
             }
             
             .closing-message {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
+        }
+        
+        @media (max-width: 400px) {
+            .proposal-title {
+                font-size: 1.6rem;
+            }
+            
+            .proposal-text {
+                font-size: 0.95rem;
+            }
+            
+            .proposal-btn {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+                min-width: 140px;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .poem-section {
+                font-size: 1.1rem;
+            }
+            
+            .time-together {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .time-card {
+                min-width: 100%;
+                max-width: 180px;
+                margin-bottom: 8px;
+            }
+            
+            .photo-frame {
+                width: 130px;
+                height: 130px;
+            }
+            
+            .photo-frame i {
+                font-size: 3.5rem;
+            }
+            
+            .gift-box {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .gift-box i {
+                font-size: 2rem;
+            }
+            
+            .heart-name {
+                width: 75px;
+                height: 75px;
+            }
+            
+            .name-inside {
+                font-size: 1.1rem;
+            }
+            
+            .closing-name {
+                font-size: 2.2rem;
+            }
+            
+            .closing-message {
+                font-size: 1.1rem;
+            }
+        }
+        
+        /* Soporte para dispositivos muy pequeños */
+        @media (max-width: 320px) {
+            .proposal-title {
+                font-size: 1.4rem;
+            }
+            
+            .proposal-text {
+                font-size: 0.9rem;
+            }
+            
+            .proposal-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+                min-width: 130px;
+            }
+            
+            h1 {
+                font-size: 1.4rem;
+            }
+            
+            .poem-section {
+                font-size: 1rem;
+            }
+            
+            .time-card {
+                padding: 10px;
+            }
+            
+            .time-number {
+                font-size: 1.3rem;
+            }
+            
+            .time-label {
+                font-size: 0.8rem;
+            }
+            
+            .closing-name {
+                font-size: 1.8rem;
+            }
+            
+            .closing-message {
+                font-size: 1rem;
+            }
+        }
+        
+        /* Mejoras de accesibilidad para botones */
+        .proposal-btn:focus {
+            outline: 2px solid #e84393;
+            outline-offset: 2px;
         }
     </style>
 </head>
@@ -818,13 +978,13 @@
             const petalsContainer = document.getElementById('petals');
             const petalTypes = ['🌸', '🌹', '🌺', '🌷', '💮'];
             
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 30; i++) {
                 const petal = document.createElement('div');
                 petal.classList.add('petal');
                 petal.textContent = petalTypes[Math.floor(Math.random() * petalTypes.length)];
                 petal.style.left = Math.random() * 100 + 'vw';
                 petal.style.animationDelay = Math.random() * 8 + 's';
-                petal.style.fontSize = (Math.random() * 15 + 20) + 'px';
+                petal.style.fontSize = (Math.random() * 12 + 15) + 'px';
                 petalsContainer.appendChild(petal);
             }
             
@@ -901,7 +1061,7 @@
                             // En un entorno real podrías usar window.close()
                             // Pero por razones de seguridad mostraré un mensaje
                             document.body.innerHTML = `
-                                <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #ffafbd; color: white; font-family: 'Dancing Script', cursive; font-size: 3rem; text-align: center; padding: 20px;">
+                                <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #ffafbd; color: white; font-family: 'Dancing Script', cursive; font-size: 2rem; text-align: center; padding: 20px;">
                                     ¡Feliz Cumpleaños! Puedes cerrar esta pestaña ahora ❤️
                                 </div>
                             `;
@@ -922,11 +1082,11 @@
                 heartsContainer.style.zIndex = '15';
                 document.body.appendChild(heartsContainer);
                 
-                for (let i = 0; i < 50; i++) {
+                for (let i = 0; i < 30; i++) {
                     const heart = document.createElement('div');
                     heart.innerHTML = '<i class="fas fa-heart" style="color:#e84393;"></i>';
                     heart.style.position = 'absolute';
-                    heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                    heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
                     heart.style.left = Math.random() * 100 + 'vw';
                     heart.style.animation = `floatHeart ${Math.random() * 3 + 3}s ease-in-out forwards`;
                     heart.style.animationDelay = Math.random() * 2 + 's';
@@ -947,12 +1107,12 @@
             
             // Crear corazones para la pantalla de cierre
             function createClosingHearts() {
-                for (let i = 0; i < 100; i++) {
+                for (let i = 0; i < 70; i++) {
                     setTimeout(() => {
                         const heart = document.createElement('div');
                         heart.innerHTML = '<i class="fas fa-heart"></i>';
                         heart.style.position = 'absolute';
-                        heart.style.fontSize = (Math.random() * 30 + 30) + 'px';
+                        heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
                         heart.style.color = '#ff3e6c';
                         heart.style.left = Math.random() * 100 + 'vw';
                         heart.style.top = '100vh';
@@ -986,11 +1146,11 @@
                 confettiContainer.style.zIndex = '200';
                 document.body.appendChild(confettiContainer);
                 
-                for (let i = 0; i < 100; i++) {
+                for (let i = 0; i < 70; i++) {
                     const confetti = document.createElement('div');
                     confetti.style.position = 'absolute';
-                    confetti.style.width = '10px';
-                    confetti.style.height = '10px';
+                    confetti.style.width = '8px';
+                    confetti.style.height = '8px';
                     confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                     confetti.style.left = `${Math.random() * 100}vw`;
                     confetti.style.top = '0';
