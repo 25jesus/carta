@@ -13,6 +13,10 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            height: 100%;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #ffafbd, #ffc3a0, #ffd8cb);
@@ -21,6 +25,7 @@
             color: #7a3b5e;
             position: relative;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 15px;
@@ -61,10 +66,22 @@
             }
         }
 
+        /* Contenedor principal centrado */
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
         /* Estilo para la sección de propuesta */
         .proposal-section {
             position: relative;
-            max-width: 600px;
             width: 100%;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -73,6 +90,7 @@
             text-align: center;
             z-index: 100;
             transition: all 0.5s ease;
+            margin: auto;
         }
 
         .proposal-content {
@@ -155,9 +173,6 @@
         #yesBtn {
             background: linear-gradient(45deg, #e84393, #ff6b9c);
             color: white;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
         }
 
         #yesBtn:before {
@@ -172,9 +187,6 @@
         #noBtn {
             background: linear-gradient(45deg, #bdc3c7, #ecf0f1);
             color: #7f8c8d;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
         }
 
         #noBtn:before {
@@ -187,18 +199,17 @@
         }
 
         .proposal-btn:hover {
-            transform: translateX(-50%) translateY(-5px) scale(1.05);
+            transform: translateY(-5px) scale(1.05);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
 
         .proposal-btn:active {
-            transform: translateX(-50%) translateY(2px);
+            transform: translateY(2px);
         }
 
         /* Estilo para el contenido principal (oculto inicialmente) */
         .main-container {
             display: none;
-            max-width: 800px;
             width: 100%;
             background: rgba(255, 255, 255, 0.92);
             border-radius: 20px;
@@ -640,6 +651,18 @@
         @media (max-width: 600px) {
             body {
                 padding: 10px;
+                justify-content: flex-start;
+            }
+            
+            .page-container {
+                height: auto;
+                min-height: 100vh;
+                justify-content: flex-start;
+                padding: 20px 0;
+            }
+            
+            .proposal-section, .main-container {
+                margin: 15px auto;
             }
             
             .proposal-section {
@@ -658,18 +681,13 @@
                 flex-direction: column;
                 align-items: center;
                 gap: 10px;
-            }
-            
-            #yesBtn, #noBtn {
-                position: relative;
-                left: auto;
-                transform: none;
-                min-width: 160px;
+                min-height: 150px;
             }
             
             .proposal-btn {
                 padding: 12px 25px;
                 font-size: 1rem;
+                min-width: 160px;
             }
             
             .main-container {
@@ -859,110 +877,112 @@
 <body>
     <div class="petals-container" id="petals"></div>
     
-    <!-- Sección de propuesta -->
-    <div class="proposal-section" id="proposalSection">
-        <div class="proposal-content">
-            <h1 class="proposal-title">Una Pregunta Especial</h1>
-            <p class="proposal-text">Han pasado 7 años desde que te conocí, y cada día a tu lado ha sido un regalo. En este día tan especial, quiero hacerte una pregunta muy importante...</p>
-            <p class="proposal-text">¿Quieres seguir siendo mi novia y compartir muchos años más juntos?</p>
-            
-            <div class="buttons-container">
-                <button id="yesBtn" class="proposal-btn">
-                    <i class="fas fa-heart"></i> ¡Sí, por supuesto!
-                </button>
-                <button id="noBtn" class="proposal-btn">
-                    <i class="fas fa-times"></i> No
-                </button>
+    <div class="page-container">
+        <!-- Sección de propuesta -->
+        <div class="proposal-section" id="proposalSection">
+            <div class="proposal-content">
+                <h1 class="proposal-title">Una Pregunta Especial</h1>
+                <p class="proposal-text">Han pasado 7 años desde que te conocí, y cada día a tu lado ha sido un regalo. En este día tan especial, quiero hacerte una pregunta muy importante...</p>
+                <p class="proposal-text">¿Quieres seguir siendo mi novia y compartir muchos años más juntos?</p>
+                
+                <div class="buttons-container">
+                    <button id="yesBtn" class="proposal-btn">
+                        <i class="fas fa-heart"></i> ¡Sí, por supuesto!
+                    </button>
+                    <button id="noBtn" class="proposal-btn">
+                        <i class="fas fa-times"></i> No
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Contenido principal (oculto inicialmente) -->
-    <div class="main-container" id="mainContainer">
-        <header>
-            <h1><i class="fas fa-heart heart-icon"></i> ¡Feliz Cumpleaños Mi Amor! <i class="fas fa-heart heart-icon"></i></h1>
-            <p>En tu día especial, quiero recordarte lo mucho que significas para mí</p>
-        </header>
         
-        <div class="main-content">
-            <div class="photo-section">
-                <div class="photo-frame">
-                    <i class="fas fa-user"></i>
-                </div>
-                <p>La persona que ilumina cada uno de mis días</p>
-            </div>
+        <!-- Contenido principal (oculto inicialmente) -->
+        <div class="main-container" id="mainContainer">
+            <header>
+                <h1><i class="fas fa-heart heart-icon"></i> ¡Feliz Cumpleaños Mi Amor! <i class="fas fa-heart heart-icon"></i></h1>
+                <p>En tu día especial, quiero recordarte lo mucho que significas para mí</p>
+            </header>
             
-            <div class="poem-section">
-                <div class="poem-title">Para ti en tu día</div>
-                <p>Hoy celebramos el día en que llegaste a este mundo,</p>
-                <p>Un alma hermosa, un corazón profundo.</p>
-                <p>Han pasado años desde que nuestros caminos cruzaron,</p>
-                <p>Y desde aquel momento, mis sueños se animaron.</p>
-                <br>
-                <p>7 años de conocerte, de tu esencia aprender,</p>
-                <p>De tu risa disfrutar, tu bondad comprender.</p>
-                <p>Y aunque el tiempo ha pasado, mi amor sigue creciendo,</p>
-                <p>Como un río que fluye, constante y sin freno.</p>
-                <br>
-                <p>Hoy quiero decirte con versos sinceros,</p>
-                <p>Que eres mi refugio, mi paz y mis sueños.</p>
-                <p>Que cada arruga que llega, cada cana que asoma,</p>
-                <p>Es un mapa de historias que juntos recorremos.</p>
-                <br>
-                <p>Feliz cumpleaños, mi sol, mi razón,</p>
-                <p>Que este nuevo año traiga bendición.</p>
-                <p>Y sigamos juntos, de la mano y unidos,</p>
-                <p>Como dos corazones para siempre encendidos.</p>
-            </div>
-            
-            <div class="time-together">
-                <div class="time-card">
-                    <div class="time-number">7+</div>
-                    <div class="time-label">Años conociéndonos</div>
+            <div class="main-content">
+                <div class="photo-section">
+                    <div class="photo-frame">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <p>La persona que ilumina cada uno de mis días</p>
                 </div>
                 
-                <div class="time-card">
-                    <div class="time-number">1</div>
-                    <div class="time-label">Mes juntos</div>
+                <div class="poem-section">
+                    <div class="poem-title">Para ti en tu día</div>
+                    <p>Hoy celebramos el día en que llegaste a este mundo,</p>
+                    <p>Un alma hermosa, un corazón profundo.</p>
+                    <p>Han pasado años desde que nuestros caminos cruzaron,</p>
+                    <p>Y desde aquel momento, mis sueños se animaron.</p>
+                    <br>
+                    <p>7 años de conocerte, de tu esencia aprender,</p>
+                    <p>De tu risa disfrutar, tu bondad comprender.</p>
+                    <p>Y aunque el tiempo ha pasado, mi amor sigue creciendo,</p>
+                    <p>Como un río que fluye, constante y sin freno.</p>
+                    <br>
+                    <p>Hoy quiero decirte con versos sinceros,</p>
+                    <p>Que eres mi refugio, mi paz y mis sueños.</p>
+                    <p>Que cada arruga que llega, cada cana que asoma,</p>
+                    <p>Es un mapa de historias que juntos recorremos.</p>
+                    <br>
+                    <p>Feliz cumpleaños, mi sol, mi razón,</p>
+                    <p>Que este nuevo año traiga bendición.</p>
+                    <p>Y sigamos juntos, de la mano y unidos,</p>
+                    <p>Como dos corazones para siempre encendidos.</p>
                 </div>
                 
-                <div class="time-card">
-                    <div class="time-number">30+</div>
-                    <div class="time-label">Días como pareja</div>
+                <div class="time-together">
+                    <div class="time-card">
+                        <div class="time-number">7+</div>
+                        <div class="time-label">Años conociéndonos</div>
+                    </div>
+                    
+                    <div class="time-card">
+                        <div class="time-number">1</div>
+                        <div class="time-label">Mes juntos</div>
+                    </div>
+                    
+                    <div class="time-card">
+                        <div class="time-number">30+</div>
+                        <div class="time-label">Días como pareja</div>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="special-message">
-                <div class="message-title">Mi Promesa</div>
-                <div class="message-content">
-                    <p>Cada día a tu lado ha sido un regalo, cada momento un tesoro.</p>
-                    <p>Desde que te conocí hace <span class="highlight">más de 7 años</span>, supe que eras especial.</p>
-                    <p>Y en este <span class="highlight">mes</span> que llevamos juntos, mi amor por ti ha crecido más de lo que imaginé posible.</p>
-                    <p>Prometo amarte cada día con la misma intensidad del primero, apoyarte en cada paso y celebrar cada logro.</p>
-                    <p>¡Feliz cumpleaños, amor de mi vida!</p>
-                </div>
-            </div>
-            
-            <div class="gift-section">
-                <h2>Tu Regalo Especial</h2>
-                <p>¡Haz clic en la caja para descubrir tu sorpresa!</p>
                 
-                <div class="gift-box" id="giftBox">
-                    <div class="gift-lid"></div>
-                    <i class="fas fa-gift"></i>
-                    <div class="gift-content">
-                        <div class="heart-name">
-                            <div class="name-inside" id="loverName">María del Carmen</div>
+                <div class="special-message">
+                    <div class="message-title">Mi Promesa</div>
+                    <div class="message-content">
+                        <p>Cada día a tu lado ha sido un regalo, cada momento un tesoro.</p>
+                        <p>Desde que te conocí hace <span class="highlight">más de 7 años</span>, supe que eras especial.</p>
+                        <p>Y en este <span class="highlight">mes</span> que llevamos juntos, mi amor por ti ha crecido más de lo que imaginé posible.</p>
+                        <p>Prometo amarte cada día con la misma intensidad del primero, apoyarte en cada paso y celebrar cada logro.</p>
+                        <p>¡Feliz cumpleaños, amor de mi vida!</p>
+                    </div>
+                </div>
+                
+                <div class="gift-section">
+                    <h2>Tu Regalo Especial</h2>
+                    <p>¡Haz clic en la caja para descubrir tu sorpresa!</p>
+                    
+                    <div class="gift-box" id="giftBox">
+                        <div class="gift-lid"></div>
+                        <i class="fas fa-gift"></i>
+                        <div class="gift-content">
+                            <div class="heart-name">
+                                <div class="name-inside" id="loverName">María del Carmen</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <footer>
+                <p>Hecho con todo mi amor para ti en tu día especial</p>
+                <div class="signature">Para siempre tuyo</div>
+            </footer>
         </div>
-        
-        <footer>
-            <p>Hecho con todo mi amor para ti en tu día especial</p>
-            <div class="signature">Para siempre tuyo</div>
-        </footer>
     </div>
     
     <!-- Pantalla de cierre -->
@@ -1028,6 +1048,8 @@
                 // Mostrar contenido principal con animación
                 setTimeout(() => {
                     mainContainer.classList.add('show');
+                    // Desplazar al inicio del contenido principal
+                    mainContainer.scrollIntoView({ behavior: 'smooth' });
                 }, 500);
             });
             
