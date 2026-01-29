@@ -666,6 +666,9 @@
     </div>
 
     <script>
+        // URL del Google Apps Script (reemplázala con la tuya)
+        const SCRIPT_URL = 'https://fndskmqdvmndwiwjwewx.supabase.co';
+        
         // Variables globales
         let predictions = [];
         let selectedGender = null;
@@ -724,7 +727,7 @@
         });
         
         // Manejar envío del formulario
-        document.getElementById('predictionForm').addEventListener('submit', function(e) {
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const nameInput = document.getElementById('guestName');
@@ -741,63 +744,102 @@
                 return;
             }
             
-            // Crear nueva predicción
-            const newPrediction = {
-                id: Date.now(),
-                name: guestName,
-                gender: selectedGender,
-                date: new Date().toLocaleDateString('es-ES', {
-                    day: 'numeric',
-                    month: 'short',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                })
-            };
-            
-            // Agregar a la lista
-            predictions.unshift(newPrediction);
-            
-            // Guardar en localStorage
-            savePredictions();
-            
-            // Actualizar la UI
-            renderPredictions();
-            updateStats();
-            
-            // Limpiar formulario
-            nameInput.value = '';
-            genderButtons.forEach(btn => btn.classList.remove('selected'));
-            selectedGender = null;
-            document.getElementById('selectedGender').value = '';
-            
-            // Efecto visual
+            // Mostrar indicador de carga
             const submitBtn = document.querySelector('.submit-btn');
-            submitBtn.innerHTML = '<i class="fas fa-check"></i><span>¡Predicción enviada!</span>';
-            submitBtn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%)';
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Enviando...</span>';
+            submitBtn.disabled = true;
             
+            try {
+                // Enviar predicción al servidor (Google Apps Script)
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        nombre: guestName,
+                        genero: selectedGender
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Actualizar las predicciones locales con las del servidor
+                    predictions = result.predictions.map((pred, index) => ({
+                        id: index + 1,
+                        name: pred.nombre,
+                        gender: pred.genero,
+                        date: `${pred.fecha} ${pred.hora}`
+                    }));
+                    
+                    // Actualizar la UI
+                    renderPredictions();
+                    updateStats();
+                    
+                    // Limpiar formulario
+                    nameInput.value = '';
+                    genderButtons.forEach(btn => btn.classList.remove('selected'));
+                    selectedGender = null;
+                    document.getElementById('selectedGender').value = '';
+                    
+                    // Efecto visual de éxito
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i><span>¡Predicción enviada!</span>';
+                    submitBtn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%)';
+                    
+                    // Mostrar mensaje de agradecimiento
+                    const genderText = selectedGender === 'boy' ? 'niño 👶💙' : 'niña 👶💖';
+                    alert(`¡Gracias ${guestName} por tu predicción!\n\nHas dicho que será ${genderText}\n\n¡El día del baby shower revelaremos si tenías razón!`);
+                    
+                } else {
+                    throw new Error('Error en el servidor');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al enviar la predicción. Por favor, inténtalo de nuevo.');
+                
+                // Restaurar botón
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
+            
+            // Restaurar botón después de 1.5 segundos
             setTimeout(() => {
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
                 submitBtn.style.background = 'linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%)';
+                submitBtn.disabled = false;
             }, 1500);
-            
-            // Mostrar mensaje de agradecimiento
-            const genderText = selectedGender === 'boy' ? 'niño 👶💙' : 'niña 👶💖';
-            alert(`¡Gracias ${guestName} por tu predicción!\n\nHas dicho que será ${genderText}\n\n¡El día del baby shower revelaremos si tenías razón!`);
         });
         
-        // Cargar predicciones desde localStorage
-        function loadPredictions() {
-            const saved = localStorage.getItem('babyShowerPredictions');
-            if (saved) {
-                predictions = JSON.parse(saved);
+        // Cargar predicciones desde el servidor
+        async function loadPredictions() {
+            try {
+                const response = await fetch(SCRIPT_URL);
+                const data = await response.json();
+                
+                predictions = data.map((pred, index) => ({
+                    id: index + 1,
+                    name: pred.nombre,
+                    gender: pred.genero,
+                    date: `${pred.fecha} ${pred.hora}`
+                }));
+                
                 renderPredictions();
                 updateStats();
+                
+            } catch (error) {
+                console.error('Error cargando predicciones:', error);
+                // Si falla, intentar cargar desde localStorage como respaldo
+                const saved = localStorage.getItem('babyShowerPredictions');
+                if (saved) {
+                    predictions = JSON.parse(saved);
+                    renderPredictions();
+                    updateStats();
+                }
             }
-        }
-        
-        // Guardar predicciones en localStorage
-        function savePredictions() {
-            localStorage.setItem('babyShowerPredictions', JSON.stringify(predictions));
         }
         
         // Mostrar predicciones en la lista
@@ -848,12 +890,13 @@
                 return;
             }
             
-            if (confirm(`¿Estás seguro de que quieres borrar todas las ${predictions.length} predicciones?`)) {
+            if (confirm(`¿Estás seguro de que quieres borrar todas las ${predictions.length} predicciones?\n\nEsta acción solo borrará las predicciones de tu navegador local.`)) {
+                // Solo borra del localStorage (como respaldo)
+                localStorage.removeItem('babyShowerPredictions');
                 predictions = [];
-                savePredictions();
                 renderPredictions();
                 updateStats();
-                alert('Todas las predicciones han sido borradas');
+                alert('Predicciones locales borradas. Las predicciones en el servidor permanecen.');
             }
         });
         
