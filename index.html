@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baby Shower - Revelación del Tesoro del Mar</title>
+    <title>Baby Shower - Libro de Predicciones del Mar</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -55,7 +55,7 @@
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 20px;
             position: relative;
@@ -152,68 +152,243 @@
             margin-top: 5px;
         }
         
-        .gender-reveal {
+        .prediction-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 40px 0;
+            justify-content: center;
+        }
+        
+        .prediction-form {
+            flex: 1;
+            min-width: 300px;
             background-color: rgba(255, 255, 255, 0.9);
             border-radius: 15px;
             padding: 30px;
-            margin: 30px auto;
-            max-width: 600px;
-            text-align: center;
             box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2);
             border: 3px solid #025e8c;
         }
         
-        .reveal-title {
+        .prediction-list {
+            flex: 1;
+            min-width: 300px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2);
+            border: 3px solid #ff6b9d;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: #013a5e;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-size: 1.1rem;
+            color: #025e8c;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #b3e0ff;
+            border-radius: 10px;
+            font-size: 1rem;
+            color: #013a5e;
+            background-color: rgba(255, 255, 255, 0.8);
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #025e8c;
+        }
+        
+        .gender-options {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        
+        .gender-option {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .gender-btn {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #b3e0ff;
+            border-radius: 10px;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .gender-btn i {
+            font-size: 1.8rem;
+        }
+        
+        .gender-btn.boy {
+            color: #4a90e2;
+        }
+        
+        .gender-btn.girl {
+            color: #ff6b9d;
+        }
+        
+        .gender-btn.selected {
+            transform: scale(1.05);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .gender-btn.boy.selected {
+            background-color: #e6f2ff;
+            border-color: #4a90e2;
+        }
+        
+        .gender-btn.girl.selected {
+            background-color: #ffe6ee;
+            border-color: #ff6b9d;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(255, 107, 157, 0.4);
+        }
+        
+        .prediction-item {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 5px solid #025e8c;
+            box-shadow: 0 3px 8px rgba(1, 90, 140, 0.1);
+        }
+        
+        .prediction-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .prediction-name {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #013a5e;
+        }
+        
+        .prediction-gender {
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .boy-badge {
+            background-color: #e6f2ff;
+            color: #4a90e2;
+        }
+        
+        .girl-badge {
+            background-color: #ffe6ee;
+            color: #ff6b9d;
+        }
+        
+        .prediction-date {
+            font-size: 0.9rem;
+            color: #7a9eb5;
+            font-style: italic;
+        }
+        
+        .stats-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px auto;
+            max-width: 800px;
+            box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2);
+            border: 3px solid #025e8c;
+            text-align: center;
+        }
+        
+        .stats-title {
             font-size: 1.8rem;
             color: #013a5e;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: 10px;
         }
         
-        .reveal-box {
-            background: linear-gradient(135deg, #e0f7ff 0%, #b3e0ff 100%);
-            border-radius: 10px;
-            padding: 30px;
-            margin: 20px 0;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px dashed #025e8c;
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
         }
         
-        .reveal-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(1, 90, 140, 0.3);
+        .stat-item {
+            flex: 1;
+            min-width: 150px;
         }
         
-        .reveal-text {
-            font-size: 1.3rem;
-            color: #013a5e;
-            margin-bottom: 10px;
-        }
-        
-        .reveal-icon {
+        .stat-value {
             font-size: 3rem;
-            color: #ff6b9d;
-            margin: 15px 0;
-        }
-        
-        .reveal-result {
-            font-size: 2.5rem;
             font-weight: bold;
-            margin-top: 15px;
-            display: none;
+            margin-bottom: 5px;
         }
         
-        .boy-color {
+        .boy-stat {
             color: #4a90e2;
         }
         
-        .girl-color {
+        .girl-stat {
             color: #ff6b9d;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: #025e8c;
         }
         
         .location-section {
@@ -222,7 +397,7 @@
         }
         
         .location-btn {
-            background: linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%);
+            background: linear-gradient(135deg, #4a90e2 0%, #6ba8ff 100%);
             color: white;
             border: none;
             padding: 18px 35px;
@@ -233,13 +408,13 @@
             align-items: center;
             gap: 12px;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.4);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
             font-weight: bold;
         }
         
         .location-btn:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.6);
+            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.6);
         }
         
         .location-details {
@@ -299,12 +474,34 @@
             50% { transform: translateY(-15px); }
         }
         
+        .empty-list {
+            text-align: center;
+            color: #7a9eb5;
+            font-style: italic;
+            padding: 40px 20px;
+        }
+        
+        .delete-all-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8a8a 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
         @media (max-width: 768px) {
             h1 { font-size: 2rem; }
             .date-details { font-size: 1.5rem; }
             .logo { font-size: 2.2rem; }
-            .reveal-title { font-size: 1.5rem; }
-            .reveal-result { font-size: 2rem; }
+            .section-title { font-size: 1.5rem; }
+            .stats-container { flex-direction: column; }
+            .stat-item { min-width: 100%; }
             .location-btn { padding: 15px 25px; font-size: 1.1rem; }
         }
     </style>
@@ -323,8 +520,8 @@
                 <span>Baby Shower Marino</span>
                 <i class="fas fa-water"></i>
             </div>
-            <h1>¡Esperando nuestro pequeño tesoro del mar!</h1>
-            <div class="subtitle">Invitación especial para la revelación del sexo del bebé</div>
+            <h1>¡Libro de Predicciones del Bebé!</h1>
+            <div class="subtitle">¿Será niño o niña? ¡Deja tu predicción!</div>
         </header>
         
         <div class="date-box">
@@ -361,20 +558,88 @@
             <div class="marine-item">🐙</div>
         </div>
         
-        <div class="gender-reveal">
-            <div class="reveal-title">
-                <i class="fas fa-question-circle"></i>
-                <span>¡Descubre el misterio del mar!</span>
+        <div class="prediction-section">
+            <div class="prediction-form">
+                <h2 class="section-title">
+                    <i class="fas fa-feather-alt"></i>
+                    <span>Deja tu predicción</span>
+                </h2>
+                
+                <form id="predictionForm">
+                    <div class="form-group">
+                        <label for="guestName">Tu nombre:</label>
+                        <input type="text" id="guestName" placeholder="Escribe tu nombre aquí" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>¿Qué crees que será?</label>
+                        <div class="gender-options">
+                            <div class="gender-option">
+                                <button type="button" class="gender-btn boy" data-gender="boy">
+                                    <i class="fas fa-mars"></i>
+                                    <span>Niño</span>
+                                </button>
+                            </div>
+                            <div class="gender-option">
+                                <button type="button" class="gender-btn girl" data-gender="girl">
+                                    <i class="fas fa-venus"></i>
+                                    <span>Niña</span>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="selectedGender" name="gender" required>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Enviar predicción</span>
+                    </button>
+                </form>
             </div>
-            <div class="reveal-text">Haz clic en el cofre del tesoro para revelar el sexo de nuestro bebé</div>
             
-            <div class="reveal-box" id="revealBox">
-                <div class="reveal-icon">🗝️</div>
-                <div class="reveal-text">Abrir cofre del tesoro</div>
-                <div class="reveal-result" id="revealResult">¡Es una niña! 👶💖</div>
+            <div class="prediction-list">
+                <h2 class="section-title">
+                    <i class="fas fa-book"></i>
+                    <span>Predicciones recibidas</span>
+                </h2>
+                
+                <div id="predictionsContainer">
+                    <!-- Las predicciones se cargarán aquí -->
+                    <div class="empty-list" id="emptyList">
+                        <p>¡Sé el primero en dejar tu predicción!</p>
+                        <p>🐚 ¿Será niño o niña? 🐚</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="delete-all-btn" id="deleteAllBtn">
+                        <i class="fas fa-trash"></i>
+                        <span>Borrar todas las predicciones</span>
+                    </button>
+                </div>
             </div>
+        </div>
+        
+        <div class="stats-box">
+            <h2 class="stats-title">
+                <i class="fas fa-chart-pie"></i>
+                <span>Estadísticas de predicciones</span>
+            </h2>
             
-            <div class="reveal-text">Compartiremos este momento especial con todos ustedes</div>
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-value boy-stat" id="boyCount">0</div>
+                    <div class="stat-label">Predicen niño</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value girl-stat" id="girlCount">0</div>
+                    <div class="stat-label">Predicen niña</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" style="color: #025e8c;" id="totalCount">0</div>
+                    <div class="stat-label">Total de predicciones</div>
+                </div>
+            </div>
         </div>
         
         <div class="location-section">
@@ -394,13 +659,29 @@
         </div>
         
         <footer>
-            <p>¡Esperamos compartir esta ola de felicidad con ustedes!</p>
+            <p>¡Gracias por compartir tu predicción! La respuesta se revelará el día del baby shower.</p>
             <p>Con cariño, los futuros papás</p>
             <p>💙💖</p>
         </footer>
     </div>
 
     <script>
+        // Variables globales
+        let predictions = [];
+        let selectedGender = null;
+        
+        // Cargar predicciones guardadas al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPredictions();
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+            
+            // Mostrar mensaje de bienvenida
+            setTimeout(() => {
+                alert('¡Bienvenidos al libro de predicciones del baby shower! 🐠\n\nDeja tu nombre y tu predicción sobre si el bebé será niño o niña.\n\nFecha: 15 de marzo de 2026');
+            }, 500);
+        });
+        
         // Cuenta regresiva
         function updateCountdown() {
             const eventDate = new Date('March 15, 2026 16:00:00').getTime();
@@ -422,33 +703,158 @@
             }
         }
         
-        // Revelación de sexo
-        const revealBox = document.getElementById('revealBox');
-        const revealResult = document.getElementById('revealResult');
+        // Seleccionar género
+        const genderButtons = document.querySelectorAll('.gender-btn');
+        genderButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remover selección anterior
+                genderButtons.forEach(btn => btn.classList.remove('selected'));
+                
+                // Seleccionar actual
+                this.classList.add('selected');
+                selectedGender = this.getAttribute('data-gender');
+                document.getElementById('selectedGender').value = selectedGender;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 300);
+            });
+        });
         
-        // Para cambiar el sexo, modifica la siguiente variable
-        // 'boy' para niño, 'girl' para niña
-        const babyGender = 'girl'; // Cambia a 'boy' si es niño
-        
-        revealBox.addEventListener('click', function() {
-            if (babyGender === 'boy') {
-                revealResult.textContent = '¡Es un niño! 👶💙';
-                revealResult.className = 'reveal-result boy-color';
-                revealBox.style.borderColor = '#4a90e2';
-                revealBox.style.background = 'linear-gradient(135deg, #b3e0ff 0%, #4a90e2 100%)';
-            } else {
-                revealResult.textContent = '¡Es una niña! 👶💖';
-                revealResult.className = 'reveal-result girl-color';
-                revealBox.style.borderColor = '#ff6b9d';
-                revealBox.style.background = 'linear-gradient(135deg, #ffd1dc 0%, #ff6b9d 100%)';
+        // Manejar envío del formulario
+        document.getElementById('predictionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nameInput = document.getElementById('guestName');
+            const guestName = nameInput.value.trim();
+            
+            if (!guestName) {
+                alert('Por favor, escribe tu nombre');
+                nameInput.focus();
+                return;
             }
             
-            revealResult.style.display = 'block';
-            revealBox.innerHTML = '';
-            revealBox.appendChild(revealResult);
+            if (!selectedGender) {
+                alert('Por favor, selecciona si crees que será niño o niña');
+                return;
+            }
             
-            // Efecto de confeti visual
-            createConfetti();
+            // Crear nueva predicción
+            const newPrediction = {
+                id: Date.now(),
+                name: guestName,
+                gender: selectedGender,
+                date: new Date().toLocaleDateString('es-ES', {
+                    day: 'numeric',
+                    month: 'short',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })
+            };
+            
+            // Agregar a la lista
+            predictions.unshift(newPrediction);
+            
+            // Guardar en localStorage
+            savePredictions();
+            
+            // Actualizar la UI
+            renderPredictions();
+            updateStats();
+            
+            // Limpiar formulario
+            nameInput.value = '';
+            genderButtons.forEach(btn => btn.classList.remove('selected'));
+            selectedGender = null;
+            document.getElementById('selectedGender').value = '';
+            
+            // Efecto visual
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.innerHTML = '<i class="fas fa-check"></i><span>¡Predicción enviada!</span>';
+            submitBtn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%)';
+            
+            setTimeout(() => {
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
+                submitBtn.style.background = 'linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%)';
+            }, 1500);
+            
+            // Mostrar mensaje de agradecimiento
+            const genderText = selectedGender === 'boy' ? 'niño 👶💙' : 'niña 👶💖';
+            alert(`¡Gracias ${guestName} por tu predicción!\n\nHas dicho que será ${genderText}\n\n¡El día del baby shower revelaremos si tenías razón!`);
+        });
+        
+        // Cargar predicciones desde localStorage
+        function loadPredictions() {
+            const saved = localStorage.getItem('babyShowerPredictions');
+            if (saved) {
+                predictions = JSON.parse(saved);
+                renderPredictions();
+                updateStats();
+            }
+        }
+        
+        // Guardar predicciones en localStorage
+        function savePredictions() {
+            localStorage.setItem('babyShowerPredictions', JSON.stringify(predictions));
+        }
+        
+        // Mostrar predicciones en la lista
+        function renderPredictions() {
+            const container = document.getElementById('predictionsContainer');
+            const emptyList = document.getElementById('emptyList');
+            
+            if (predictions.length === 0) {
+                emptyList.style.display = 'block';
+                return;
+            }
+            
+            emptyList.style.display = 'none';
+            
+            // Generar HTML para cada predicción
+            const predictionsHTML = predictions.map(prediction => `
+                <div class="prediction-item" data-id="${prediction.id}">
+                    <div class="prediction-header">
+                        <div class="prediction-name">${prediction.name}</div>
+                        <div class="prediction-gender ${prediction.gender === 'boy' ? 'boy-badge' : 'girl-badge'}">
+                            ${prediction.gender === 'boy' ? '👶 Niño' : '👶 Niña'}
+                        </div>
+                    </div>
+                    <div class="prediction-date">
+                        <i class="far fa-clock"></i> ${prediction.date}
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = predictionsHTML + (emptyList.outerHTML);
+        }
+        
+        // Actualizar estadísticas
+        function updateStats() {
+            const boyCount = predictions.filter(p => p.gender === 'boy').length;
+            const girlCount = predictions.filter(p => p.gender === 'girl').length;
+            const totalCount = predictions.length;
+            
+            document.getElementById('boyCount').textContent = boyCount;
+            document.getElementById('girlCount').textContent = girlCount;
+            document.getElementById('totalCount').textContent = totalCount;
+        }
+        
+        // Botón para borrar todas las predicciones
+        document.getElementById('deleteAllBtn').addEventListener('click', function() {
+            if (predictions.length === 0) {
+                alert('No hay predicciones para borrar');
+                return;
+            }
+            
+            if (confirm(`¿Estás seguro de que quieres borrar todas las ${predictions.length} predicciones?`)) {
+                predictions = [];
+                savePredictions();
+                renderPredictions();
+                updateStats();
+                alert('Todas las predicciones han sido borradas');
+            }
         });
         
         // Botón de ubicación
@@ -472,48 +878,16 @@
             }
         });
         
-        // Efecto de confeti
-        function createConfetti() {
-            const confettiCount = 50;
-            const container = document.querySelector('.gender-reveal');
+        // Efecto decorativo para elementos marinos
+        const marineItems = document.querySelectorAll('.marine-item');
+        marineItems.forEach(item => {
+            item.addEventListener('mouseover', function() {
+                this.style.transform = 'scale(1.2)';
+            });
             
-            for (let i = 0; i < confettiCount; i++) {
-                const confetti = document.createElement('div');
-                confetti.innerHTML = babyGender === 'boy' ? '💙' : '💖';
-                confetti.style.position = 'absolute';
-                confetti.style.fontSize = Math.random() * 20 + 10 + 'px';
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.top = '50%';
-                confetti.style.opacity = '0';
-                confetti.style.zIndex = '9999';
-                
-                container.appendChild(confetti);
-                
-                // Animación
-                const animation = confetti.animate([
-                    { opacity: 0, transform: 'translateY(0) rotate(0deg)' },
-                    { opacity: 1, transform: `translateY(${Math.random() * 100 - 150}px) rotate(${Math.random() * 360}deg)` }
-                ], {
-                    duration: 1000 + Math.random() * 1000,
-                    easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
-                });
-                
-                // Eliminar después de la animación
-                animation.onfinish = () => {
-                    confetti.remove();
-                };
-            }
-        }
-        
-        // Inicializar cuenta regresiva
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-        
-        // Mostrar mensaje de bienvenida
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                alert('¡Bienvenidos a la invitación de nuestro Baby Shower! 🐠\n\nFecha: 15 de marzo de 2026\n\nHaz clic en el cofre para revelar el sexo del bebé.');
-            }, 500);
+            item.addEventListener('mouseout', function() {
+                this.style.transform = '';
+            });
         });
     </script>
 </body>
