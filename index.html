@@ -666,8 +666,14 @@
     </div>
 
     <script>
-        // URL del Google Apps Script (reemplázala con la tuya)
-        const SCRIPT_URL = 'https://fndskmqdvmndwiwjwewx.supabase.co';
+        // URL de tu Google Apps Script (REEMPLAZA CON TU URL DESPUÉS DE CONFIGURAR)
+        // Instrucciones: 
+        // 1. Ve a https://docs.google.com/spreadsheets/ y crea una nueva hoja
+        // 2. En la primera fila, escribe: Nombre | Genero | Fecha | Timestamp
+        // 3. Ve a Extensiones → Apps Script
+        // 4. Pega el código del script (te lo daré al final)
+        // 5. Publica como Web App y copia la URL aquí:
+        const SCRIPT_URL = 'https://script.google.com/macros/s/TU_ID_DE_SCRIPT/exec';
         
         // Variables globales
         let predictions = [];
@@ -744,39 +750,32 @@
                 return;
             }
             
-            // Mostrar indicador de carga
-            const submitBtn = document.querySelector('.submit-btn');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Enviando...</span>';
-            submitBtn.disabled = true;
+            // Crear objeto de predicción
+            const predictionData = {
+                nombre: guestName,
+                genero: selectedGender
+            };
             
             try {
-                // Enviar predicción al servidor (Google Apps Script)
+                // Mostrar carga
+                const submitBtn = document.querySelector('.submit-btn');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Enviando...</span>';
+                submitBtn.disabled = true;
+                
+                // Enviar a Google Sheets usando FormData para evitar problemas de CORS
+                const formData = new FormData();
+                formData.append('data', JSON.stringify(predictionData));
+                
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        nombre: guestName,
-                        genero: selectedGender
-                    })
+                    body: formData,
+                    mode: 'no-cors' // Importante para evitar problemas de CORS
                 });
                 
-                const result = await response.json();
-                
-                if (result.success) {
-                    // Actualizar las predicciones locales con las del servidor
-                    predictions = result.predictions.map((pred, index) => ({
-                        id: index + 1,
-                        name: pred.nombre,
-                        gender: pred.genero,
-                        date: `${pred.fecha} ${pred.hora}`
-                    }));
-                    
-                    // Actualizar la UI
-                    renderPredictions();
-                    updateStats();
+                // Recargar predicciones después de un breve retraso
+                setTimeout(async () => {
+                    await loadPredictions();
                     
                     // Limpiar formulario
                     nameInput.value = '';
@@ -788,56 +787,70 @@
                     submitBtn.innerHTML = '<i class="fas fa-check"></i><span>¡Predicción enviada!</span>';
                     submitBtn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%)';
                     
+                    setTimeout(() => {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.style.background = 'linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%)';
+                        submitBtn.disabled = false;
+                    }, 2000);
+                    
                     // Mostrar mensaje de agradecimiento
                     const genderText = selectedGender === 'boy' ? 'niño 👶💙' : 'niña 👶💖';
                     alert(`¡Gracias ${guestName} por tu predicción!\n\nHas dicho que será ${genderText}\n\n¡El día del baby shower revelaremos si tenías razón!`);
                     
+                }, 1000);
+                
+            } catch (error) {
+                alert('Error al enviar la predicción. Por favor, inténtalo de nuevo.');
+                console.error('Error:', error);
+                
+                // Restaurar botón
+                const submitBtn = document.querySelector('.submit-btn');
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
+                submitBtn.disabled = false;
+            }
+        });
+        
+        // Cargar predicciones desde Google Sheets
+        async function loadPredictions() {
+            try {
+                // Agregar timestamp para evitar caché
+                const response = await fetch(`${SCRIPT_URL}?t=${Date.now()}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Verificar si la respuesta es un array
+                if (Array.isArray(data)) {
+                    predictions = data.map((item, index) => ({
+                        id: index,
+                        name: item.nombre || item.Nombre || '',
+                        gender: item.genero || item.Genero || '',
+                        date: item.fecha || item.Fecha || ''
+                    })).filter(item => item.name && item.gender); // Filtrar entradas vacías
+                    
+                    renderPredictions();
+                    updateStats();
                 } else {
-                    throw new Error('Error en el servidor');
+                    console.warn('La respuesta no es un array:', data);
+                    predictions = [];
+                    renderPredictions();
+                    updateStats();
                 }
                 
             } catch (error) {
-                console.error('Error:', error);
-                alert('Error al enviar la predicción. Por favor, inténtalo de nuevo.');
-                
-                // Restaurar botón
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                return;
-            }
-            
-            // Restaurar botón después de 1.5 segundos
-            setTimeout(() => {
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
-                submitBtn.style.background = 'linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%)';
-                submitBtn.disabled = false;
-            }, 1500);
-        });
-        
-        // Cargar predicciones desde el servidor
-        async function loadPredictions() {
-            try {
-                const response = await fetch(SCRIPT_URL);
-                const data = await response.json();
-                
-                predictions = data.map((pred, index) => ({
-                    id: index + 1,
-                    name: pred.nombre,
-                    gender: pred.genero,
-                    date: `${pred.fecha} ${pred.hora}`
-                }));
-                
+                console.error('Error cargando predicciones:', error);
+                // Si falla, mostrar predicciones vacías
+                predictions = [];
                 renderPredictions();
                 updateStats();
                 
-            } catch (error) {
-                console.error('Error cargando predicciones:', error);
-                // Si falla, intentar cargar desde localStorage como respaldo
-                const saved = localStorage.getItem('babyShowerPredictions');
-                if (saved) {
-                    predictions = JSON.parse(saved);
-                    renderPredictions();
-                    updateStats();
+                // Mostrar mensaje de error solo si no es el primer error
+                if (predictions.length === 0) {
+                    document.getElementById('predictionsContainer').innerHTML = 
+                        '<div class="empty-list"><p>⚠️ Error cargando predicciones</p><p>Intenta recargar la página</p></div>';
                 }
             }
         }
@@ -848,11 +861,9 @@
             const emptyList = document.getElementById('emptyList');
             
             if (predictions.length === 0) {
-                emptyList.style.display = 'block';
+                container.innerHTML = '<div class="empty-list" id="emptyList"><p>¡Sé el primero en dejar tu predicción!</p><p>🐚 ¿Será niño o niña? 🐚</p></div>';
                 return;
             }
-            
-            emptyList.style.display = 'none';
             
             // Generar HTML para cada predicción
             const predictionsHTML = predictions.map(prediction => `
@@ -869,7 +880,7 @@
                 </div>
             `).join('');
             
-            container.innerHTML = predictionsHTML + (emptyList.outerHTML);
+            container.innerHTML = predictionsHTML;
         }
         
         // Actualizar estadísticas
@@ -890,13 +901,8 @@
                 return;
             }
             
-            if (confirm(`¿Estás seguro de que quieres borrar todas las ${predictions.length} predicciones?\n\nEsta acción solo borrará las predicciones de tu navegador local.`)) {
-                // Solo borra del localStorage (como respaldo)
-                localStorage.removeItem('babyShowerPredictions');
-                predictions = [];
-                renderPredictions();
-                updateStats();
-                alert('Predicciones locales borradas. Las predicciones en el servidor permanecen.');
+            if (confirm(`¿Estás seguro de que quieres borrar todas las ${predictions.length} predicciones?\n\n⚠️ Esta acción requiere acceso a la hoja de Google Sheets.`)) {
+                alert('Para borrar todas las predicciones:\n\n1. Ve a tu hoja de Google Sheets\n2. Selecciona todas las filas (excepto los encabezados)\n3. Haz clic derecho y selecciona "Eliminar filas"\n\nO usa la función "Limpiar hoja" en Apps Script.');
             }
         });
         
@@ -911,10 +917,6 @@
                 locationDetails.style.display = 'block';
                 
                 // Aquí puedes agregar un enlace real a Google Maps
-                // Por ejemplo:
-                // window.open('https://goo.gl/maps/...', '_blank');
-                
-                // Para este ejemplo, mostramos un mensaje
                 setTimeout(() => {
                     alert('En una página real, esto abriría Google Maps con la ubicación exacta. Para este ejemplo, hemos mostrado los detalles del lugar.');
                 }, 300);
@@ -932,6 +934,14 @@
                 this.style.transform = '';
             });
         });
+        
+        // Función para manejar errores
+        window.addEventListener('error', function(e) {
+            console.error('Error en la aplicación:', e.error);
+        });
+        
+        // Función para recargar predicciones manualmente (puedes agregar un botón si quieres)
+        window.reloadPredictions = loadPredictions;
     </script>
 </body>
 </html>
