@@ -6,7 +6,7 @@
     <title>Baby Shower - Libro de Predicciones del Mar</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* (Mismo CSS que la versión anterior, manteniendo la temática marina) */
+        /* (Mismo CSS que la versión anterior - manteniendo la temática marina) */
         * {
             margin: 0;
             padding: 0;
@@ -729,10 +729,10 @@
     
     <script>
         // ============================================
-        // CONFIGURACIÓN DE SUPABASE (EDITA ESTO)
+        // CONFIGURACIÓN DE SUPABASE
         // ============================================
-        const SUPABASE_URL = 'https://fndskmqdvmndwiwjwewx.supabase.co'; // ← TU URL
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuZHNrbXFkdm1uZHdpd2p3ZXd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3MDk5MDQsImV4cCI6MjA4NTI4NTkwNH0.7cTUi4jb1eGYuCE8YVuUZi1dozTGRufWkVR-sHZAM88'; // ← TU CLAVE
+        const SUPABASE_URL = 'https://fndskmqdvmndwiwjwewx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuZHNrbXFkdm1uZHdpd2p3ZXd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3MDk5MDQsImV4cCI6MjA4NTI4NTkwNH0.7cTUi4jb1eGYuCE8YVuUZi1dozTGRufWkVR-sHZAM88';
         
         // Inicializar Supabase
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -741,23 +741,100 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
         let selectedGender = null;
         let predictions = [];
         let adminMode = false;
-        const ADMIN_PASSWORD = 'baby2026'; // Cambia esta contraseña
+        const ADMIN_PASSWORD = 'baby2026';
         
         // Cargar predicciones al iniciar
         document.addEventListener('DOMContentLoaded', function() {
-            loadPredictions();
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
-            
-            // Mostrar mensaje de bienvenida
-            setTimeout(() => {
-                alert('¡Bienvenidos al libro de predicciones del baby shower! 🐠\n\nDeja tu nombre y tu predicción sobre si el bebé será niño o niña.\n\nFecha: 15 de marzo de 2026');
-            }, 1000);
+            console.log('DOM cargado, iniciando aplicación...');
+            initApp();
         });
         
-        // Cuenta regresiva
+        async function initApp() {
+            try {
+                updateCountdown();
+                setInterval(updateCountdown, 1000);
+                setupEventListeners();
+                await loadPredictions();
+                
+                // Mostrar mensaje de bienvenida después de 1 segundo
+                setTimeout(() => {
+                    alert('¡Bienvenidos al libro de predicciones del baby shower! 🐠\n\nDeja tu nombre y tu predicción sobre si el bebé será niño o niña.\n\nFecha: 15 de marzo de 2026');
+                }, 1000);
+            } catch (error) {
+                console.error('Error inicializando la app:', error);
+                alert('Error al cargar la aplicación. Por favor, recarga la página.');
+            }
+        }
+        
+        function setupEventListeners() {
+            console.log('Configurando event listeners...');
+            
+            // Seleccionar género
+            const genderButtons = document.querySelectorAll('.gender-btn');
+            genderButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    console.log('Género seleccionado:', this.dataset.gender);
+                    genderButtons.forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedGender = this.dataset.gender;
+                    document.getElementById('selectedGender').value = selectedGender;
+                });
+            });
+            
+            // Manejar envío del formulario
+            document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                await submitPrediction();
+            });
+            
+            // Botón de ubicación
+            document.getElementById('locationBtn').addEventListener('click', function() {
+                const locationDetails = document.getElementById('locationDetails');
+                locationDetails.style.display = locationDetails.style.display === 'block' ? 'none' : 'block';
+            });
+            
+            // Funcionalidades de administración
+            document.getElementById('adminToggle').addEventListener('click', function() {
+                if (adminMode) {
+                    document.getElementById('adminSection').style.display = 'none';
+                    adminMode = false;
+                    return;
+                }
+                
+                const password = prompt('Introduce la contraseña de administrador:');
+                if (password === ADMIN_PASSWORD) {
+                    document.getElementById('adminSection').style.display = 'block';
+                    adminMode = true;
+                    document.getElementById('adminMessage').innerHTML = '<p style="color: #4CAF50; text-align: center;">✅ Modo administrador activado</p>';
+                } else if (password) {
+                    alert('Contraseña incorrecta');
+                }
+            });
+            
+            // Botón para exportar predicciones
+            document.getElementById('exportBtn').addEventListener('click', exportPredictions);
+            
+            // Botón para refrescar datos
+            document.getElementById('refreshBtn').addEventListener('click', async function() {
+                if (!adminMode) {
+                    alert('Necesitas activar el modo administrador primero');
+                    return;
+                }
+                
+                document.getElementById('adminMessage').innerHTML = '<p style="text-align: center;"><i class="fas fa-spinner fa-spin"></i> Actualizando datos...</p>';
+                await loadPredictions();
+                document.getElementById('adminMessage').innerHTML = '<p style="color: #4CAF50; text-align: center;">✅ Datos actualizados correctamente</p>';
+            });
+            
+            // Botón para borrar todas las predicciones
+            document.getElementById('clearAllBtn').addEventListener('click', clearAllPredictions);
+            
+            console.log('Event listeners configurados correctamente');
+        }
+        
+        // Cuenta regresiva - FIXED
         function updateCountdown() {
-            const eventDate = new Date('March 15, 2026 16:00:00').getTime();
+            const eventDate = new Date('2026-03-15T16:00:00').getTime();
             const now = new Date().getTime();
             const timeLeft = eventDate - now;
             
@@ -776,24 +853,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
             }
         }
         
-        // Seleccionar género
-        const genderButtons = document.querySelectorAll('.gender-btn');
-        genderButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Remover selección anterior
-                genderButtons.forEach(btn => btn.classList.remove('selected'));
-                
-                // Seleccionar actual
-                this.classList.add('selected');
-                selectedGender = this.getAttribute('data-gender');
-                document.getElementById('selectedGender').value = selectedGender;
-            });
-        });
-        
-        // Manejar envío del formulario
-        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
+        async function submitPrediction() {
             const nameInput = document.getElementById('guestName');
             const guestName = nameInput.value.trim();
             const submitBtn = document.getElementById('submitBtn');
@@ -820,7 +880,8 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
                     .insert([
                         { 
                             name: guestName, 
-                            gender: selectedGender
+                            gender: selectedGender,
+                            prediction_date: new Date().toISOString()
                         }
                     ]);
                 
@@ -831,34 +892,31 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
                 
                 // Limpiar formulario
                 nameInput.value = '';
-                genderButtons.forEach(btn => btn.classList.remove('selected'));
+                document.querySelectorAll('.gender-btn').forEach(btn => btn.classList.remove('selected'));
                 selectedGender = null;
                 document.getElementById('selectedGender').value = '';
                 
                 // Mostrar mensaje de éxito
-                submitBtn.innerHTML = '<i class="fas fa-check"></i><span>¡Predicción enviada!</span>';
+                const genderText = selectedGender === 'boy' ? 'niño 👶💙' : 'niña 👶💖';
+                submitBtn.innerHTML = '<i class="fas fa-check"></i><span>¡Enviado!</span>';
                 submitBtn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%)';
+                
+                alert(`¡Gracias ${guestName} por tu predicción!\n\nHas dicho que será ${genderText}\n\n¡El día del baby shower revelaremos si tenías razón!`);
                 
                 setTimeout(() => {
                     submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
                     submitBtn.style.background = 'linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%)';
                     submitBtn.disabled = false;
-                }, 1500);
-                
-                // Mostrar alerta de agradecimiento
-                const genderText = selectedGender === 'boy' ? 'niño 👶💙' : 'niña 👶💖';
-                alert(`¡Gracias ${guestName} por tu predicción!\n\nHas dicho que será ${genderText}\n\n¡El día del baby shower revelaremos si tenías razón!`);
+                }, 2000);
                 
             } catch (error) {
                 console.error('Error al enviar predicción:', error);
                 alert('Hubo un error al enviar tu predicción. Por favor, intenta de nuevo.');
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
-                submitBtn.style.background = 'linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%)';
                 submitBtn.disabled = false;
             }
-        });
+        }
         
-        // Cargar predicciones desde Supabase
         async function loadPredictions() {
             const loadingEl = document.getElementById('loadingPredictions');
             const container = document.getElementById('predictionsContainer');
@@ -873,6 +931,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
                 if (error) throw error;
                 
                 predictions = data || [];
+                console.log('Predicciones cargadas:', predictions.length);
                 
                 // Mostrar predicciones
                 renderPredictions();
@@ -886,6 +945,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
                     <div class="empty-list">
                         <p>❌ Error al cargar las predicciones</p>
                         <p>Por favor, recarga la página</p>
+                        <p>Error: ${error.message}</p>
                     </div>
                 `;
             } finally {
@@ -893,7 +953,6 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
             }
         }
         
-        // Mostrar predicciones en la lista
         function renderPredictions() {
             const container = document.getElementById('predictionsContainer');
             
@@ -907,7 +966,6 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
                 return;
             }
             
-            // Generar HTML para cada predicción
             const predictionsHTML = predictions.map(prediction => {
                 const date = new Date(prediction.prediction_date);
                 const formattedDate = date.toLocaleDateString('es-ES', {
@@ -935,7 +993,6 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
             container.innerHTML = predictionsHTML;
         }
         
-        // Actualizar estadísticas
         function updateStats() {
             const boyCount = predictions.filter(p => p.gender === 'boy').length;
             const girlCount = predictions.filter(p => p.gender === 'girl').length;
@@ -946,50 +1003,13 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
             document.getElementById('totalCount').textContent = totalCount;
         }
         
-        // Botón de ubicación
-        const locationBtn = document.getElementById('locationBtn');
-        const locationDetails = document.getElementById('locationDetails');
-        
-        locationBtn.addEventListener('click', function() {
-            if (locationDetails.style.display === 'block') {
-                locationDetails.style.display = 'none';
-            } else {
-                locationDetails.style.display = 'block';
-                
-                // Aquí puedes agregar un enlace real a Google Maps
-                setTimeout(() => {
-                    alert('En una página real, esto abriría Google Maps con la ubicación exacta. Para este ejemplo, hemos mostrado los detalles del lugar.');
-                }, 300);
-            }
-        });
-        
-        // Funcionalidades de administración
-        document.getElementById('adminToggle').addEventListener('click', function() {
-            if (adminMode) {
-                document.getElementById('adminSection').style.display = 'none';
-                adminMode = false;
-                return;
-            }
-            
-            const password = prompt('Introduce la contraseña de administrador:');
-            if (password === ADMIN_PASSWORD) {
-                document.getElementById('adminSection').style.display = 'block';
-                adminMode = true;
-                document.getElementById('adminMessage').innerHTML = '<p style="color: #4CAF50; text-align: center;">✅ Modo administrador activado</p>';
-            } else if (password) {
-                alert('Contraseña incorrecta');
-            }
-        });
-        
-        // Botón para exportar predicciones
-        document.getElementById('exportBtn').addEventListener('click', async function() {
+        async function exportPredictions() {
             if (!adminMode) {
                 alert('Necesitas activar el modo administrador primero');
                 return;
             }
             
             try {
-                // Crear contenido CSV
                 let csvContent = "data:text/csv;charset=utf-8,Nombre,Género,Fecha\n";
                 
                 predictions.forEach(prediction => {
@@ -998,7 +1018,6 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
                     csvContent += `"${prediction.name}","${prediction.gender}","${formattedDate}"\n`;
                 });
                 
-                // Crear enlace de descarga
                 const encodedUri = encodeURI(csvContent);
                 const link = document.createElement("a");
                 link.setAttribute("href", encodedUri);
@@ -1013,24 +1032,9 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
                 console.error('Error al exportar:', error);
                 document.getElementById('adminMessage').innerHTML = '<p style="color: #ff6b6b; text-align: center;">❌ Error al exportar datos</p>';
             }
-        });
+        }
         
-        // Botón para refrescar datos
-        document.getElementById('refreshBtn').addEventListener('click', async function() {
-            if (!adminMode) {
-                alert('Necesitas activar el modo administrador primero');
-                return;
-            }
-            
-            document.getElementById('adminMessage').innerHTML = '<p style="text-align: center;"><i class="fas fa-spinner fa-spin"></i> Actualizando datos...</p>';
-            
-            await loadPredictions();
-            
-            document.getElementById('adminMessage').innerHTML = '<p style="color: #4CAF50; text-align: center;">✅ Datos actualizados correctamente</p>';
-        });
-        
-        // Botón para borrar todas las predicciones
-        document.getElementById('clearAllBtn').addEventListener('click', async function() {
+        async function clearAllPredictions() {
             if (!adminMode) {
                 alert('Necesitas activar el modo administrador primero');
                 return;
@@ -1045,37 +1049,18 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
                 const { error } = await supabase
                     .from('baby_shower_predictions')
                     .delete()
-                    .neq('id', 0); // Esto borrará todos los registros
+                    .neq('id', 0);
                 
                 if (error) throw error;
                 
-                // Recargar predicciones
                 await loadPredictions();
-                
                 document.getElementById('adminMessage').innerHTML = '<p style="color: #4CAF50; text-align: center;">✅ Todas las predicciones han sido borradas</p>';
                 
             } catch (error) {
                 console.error('Error al borrar predicciones:', error);
                 document.getElementById('adminMessage').innerHTML = '<p style="color: #ff6b6b; text-align: center;">❌ Error al borrar predicciones</p>';
             }
-        });
-        
-        // Efecto decorativo para elementos marinos
-        const marineItems = document.querySelectorAll('.marine-item');
-        marineItems.forEach(item => {
-            item.addEventListener('mouseover', function() {
-                this.style.transform = 'scale(1.2)';
-            });
-            
-            item.addEventListener('mouseout', function() {
-                this.style.transform = '';
-            });
-        });
+        }
     </script>
 </body>
 </html>
-
-
-
-
-
