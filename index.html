@@ -2,1055 +2,518 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Feliz Cumpleaños Mi Amor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby Shower - Revelación del Tesoro del Mar</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
-        html, body {
-            height: 100%;
+        
+        body {
+            background: linear-gradient(180deg, #e0f7ff 0%, #b3e0ff 100%);
+            color: #025e8c;
+            min-height: 100vh;
             overflow-x: hidden;
         }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #ffafbd, #ffc3a0, #ffd8cb);
-            min-height: 100vh;
-            color: #7a3b5e;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-        }
-
-        /* Contenedores principales */
-        .page-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Sección de propuesta */
-        .proposal-section {
-            position: relative;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(122, 59, 94, 0.3);
-            padding: 30px 20px;
-            text-align: center;
-            z-index: 100;
-            transition: all 0.5s ease;
-            margin: auto;
-        }
-
-        .proposal-content:before {
-            content: """;
-            position: absolute;
-            top: -20px;
-            left: 10px;
-            font-size: 5rem;
-            color: rgba(232, 67, 147, 0.2);
-            font-family: 'Dancing Script', cursive;
-        }
-
-        .proposal-content:after {
-            content: """;
-            position: absolute;
-            bottom: -60px;
-            right: 10px;
-            font-size: 5rem;
-            color: rgba(232, 67, 147, 0.2);
-            font-family: 'Dancing Script', cursive;
-            transform: rotate(180deg);
-        }
-
-        .proposal-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            color: #e84393;
-            margin-bottom: 20px;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .proposal-text {
-            font-size: 1.1rem;
-            line-height: 1.5;
-            margin-bottom: 30px;
-            color: #7a3b5e;
-        }
-
-        .buttons-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-            position: relative;
-            min-height: 100px;
-        }
-
-        .proposal-btn {
-            padding: 14px 30px;
-            font-size: 1.1rem;
-            border-radius: 50px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
-            z-index: 2;
-            min-width: 180px;
-        }
-
-        #yesBtn {
-            background: linear-gradient(45deg, #e84393, #ff6b9c);
-            color: white;
-        }
-
-        #noBtn {
-            background: linear-gradient(45deg, #bdc3c7, #ecf0f1);
-            color: #7f8c8d;
-        }
-
-        .proposal-btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Sección de desbloqueo */
-        .unlock-section {
-            position: relative;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(122, 59, 94, 0.3);
-            padding: 30px 20px;
-            text-align: center;
-            z-index: 100;
-            transition: all 0.5s ease;
-            margin: 15px auto;
-            display: none;
-        }
-
-        .unlock-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: #e84393;
-            margin-bottom: 20px;
-        }
-
-        .unlock-text {
-            font-size: 1.1rem;
-            line-height: 1.5;
-            margin-bottom: 30px;
-            color: #7a3b5e;
-        }
-
-        .unlock-options {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-
-        .unlock-option {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            min-width: 200px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .unlock-option:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .option-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            color: #e84393;
-        }
-
-        .option-title {
-            font-weight: 600;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            color: #7a3b5e;
-        }
-
-        .option-description {
-            font-size: 0.9rem;
-            color: #888;
-        }
-
-        /* Animación de rosas */
-        .animation-container {
+        
+        .ocean-bg {
             position: fixed;
-            top: 0;
+            bottom: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+            height: 150px;
+            background: linear-gradient(180deg, transparent 0%, #0077be 100%);
+            z-index: -1;
         }
-
-        .roses-animation {
-            position: relative;
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
             width: 100%;
-            height: 100%;
-            overflow: hidden;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%2301558c" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+            animation: wave 12s linear infinite;
         }
-
-        .rose {
-            position: absolute;
-            font-size: 2rem;
-            top: -50px;
-            animation: fall linear forwards;
-            color: #e84393;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-            z-index: 10;
+        
+        .wave:nth-child(2) {
+            animation: wave 8s linear infinite;
+            opacity: 0.7;
         }
-
-        @keyframes fall {
-            to {
-                transform: translateY(110vh) rotate(360deg);
-            }
+        
+        .wave:nth-child(3) {
+            animation: wave 10s linear infinite;
+            opacity: 0.5;
         }
-
-        .boy-character {
-            position: absolute;
-            bottom: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 5rem;
-            z-index: 20;
-            animation: appear 1s forwards, walk 3s 1s forwards, collect 2s 4s forwards, deliver 2s 6s forwards;
+        
+        @keyframes wave {
+            0% { background-position-x: 0; }
+            100% { background-position-x: 1440px; }
         }
-
-        @keyframes appear {
-            to { bottom: 50px; }
-        }
-
-        @keyframes walk {
-            0% { left: 50%; }
-            100% { left: 20%; }
-        }
-
-        @keyframes collect {
-            0% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) translateY(-30px) scale(1.1); }
-            100% { transform: translateX(-50%) scale(1); }
-        }
-
-        @keyframes deliver {
-            0% { transform: translateX(-50%) rotate(0); }
-            100% { transform: translateX(-50%) rotate(-20deg); }
-        }
-
-        .roses-bouquet {
-            position: absolute;
-            bottom: 50px;
-            left: 20%;
-            font-size: 4rem;
-            color: #e84393;
-            opacity: 0;
-            animation: showBouquet 1s 8s forwards;
-        }
-
-        @keyframes showBouquet {
-            to { opacity: 1; }
-        }
-
-        .message-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px 40px;
-            border-radius: 15px;
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.5rem;
-            color: #e84393;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            animation: showMessage 1s 9s forwards;
-            text-align: center;
-            z-index: 30;
-        }
-
-        @keyframes showMessage {
-            to { opacity: 1; }
-        }
-
-        .continue-btn {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 12px 30px;
-            background: #e84393;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 1.2rem;
-            cursor: pointer;
-            opacity: 0;
-            animation: showButton 1s 10s forwards;
-            z-index: 30;
-        }
-
-        @keyframes showButton {
-            to { opacity: 1; }
-        }
-
-        /* Contenido principal */
-        .main-container {
-            display: none;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.92);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(122, 59, 94, 0.3);
-            overflow: hidden;
-            position: relative;
-            padding: 20px;
-            z-index: 20;
-            margin: 15px auto;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 1s ease;
-        }
-
-        .main-container.show {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        header {
-            text-align: center;
-            padding: 25px 15px 15px;
-            position: relative;
-            z-index: 30;
-        }
-
-        h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            color: #e84393;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-            animation: pulse 2s infinite;
-            position: relative;
-            display: inline-block;
-        }
-
-        h1:after {
-            content: "";
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #e84393, transparent);
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-            100% { transform: scale(1); }
-        }
-
-        .heart-icon {
-            color: #e84393;
-            font-size: 1.5rem;
-            margin: 0 8px;
-            animation: beat 1s infinite;
-        }
-
-        @keyframes beat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            position: relative;
-            z-index: 30;
-        }
-
-        .photo-section {
-            text-align: center;
-            position: relative;
-            padding: 15px 0;
-        }
-
-        .photo-frame {
-            width: 180px;
-            height: 180px;
+        
+        .container {
+            max-width: 1000px;
             margin: 0 auto;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #ffafbd, #ffc3a0);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border: 6px solid white;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            animation: float 6s ease-in-out infinite;
+            padding: 20px;
             position: relative;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
-        .photo-frame i {
-            font-size: 4rem;
-            color: white;
-        }
-
-        .photo-frame:before {
-            content: "";
-            position: absolute;
-            top: -8px;
-            left: -8px;
-            right: -8px;
-            bottom: -8px;
-            border: 2px solid #ffc3a0;
-            border-radius: 50%;
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .photo-section p {
-            font-size: 1rem;
-            margin-top: 15px;
-            font-style: italic;
-            color: #e84393;
-        }
-
-        .poem-section {
-            background: linear-gradient(45deg, #f8c6d7, #ffd8cb);
-            padding: 25px 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.4rem;
-            line-height: 1.5;
-            color: #7a3b5e;
-        }
-
-        .poem-section:before {
-            content: """;
-            font-size: 6rem;
-            position: absolute;
-            top: -20px;
-            left: 10px;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .poem-section:after {
-            content: """;
-            font-size: 6rem;
-            position: absolute;
-            bottom: -60px;
-            right: 10px;
-            color: rgba(255, 255, 255, 0.5);
-            transform: rotate(180deg);
-        }
-
-        .poem-title {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: #e84393;
-            font-weight: bold;
-        }
-
-        .time-together {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .time-card {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            min-width: 120px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            animation: fadeIn 1s ease-out;
-            flex: 1;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .time-number {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #e84393;
-            margin-bottom: 5px;
-        }
-
-        .time-label {
-            font-size: 0.9rem;
-            color: #7a3b5e;
-        }
-
-        .special-message {
-            background: white;
-            padding: 20px 15px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            margin-top: 15px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .special-message:before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #ffafbd, #ffc3a0, #ffd8cb);
-        }
-
-        .message-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.6rem;
-            color: #e84393;
-            margin-bottom: 15px;
-        }
-
-        .message-content {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: #7a3b5e;
-        }
-
-        .highlight {
-            color: #e84393;
-            font-weight: bold;
-            font-style: italic;
-        }
-
-        .gift-section {
-            text-align: center;
-            padding: 20px 15px;
-            background: linear-gradient(45deg, #f8c6d7, #ffd8cb);
-            border-radius: 12px;
-            margin-top: 15px;
-            animation: fadeIn 1s ease-out;
-        }
-
-        .gift-box {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(45deg, #e84393, #ff6b9c);
-            margin: 0 auto 15px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            transition: all 0.5s;
-        }
-
-        .gift-box:hover {
-            transform: scale(1.1);
-        }
-
-        .gift-box i {
-            color: white;
-            font-size: 2.5rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .gift-lid {
-            position: absolute;
-            top: -4px;
-            left: 0;
-            width: 100%;
-            height: 20px;
-            background: linear-gradient(45deg, #ff6b9c, #e84393);
-            border-radius: 4px 4px 0 0;
-            transition: transform 0.5s;
-            z-index: 3;
-        }
-
-        .gift-open .gift-lid {
-            transform: translateY(-100%);
-        }
-
-        .gift-content {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transform: translateY(15px);
-            transition: all 0.5s;
             z-index: 1;
         }
-
-        .gift-open .gift-content {
-            opacity: 1;
-            transform: translateY(0);
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
         }
-
-        .heart-name {
-            position: relative;
-            width: 100px;
-            height: 100px;
+        
+        .logo {
+            font-size: 2.8rem;
+            color: #025e8c;
+            margin-bottom: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            animation: heartbeat 1.5s infinite;
+            gap: 15px;
         }
-
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            25% { transform: scale(1.1); }
-            50% { transform: scale(1); }
-            75% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+        
+        .logo i {
+            color: #ff6b9d;
         }
-
-        .heart-name::before,
-        .heart-name::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            width: 50px;
-            height: 80px;
-            background: #ff3e6c;
-            border-radius: 50px 50px 0 0;
-            transform: rotate(-45deg);
-            transform-origin: 0 100%;
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #013a5e;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
         }
-
-        .heart-name::after {
-            left: 0;
-            transform: rotate(45deg);
-            transform-origin: 100% 100%;
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: #ff6b9d;
+            font-weight: 600;
+            margin-bottom: 30px;
         }
-
-        .name-inside {
-            position: relative;
-            z-index: 10;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.4rem;
+        
+        .date-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px auto;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2);
+            border: 3px solid #ff6b9d;
+        }
+        
+        .date-title {
+            font-size: 1.5rem;
+            color: #ff6b9d;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .date-details {
+            font-size: 1.8rem;
             font-weight: bold;
-            color: white;
-            text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            color: #013a5e;
             text-align: center;
-            padding-top: 8px;
         }
-
+        
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .countdown-item {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 80px;
+            box-shadow: 0 3px 10px rgba(1, 90, 140, 0.2);
+            text-align: center;
+            border: 2px solid #025e8c;
+        }
+        
+        .countdown-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6b9d;
+        }
+        
+        .countdown-label {
+            font-size: 0.9rem;
+            color: #025e8c;
+            margin-top: 5px;
+        }
+        
+        .gender-reveal {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2);
+            border: 3px solid #025e8c;
+        }
+        
+        .reveal-title {
+            font-size: 1.8rem;
+            color: #013a5e;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .reveal-box {
+            background: linear-gradient(135deg, #e0f7ff 0%, #b3e0ff 100%);
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px dashed #025e8c;
+        }
+        
+        .reveal-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(1, 90, 140, 0.3);
+        }
+        
+        .reveal-text {
+            font-size: 1.3rem;
+            color: #013a5e;
+            margin-bottom: 10px;
+        }
+        
+        .reveal-icon {
+            font-size: 3rem;
+            color: #ff6b9d;
+            margin: 15px 0;
+        }
+        
+        .reveal-result {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .boy-color {
+            color: #4a90e2;
+        }
+        
+        .girl-color {
+            color: #ff6b9d;
+        }
+        
+        .location-section {
+            text-align: center;
+            margin: 40px auto;
+        }
+        
+        .location-btn {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.4);
+            font-weight: bold;
+        }
+        
+        .location-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.6);
+        }
+        
+        .location-details {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 25px auto;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2);
+            display: none;
+        }
+        
+        .location-details h3 {
+            color: #025e8c;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
         footer {
             text-align: center;
-            padding: 20px 0 15px;
-            color: #7a3b5e;
-            font-size: 0.9rem;
-            position: relative;
-            z-index: 30;
+            padding: 30px 0;
+            margin-top: 40px;
+            color: #025e8c;
+            font-size: 1rem;
         }
-
-        .signature {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.8rem;
-            color: #e84393;
-            margin-top: 8px;
+        
+        .marine-decor {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
         }
-
-        /* Responsive */
-        @media (max-width: 600px) {
-            .unlock-options {
-                flex-direction: column;
-            }
-            
-            .unlock-option {
-                width: 100%;
-            }
-            
-            .proposal-title, .unlock-title {
-                font-size: 1.8rem;
-            }
-            
-            .proposal-btn {
-                min-width: 140px;
-                padding: 12px 20px;
-            }
-            
-            .message-text {
-                font-size: 1.8rem;
-                width: 90%;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .photo-frame {
-                width: 150px;
-                height: 150px;
-            }
-            
-            .poem-section {
-                font-size: 1.2rem;
-                padding: 20px 15px;
-            }
-            
-            .poem-title {
-                font-size: 1.5rem;
-            }
-            
-            .time-together {
-                gap: 10px;
-            }
-            
-            .time-card {
-                min-width: calc(33% - 10px);
-                padding: 12px;
-            }
-            
-            .time-number {
-                font-size: 1.5rem;
-            }
-            
-            .special-message {
-                padding: 18px 12px;
-            }
-            
-            .gift-box {
-                width: 100px;
-                height: 100px;
-            }
+        
+        .marine-item {
+            font-size: 2.5rem;
+            color: #025e8c;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .marine-item:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+        
+        .marine-item:nth-child(3) {
+            animation-delay: 1s;
+        }
+        
+        .marine-item:nth-child(4) {
+            animation-delay: 1.5s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .date-details { font-size: 1.5rem; }
+            .logo { font-size: 2.2rem; }
+            .reveal-title { font-size: 1.5rem; }
+            .reveal-result { font-size: 2rem; }
+            .location-btn { padding: 15px 25px; font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
-    <div class="page-container">
-        <!-- Sección de propuesta -->
-        <div class="proposal-section" id="proposalSection">
-            <div class="proposal-content">
-                <h1 class="proposal-title">Una Pregunta Especial</h1>
-                <p class="proposal-text">Han pasado mas de 7 años desde que te conocí, y cada día a tu lado ha sido un regalo. En este día tan especial, quiero hacerte una pregunta muy importante...</p>
-                <p class="proposal-text">¿Quieres seguir siendo mi novia y compartir muchos años más juntos?</p>
-                
-                <div class="buttons-container">
-                    <button id="yesBtn" class="proposal-btn">
-                        <i class="fas fa-heart"></i> ¡Sí, por supuesto!
-                    </button>
-                    <button id="noBtn" class="proposal-btn">
-                        <i class="fas fa-times"></i> No
-                    </button>
-                </div>
+    <div class="ocean-bg">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-water"></i>
+                <span>Baby Shower Marino</span>
+                <i class="fas fa-water"></i>
+            </div>
+            <h1>¡Esperando nuestro pequeño tesoro del mar!</h1>
+            <div class="subtitle">Invitación especial para la revelación del sexo del bebé</div>
+        </header>
+        
+        <div class="date-box">
+            <div class="date-title">
+                <i class="far fa-calendar-alt"></i>
+                <span>Fecha del evento</span>
+            </div>
+            <div class="date-details">15 de Marzo de 2026 - 4:00 PM</div>
+        </div>
+        
+        <div class="countdown" id="countdown">
+            <div class="countdown-item">
+                <div class="countdown-value" id="days">00</div>
+                <div class="countdown-label">Días</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="hours">00</div>
+                <div class="countdown-label">Horas</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="minutes">00</div>
+                <div class="countdown-label">Minutos</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="seconds">00</div>
+                <div class="countdown-label">Segundos</div>
             </div>
         </div>
         
-        <!-- Sección de desbloqueo -->
-        <div class="unlock-section" id="unlockSection">
-            <h2 class="unlock-title">¡Gracias por aceptar!</h2>
-            <p class="unlock-text">Ahora elige cómo quieres recibir tu sorpresa especial:</p>
+        <div class="marine-decor">
+            <div class="marine-item">🐠</div>
+            <div class="marine-item">🐬</div>
+            <div class="marine-item">🐳</div>
+            <div class="marine-item">🐙</div>
+        </div>
+        
+        <div class="gender-reveal">
+            <div class="reveal-title">
+                <i class="fas fa-question-circle"></i>
+                <span>¡Descubre el misterio del mar!</span>
+            </div>
+            <div class="reveal-text">Haz clic en el cofre del tesoro para revelar el sexo de nuestro bebé</div>
             
-            <div class="unlock-options">
-                <div class="unlock-option" id="rosesOption">
-                    <div class="option-icon">
-                        <i class="fas fa-rose"></i>
-                    </div>
-                    <h3 class="option-title">Ramo de Rosas Virtual</h3>
-                    <p class="option-description">Una hermosa animación con flores cayendo</p>
-                </div>
-                
-                <div class="unlock-option" id="letterOption">
-                    <div class="option-icon">
-                        <i class="fas fa-envelope-open-text"></i>
-                    </div>
-                    <h3 class="option-title">Carta de Sorpresa</h3>
-                    <p class="option-description">Ve directamente al mensaje especial</p>
-                </div>
+            <div class="reveal-box" id="revealBox">
+                <div class="reveal-icon">🗝️</div>
+                <div class="reveal-text">Abrir cofre del tesoro</div>
+                <div class="reveal-result" id="revealResult">¡Es una niña! 👶💖</div>
+            </div>
+            
+            <div class="reveal-text">Compartiremos este momento especial con todos ustedes</div>
+        </div>
+        
+        <div class="location-section">
+            <button class="location-btn" id="locationBtn">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Ver ubicación del evento</span>
+            </button>
+            
+            <div class="location-details" id="locationDetails">
+                <h3><i class="fas fa-map-pin"></i> Lugar del Baby Shower</h3>
+                <p><strong>Salón Azul Marino</strong></p>
+                <p>Avenida del Océano, 123</p>
+                <p>Zona Costera, Ciudad</p>
+                <p><em>Estacionamiento disponible en el lugar</em></p>
+                <p>Para confirmar asistencia: 555-123-4567</p>
             </div>
         </div>
         
-        <!-- Animación de rosas -->
-        <div class="animation-container" id="animationContainer">
-            <div class="roses-animation">
-                <div class="message-text">¡Aquí están tus rosas!</div>
-                <button class="continue-btn" id="continueBtn">Continuar</button>
-            </div>
-        </div>
-        
-        <!-- Contenido principal -->
-        <div class="main-container" id="mainContainer">
-            <header>
-                <h1><i class="fas fa-heart heart-icon"></i> ¡Feliz Cumpleaños Mi Amor! <i class="fas fa-heart heart-icon"></i></h1>
-                <p>En tu día especial, quiero recordarte lo mucho que significas para mí</p>
-            </header>
-            
-            <div class="main-content">
-                <div class="photo-section">
-                    <div class="photo-frame">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <p>La persona que ilumina cada uno de mis días</p>
-                </div>
-                
-                <div class="poem-section">
-                    <div class="poem-title">Para ti en tu día</div>
-                    <p>Hoy celebramos el día en que llegaste a este mundo,</p>
-                    <p>Un alma hermosa, un corazón profundo.</p>
-                    <p>Han pasado años desde que nuestros caminos cruzaron,</p>
-                    <p>Y desde aquel momento, mis sueños se animaron.</p>
-                    <br>
-                    <p>7 años de conocerte, de tu esencia aprender,</p>
-                    <p>De tu risa disfrutar, tu bondad comprender.</p>
-                    <p>Y aunque el tiempo ha pasado, mi amor sigue creciendo,</p>
-                    <p>Como un río que fluye, constante y sin freno.</p>
-                    <br>
-                    <p>Hoy quiero decirte con versos sinceros,</p>
-                    <p>Que eres mi refugio, mi paz y mis sueños.</p>
-                    <p>Que cada arruga que llega, cada cana que asoma,</p>
-                    <p>Es un mapa de historias que juntos recorremos.</p>
-                    <br>
-                    <p>Feliz cumpleaños, mi sol, mi razón,</p>
-                    <p>Que este nuevo año traiga bendición.</p>
-                    <p>Y sigamos juntos, de la mano y unidos,</p>
-                    <p>Como dos corazones para siempre encendidos.</p>
-                </div>
-                
-                <div class="time-together">
-                    <div class="time-card">
-                        <div class="time-number">7+</div>
-                        <div class="time-label">Años conociéndonos</div>
-                    </div>
-                    
-                    <div class="time-card">
-                        <div class="time-number">1</div>
-                        <div class="time-label">Mes juntos</div>
-                    </div>
-                    
-                    <div class="time-card">
-                        <div class="time-number">30+</div>
-                        <div class="time-label">Días como pareja</div>
-                    </div>
-                </div>
-                
-                <div class="special-message">
-                    <div class="message-title">Mi Promesa</div>
-                    <div class="message-content">
-                        <p>Cada día a tu lado ha sido un regalo, cada momento un tesoro.</p>
-                        <p>Desde que te conocí hace <span class="highlight">más de 7 años</span>, supe que eras especial.</p>
-                        <p>Y en este <span class="highlight">mes</span> que llevamos juntos, mi amor por ti ha crecido más de lo que imaginé posible.</p>
-                        <p>Prometo amarte cada día con la misma intensidad del primero, apoyarte en cada paso y celebrar cada logro.</p>
-                        <p>¡Feliz cumpleaños, amor de mi vida!</p>
-                    </div>
-                </div>
-                
-                <div class="gift-section">
-                    <h2>Tu Regalo Especial</h2>
-                    <p>¡Haz clic en la caja para descubrir tu sorpresa!</p>
-                    
-                    <div class="gift-box" id="giftBox">
-                        <div class="gift-lid"></div>
-                        <i class="fas fa-gift"></i>
-                        <div class="gift-content">
-                            <div class="heart-name">
-                                <div class="name-inside" id="loverName">María del Carmen</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <footer>
-                <p>Hecho con todo mi amor para ti en tu día especial</p>
-                <div class="signature">Para siempre tuyo</div>
-            </footer>
-        </div>
+        <footer>
+            <p>¡Esperamos compartir esta ola de felicidad con ustedes!</p>
+            <p>Con cariño, los futuros papás</p>
+            <p>💙💖</p>
+        </footer>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Elementos principales
-            const proposalSection = document.getElementById('proposalSection');
-            const unlockSection = document.getElementById('unlockSection');
-            const animationContainer = document.getElementById('animationContainer');
-            const mainContainer = document.getElementById('mainContainer');
-            const yesBtn = document.getElementById('yesBtn');
-            const noBtn = document.getElementById('noBtn');
-            const rosesOption = document.getElementById('rosesOption');
-            const letterOption = document.getElementById('letterOption');
-            const continueBtn = document.getElementById('continueBtn');
-            const giftBox = document.getElementById('giftBox');
+        // Cuenta regresiva
+        function updateCountdown() {
+            const eventDate = new Date('March 15, 2026 16:00:00').getTime();
+            const now = new Date().getTime();
+            const timeLeft = eventDate - now;
             
-            // Función para mover el botón "No"
-            function moveNoButton() {
-                const container = document.querySelector('.buttons-container');
-                const containerRect = container.getBoundingClientRect();
+            if (timeLeft > 0) {
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
                 
-                const maxX = containerRect.width - noBtn.offsetWidth;
-                const maxY = containerRect.height - noBtn.offsetHeight;
-                
-                const newX = Math.random() * maxX;
-                const newY = Math.random() * maxY;
-                
-                noBtn.style.position = 'absolute';
-                noBtn.style.left = `${newX}px`;
-                noBtn.style.top = `${newY}px`;
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            } else {
+                document.getElementById('countdown').innerHTML = '<div class="date-details">¡El evento está en curso!</div>';
+            }
+        }
+        
+        // Revelación de sexo
+        const revealBox = document.getElementById('revealBox');
+        const revealResult = document.getElementById('revealResult');
+        
+        // Para cambiar el sexo, modifica la siguiente variable
+        // 'boy' para niño, 'girl' para niña
+        const babyGender = 'girl'; // Cambia a 'boy' si es niño
+        
+        revealBox.addEventListener('click', function() {
+            if (babyGender === 'boy') {
+                revealResult.textContent = '¡Es un niño! 👶💙';
+                revealResult.className = 'reveal-result boy-color';
+                revealBox.style.borderColor = '#4a90e2';
+                revealBox.style.background = 'linear-gradient(135deg, #b3e0ff 0%, #4a90e2 100%)';
+            } else {
+                revealResult.textContent = '¡Es una niña! 👶💖';
+                revealResult.className = 'reveal-result girl-color';
+                revealBox.style.borderColor = '#ff6b9d';
+                revealBox.style.background = 'linear-gradient(135deg, #ffd1dc 0%, #ff6b9d 100%)';
             }
             
-            // Evento para el botón "Sí"
-            yesBtn.addEventListener('click', function() {
-                // Ocultar propuesta
-                proposalSection.style.opacity = '0';
-                proposalSection.style.pointerEvents = 'none';
+            revealResult.style.display = 'block';
+            revealBox.innerHTML = '';
+            revealBox.appendChild(revealResult);
+            
+            // Efecto de confeti visual
+            createConfetti();
+        });
+        
+        // Botón de ubicación
+        const locationBtn = document.getElementById('locationBtn');
+        const locationDetails = document.getElementById('locationDetails');
+        
+        locationBtn.addEventListener('click', function() {
+            if (locationDetails.style.display === 'block') {
+                locationDetails.style.display = 'none';
+            } else {
+                locationDetails.style.display = 'block';
                 
-                // Mostrar sección de desbloqueo después de un breve retraso
+                // Aquí puedes agregar un enlace real a Google Maps
+                // Por ejemplo:
+                // window.open('https://goo.gl/maps/...', '_blank');
+                
+                // Para este ejemplo, mostramos un mensaje
                 setTimeout(() => {
-                    proposalSection.style.display = 'none';
-                    unlockSection.style.display = 'block';
-                    unlockSection.style.opacity = '1';
-                }, 500);
-            });
-            
-            // Evento para el botón "No"
-            noBtn.addEventListener('click', moveNoButton);
-            noBtn.addEventListener('mouseover', moveNoButton);
-            
-            // Evento para la opción de rosas
-            rosesOption.addEventListener('click', function() {
-                unlockSection.style.display = 'none';
-                animationContainer.style.display = 'flex';
-                
-                // Iniciar animación de rosas
-                startRosesAnimation();
-            });
-            
-            // Evento para la opción de carta
-            letterOption.addEventListener('click', function() {
-                unlockSection.style.display = 'none';
-                showMainContent();
-            });
-            
-            // Evento para continuar después de la animación
-            continueBtn.addEventListener('click', function() {
-                animationContainer.style.display = 'none';
-                showMainContent();
-            });
-            
-            // Función para iniciar animación de rosas
-            function startRosesAnimation() {
-                const rosesAnimation = document.querySelector('.roses-animation');
-                
-                // Crear rosas cayendo
-                for (let i = 0; i < 50; i++) {
-                    setTimeout(() => {
-                        const rose = document.createElement('div');
-                        rose.classList.add('rose');
-                        rose.innerHTML = '🌹';
-                        rose.style.left = Math.random() * 100 + 'vw';
-                        rose.style.animationDuration = Math.random() * 3 + 5 + 's';
-                        rosesAnimation.appendChild(rose);
-                        
-                        // Eliminar la rosa después de que termine la animación
-                        setTimeout(() => {
-                            rose.remove();
-                        }, 10000);
-                    }, i * 200);
-                }
-                
-                // Crear niño después de que caigan algunas rosas
-                setTimeout(() => {
-                    const boy = document.createElement('div');
-                    boy.classList.add('boy-character');
-                    boy.innerHTML = '👦';
-                    rosesAnimation.appendChild(boy);
-                }, 2000);
-                
-                // Crear ramo de rosas
-                setTimeout(() => {
-                    const bouquet = document.createElement('div');
-                    bouquet.classList.add('roses-bouquet');
-                    bouquet.innerHTML = '💐';
-                    rosesAnimation.appendChild(bouquet);
-                }, 8000);
+                    alert('En una página real, esto abriría Google Maps con la ubicación exacta. Para este ejemplo, hemos mostrado los detalles del lugar.');
+                }, 300);
             }
+        });
+        
+        // Efecto de confeti
+        function createConfetti() {
+            const confettiCount = 50;
+            const container = document.querySelector('.gender-reveal');
             
-            // Función para mostrar el contenido principal
-            function showMainContent() {
-                mainContainer.classList.add('show');
-                // Desplazar al inicio del contenido principal
-                mainContainer.scrollIntoView({ behavior: 'smooth' });
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.innerHTML = babyGender === 'boy' ? '💙' : '💖';
+                confetti.style.position = 'absolute';
+                confetti.style.fontSize = Math.random() * 20 + 10 + 'px';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '50%';
+                confetti.style.opacity = '0';
+                confetti.style.zIndex = '9999';
+                
+                container.appendChild(confetti);
+                
+                // Animación
+                const animation = confetti.animate([
+                    { opacity: 0, transform: 'translateY(0) rotate(0deg)' },
+                    { opacity: 1, transform: `translateY(${Math.random() * 100 - 150}px) rotate(${Math.random() * 360}deg)` }
+                ], {
+                    duration: 1000 + Math.random() * 1000,
+                    easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+                });
+                
+                // Eliminar después de la animación
+                animation.onfinish = () => {
+                    confetti.remove();
+                };
             }
-            
-            // Animación de regalo
-            giftBox.addEventListener('click', function() {
-                if (!giftBox.classList.contains('gift-open')) {
-                    giftBox.classList.add('gift-open');
-                    
-                    // Esperar un momento y mostrar la pantalla de cierre
-                    setTimeout(() => {
-                        // Mostrar mensaje de amor
-                        alert('¡Feliz Cumpleaños! Te amo con todo mi corazón ❤️');
-                    }, 1000);
-                }
-            });
+        }
+        
+        // Inicializar cuenta regresiva
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+        
+        // Mostrar mensaje de bienvenida
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                alert('¡Bienvenidos a la invitación de nuestro Baby Shower! 🐠\n\nFecha: 15 de marzo de 2026\n\nHaz clic en el cofre para revelar el sexo del bebé.');
+            }, 500);
         });
     </script>
 </body>
