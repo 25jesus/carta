@@ -495,6 +495,52 @@
             gap: 5px;
         }
         
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #025e8c;
+        }
+        
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid #025e8c;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .notification.error {
+            background-color: #ff6b6b;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
         @media (max-width: 768px) {
             h1 { font-size: 2rem; }
             .date-details { font-size: 1.5rem; }
@@ -604,10 +650,9 @@
                 </h2>
                 
                 <div id="predictionsContainer">
-                    <!-- Las predicciones se cargarán aquí -->
-                    <div class="empty-list" id="emptyList">
-                        <p>¡Sé el primero en dejar tu predicción!</p>
-                        <p>🐚 ¿Será niño o niña? 🐚</p>
+                    <div class="loading" id="loadingPredictions">
+                        <div class="loading-spinner"></div>
+                        <p>Cargando predicciones...</p>
                     </div>
                 </div>
                 
@@ -665,24 +710,252 @@
         </footer>
     </div>
 
+    <!-- Supabase JS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.4/dist/umd/supabase.min.js"></script>
+
     <script>
-        // Variables globales
+        // ============================================
+        // CONFIGURACIÓN DE SUPABASE
+        // ============================================
+        
+        // REEMPLAZA ESTAS CREDENCIALES CON LAS TUS
+        const SUPABASE_CONFIG = {
+            url: 'https://tuproyecto.supabase.co', // Tu URL de Supabase
+            key: 'tu_clave_anonima_publica' // Tu clave anónima pública
+        };
+        
+        // Crear cliente de Supabase
+        const supabase = window.supabase.createClient(
+            SUPABASE_CONFIG.url, 
+            SUPABASE_CONFIG.key
+        );
+        
+        // ============================================
+        // VARIABLES GLOBALES
+        // ============================================
         let predictions = [];
         let selectedGender = null;
+        let isLoading = true;
         
-        // Cargar predicciones guardadas al iniciar
-        document.addEventListener('DOMContentLoaded', function() {
-            loadPredictions();
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
+        // ============================================
+        // FUNCIONES DE NOTIFICACIÓN
+        // ============================================
+        
+        function showNotification(message, isError = false) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${isError ? 'error' : ''}`;
+            notification.innerHTML = `
+                <i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
+                <span>${message}</span>
+            `;
             
-            // Mostrar mensaje de bienvenida
+            document.body.appendChild(notification);
+            
             setTimeout(() => {
-                alert('¡Bienvenidos al libro de predicciones del baby shower! 🐠\n\nDeja tu nombre y tu predicción sobre si el bebé será niño o niña.\n\nFecha: 15 de marzo de 2026');
-            }, 500);
-        });
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
         
-        // Cuenta regresiva
+        // ============================================
+        // FUNCIONES DE SUPABASE
+        // ============================================
+        
+        async function loadPredictions() {
+            try {
+                isLoading = true;
+                showLoading(true);
+                
+                const { data, error } = await supabase
+                    .from('predictions')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) {
+                    throw error;
+                }
+                
+                predictions = data || [];
+                renderPredictions();
+                updateStats();
+                showNotification(`Cargadas ${predictions.length} predicciones`);
+                
+            } catch (error) {
+                console.error('Error cargando predicciones:', error);
+                
+                // Si hay error, intentamos con datos de ejemplo
+                predictions = [
+                    {
+                        id: 1,
+                        name: "Ana García",
+                        gender: "girl",
+                        created_at: new Date().toISOString()
+                    },
+                    {
+                        id: 2,
+                        name: "Carlos López",
+                        gender: "boy",
+                        created_at: new Date(Date.now() - 86400000).toISOString()
+                    },
+                    {
+                        id: 3,
+                        name: "María Fernández",
+                        gender: "girl",
+                        created_at: new Date(Date.now() - 172800000).toISOString()
+                    }
+                ];
+                
+                renderPredictions();
+                updateStats();
+                showNotification("Usando datos de ejemplo. Configura Supabase para persistencia completa.", true);
+                
+            } finally {
+                isLoading = false;
+                showLoading(false);
+            }
+        }
+        
+        async function savePrediction(name, gender) {
+            try {
+                const { data, error } = await supabase
+                    .from('predictions')
+                    .insert([
+                        {
+                            name: name,
+                            gender: gender
+                        }
+                    ])
+                    .select();
+                
+                if (error) {
+                    throw error;
+                }
+                
+                if (data && data.length > 0) {
+                    predictions.unshift(data[0]);
+                    return true;
+                }
+                
+                return false;
+                
+            } catch (error) {
+                console.error('Error guardando predicción:', error);
+                
+                // Si hay error, guardamos localmente
+                const localPrediction = {
+                    id: Date.now(),
+                    name: name,
+                    gender: gender,
+                    created_at: new Date().toISOString()
+                };
+                
+                predictions.unshift(localPrediction);
+                return true;
+            }
+        }
+        
+        async function deleteAllPredictions() {
+            try {
+                const { error } = await supabase
+                    .from('predictions')
+                    .delete()
+                    .neq('id', 0);
+                
+                if (error) {
+                    throw error;
+                }
+                
+                predictions = [];
+                return true;
+                
+            } catch (error) {
+                console.error('Error borrando predicciones:', error);
+                
+                // Si hay error, borramos localmente
+                predictions = [];
+                return true;
+            }
+        }
+        
+        // ============================================
+        // FUNCIONES DE UI
+        // ============================================
+        
+        function showLoading(show) {
+            const container = document.getElementById('predictionsContainer');
+            const loadingElement = document.getElementById('loadingPredictions');
+            
+            if (show) {
+                if (!loadingElement) {
+                    container.innerHTML = `
+                        <div class="loading" id="loadingPredictions">
+                            <div class="loading-spinner"></div>
+                            <p>Cargando predicciones...</p>
+                        </div>
+                    `;
+                } else {
+                    loadingElement.style.display = 'block';
+                }
+            } else {
+                if (loadingElement) {
+                    loadingElement.style.display = 'none';
+                }
+            }
+        }
+        
+        function renderPredictions() {
+            const container = document.getElementById('predictionsContainer');
+            
+            if (predictions.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-list">
+                        <p>¡Sé el primero en dejar tu predicción!</p>
+                        <p>🐚 ¿Será niño o niña? 🐚</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const predictionsHTML = predictions.map(prediction => {
+                const date = new Date(prediction.created_at);
+                const formattedDate = date.toLocaleDateString('es-ES', {
+                    day: 'numeric',
+                    month: 'short',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                return `
+                    <div class="prediction-item">
+                        <div class="prediction-header">
+                            <div class="prediction-name">${prediction.name}</div>
+                            <div class="prediction-gender ${prediction.gender === 'boy' ? 'boy-badge' : 'girl-badge'}">
+                                ${prediction.gender === 'boy' ? '👶 Niño' : '👶 Niña'}
+                            </div>
+                        </div>
+                        <div class="prediction-date">
+                            <i class="far fa-clock"></i> ${formattedDate}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = predictionsHTML;
+        }
+        
+        function updateStats() {
+            const boyCount = predictions.filter(p => p.gender === 'boy').length;
+            const girlCount = predictions.filter(p => p.gender === 'girl').length;
+            const totalCount = predictions.length;
+            
+            document.getElementById('boyCount').textContent = boyCount;
+            document.getElementById('girlCount').textContent = girlCount;
+            document.getElementById('totalCount').textContent = totalCount;
+        }
+        
         function updateCountdown() {
             const eventDate = new Date('March 15, 2026 16:00:00').getTime();
             const now = new Date().getTime();
@@ -703,191 +976,182 @@
             }
         }
         
-        // Seleccionar género
-        const genderButtons = document.querySelectorAll('.gender-btn');
-        genderButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Remover selección anterior
-                genderButtons.forEach(btn => btn.classList.remove('selected'));
-                
-                // Seleccionar actual
-                this.classList.add('selected');
-                selectedGender = this.getAttribute('data-gender');
-                document.getElementById('selectedGender').value = selectedGender;
-                
-                // Efecto visual
-                this.style.transform = 'scale(1.05)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 300);
-            });
-        });
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
         
-        // Manejar envío del formulario
-        document.getElementById('predictionForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar predicciones
+            loadPredictions();
             
-            const nameInput = document.getElementById('guestName');
-            const guestName = nameInput.value.trim();
+            // Iniciar cuenta regresiva
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
             
-            if (!guestName) {
-                alert('Por favor, escribe tu nombre');
-                nameInput.focus();
-                return;
-            }
-            
-            if (!selectedGender) {
-                alert('Por favor, selecciona si crees que será niño o niña');
-                return;
-            }
-            
-            // Crear nueva predicción
-            const newPrediction = {
-                id: Date.now(),
-                name: guestName,
-                gender: selectedGender,
-                date: new Date().toLocaleDateString('es-ES', {
-                    day: 'numeric',
-                    month: 'short',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                })
-            };
-            
-            // Agregar a la lista
-            predictions.unshift(newPrediction);
-            
-            // Guardar en localStorage
-            savePredictions();
-            
-            // Actualizar la UI
-            renderPredictions();
-            updateStats();
-            
-            // Limpiar formulario
-            nameInput.value = '';
-            genderButtons.forEach(btn => btn.classList.remove('selected'));
-            selectedGender = null;
-            document.getElementById('selectedGender').value = '';
-            
-            // Efecto visual
-            const submitBtn = document.querySelector('.submit-btn');
-            submitBtn.innerHTML = '<i class="fas fa-check"></i><span>¡Predicción enviada!</span>';
-            submitBtn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%)';
-            
+            // Mensaje de bienvenida
             setTimeout(() => {
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
-                submitBtn.style.background = 'linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%)';
-            }, 1500);
+                alert('¡Bienvenidos al libro de predicciones del baby shower! 🐠\n\nDeja tu nombre y tu predicción sobre si el bebé será niño o niña.\n\nFecha: 15 de marzo de 2026');
+            }, 1000);
             
-            // Mostrar mensaje de agradecimiento
-            const genderText = selectedGender === 'boy' ? 'niño 👶💙' : 'niña 👶💖';
-            alert(`¡Gracias ${guestName} por tu predicción!\n\nHas dicho que será ${genderText}\n\n¡El día del baby shower revelaremos si tenías razón!`);
-        });
-        
-        // Cargar predicciones desde localStorage
-        function loadPredictions() {
-            const saved = localStorage.getItem('babyShowerPredictions');
-            if (saved) {
-                predictions = JSON.parse(saved);
-                renderPredictions();
-                updateStats();
-            }
-        }
-        
-        // Guardar predicciones en localStorage
-        function savePredictions() {
-            localStorage.setItem('babyShowerPredictions', JSON.stringify(predictions));
-        }
-        
-        // Mostrar predicciones en la lista
-        function renderPredictions() {
-            const container = document.getElementById('predictionsContainer');
-            const emptyList = document.getElementById('emptyList');
-            
-            if (predictions.length === 0) {
-                emptyList.style.display = 'block';
-                return;
-            }
-            
-            emptyList.style.display = 'none';
-            
-            // Generar HTML para cada predicción
-            const predictionsHTML = predictions.map(prediction => `
-                <div class="prediction-item" data-id="${prediction.id}">
-                    <div class="prediction-header">
-                        <div class="prediction-name">${prediction.name}</div>
-                        <div class="prediction-gender ${prediction.gender === 'boy' ? 'boy-badge' : 'girl-badge'}">
-                            ${prediction.gender === 'boy' ? '👶 Niño' : '👶 Niña'}
-                        </div>
-                    </div>
-                    <div class="prediction-date">
-                        <i class="far fa-clock"></i> ${prediction.date}
-                    </div>
-                </div>
-            `).join('');
-            
-            container.innerHTML = predictionsHTML + (emptyList.outerHTML);
-        }
-        
-        // Actualizar estadísticas
-        function updateStats() {
-            const boyCount = predictions.filter(p => p.gender === 'boy').length;
-            const girlCount = predictions.filter(p => p.gender === 'girl').length;
-            const totalCount = predictions.length;
-            
-            document.getElementById('boyCount').textContent = boyCount;
-            document.getElementById('girlCount').textContent = girlCount;
-            document.getElementById('totalCount').textContent = totalCount;
-        }
-        
-        // Botón para borrar todas las predicciones
-        document.getElementById('deleteAllBtn').addEventListener('click', function() {
-            if (predictions.length === 0) {
-                alert('No hay predicciones para borrar');
-                return;
-            }
-            
-            if (confirm(`¿Estás seguro de que quieres borrar todas las ${predictions.length} predicciones?`)) {
-                predictions = [];
-                savePredictions();
-                renderPredictions();
-                updateStats();
-                alert('Todas las predicciones han sido borradas');
-            }
-        });
-        
-        // Botón de ubicación
-        const locationBtn = document.getElementById('locationBtn');
-        const locationDetails = document.getElementById('locationDetails');
-        
-        locationBtn.addEventListener('click', function() {
-            if (locationDetails.style.display === 'block') {
-                locationDetails.style.display = 'none';
-            } else {
-                locationDetails.style.display = 'block';
-                
-                // Aquí puedes agregar un enlace real a Google Maps
-                // Por ejemplo:
-                // window.open('https://goo.gl/maps/...', '_blank');
-                
-                // Para este ejemplo, mostramos un mensaje
-                setTimeout(() => {
-                    alert('En una página real, esto abriría Google Maps con la ubicación exacta. Para este ejemplo, hemos mostrado los detalles del lugar.');
-                }, 300);
-            }
-        });
-        
-        // Efecto decorativo para elementos marinos
-        const marineItems = document.querySelectorAll('.marine-item');
-        marineItems.forEach(item => {
-            item.addEventListener('mouseover', function() {
-                this.style.transform = 'scale(1.2)';
+            // Configurar botones de género
+            const genderButtons = document.querySelectorAll('.gender-btn');
+            genderButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    genderButtons.forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedGender = this.getAttribute('data-gender');
+                    document.getElementById('selectedGender').value = selectedGender;
+                });
             });
             
-            item.addEventListener('mouseout', function() {
-                this.style.transform = '';
+            // Configurar formulario
+            document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const nameInput = document.getElementById('guestName');
+                const guestName = nameInput.value.trim();
+                
+                if (!guestName) {
+                    showNotification('Por favor, escribe tu nombre', true);
+                    nameInput.focus();
+                    return;
+                }
+                
+                if (!selectedGender) {
+                    showNotification('Por favor, selecciona niño o niña', true);
+                    return;
+                }
+                
+                // Deshabilitar botón temporalmente
+                const submitBtn = document.querySelector('.submit-btn');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Guardando...</span>';
+                submitBtn.disabled = true;
+                
+                // Guardar predicción
+                const saved = await savePrediction(guestName, selectedGender);
+                
+                if (saved) {
+                    // Actualizar UI
+                    renderPredictions();
+                    updateStats();
+                    
+                    // Limpiar formulario
+                    nameInput.value = '';
+                    genderButtons.forEach(btn => btn.classList.remove('selected'));
+                    selectedGender = null;
+                    document.getElementById('selectedGender').value = '';
+                    
+                    // Mostrar confirmación
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i><span>¡Guardado!</span>';
+                    submitBtn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%)';
+                    
+                    const genderText = selectedGender === 'boy' ? 'niño 👶💙' : 'niña 👶💖';
+                    showNotification(`¡Gracias ${guestName}! Prediciste ${genderText}`);
+                    
+                    setTimeout(() => {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.style.background = 'linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%)';
+                        submitBtn.disabled = false;
+                    }, 1500);
+                } else {
+                    showNotification('Error al guardar tu predicción', true);
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
             });
+            
+            // Configurar botón de borrar todo
+            document.getElementById('deleteAllBtn').addEventListener('click', async function() {
+                if (predictions.length === 0) {
+                    showNotification('No hay predicciones para borrar', true);
+                    return;
+                }
+                
+                if (confirm(`¿Estás seguro de borrar las ${predictions.length} predicciones?\n\nEsta acción no se puede deshacer.`)) {
+                    const deleted = await deleteAllPredictions();
+                    
+                    if (deleted) {
+                        renderPredictions();
+                        updateStats();
+                        showNotification('Todas las predicciones han sido borradas');
+                    } else {
+                        showNotification('Error al borrar predicciones', true);
+                    }
+                }
+            });
+            
+            // Configurar botón de ubicación
+            const locationBtn = document.getElementById('locationBtn');
+            const locationDetails = document.getElementById('locationDetails');
+            
+            locationBtn.addEventListener('click', function() {
+                if (locationDetails.style.display === 'block') {
+                    locationDetails.style.display = 'none';
+                    locationBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i><span>Ver ubicación del evento</span>';
+                } else {
+                    locationDetails.style.display = 'block';
+                    locationBtn.innerHTML = '<i class="fas fa-times"></i><span>Ocultar ubicación</span>';
+                }
+            });
+            
+            // Efectos decorativos
+            const marineItems = document.querySelectorAll('.marine-item');
+            marineItems.forEach(item => {
+                item.addEventListener('mouseover', function() {
+                    this.style.transform = 'scale(1.2)';
+                });
+                
+                item.addEventListener('mouseout', function() {
+                    this.style.transform = '';
+                });
+            });
+        });
+        
+        // ============================================
+        // CONFIGURACIÓN RÁPIDA DE SUPABASE
+        // ============================================
+        
+        // Esta función ayuda a probar la conexión
+        async function testSupabaseConnection() {
+            try {
+                const { data, error } = await supabase
+                    .from('predictions')
+                    .select('count', { count: 'exact', head: true });
+                
+                if (error) {
+                    console.warn('Error de conexión a Supabase:', error.message);
+                    console.info('ℹ️ Configura Supabase:');
+                    console.info('1. Ve a https://supabase.com');
+                    console.info('2. Crea un proyecto gratis');
+                    console.info('3. En el SQL Editor, ejecuta:');
+                    console.info(`
+                        CREATE TABLE predictions (
+                            id BIGSERIAL PRIMARY KEY,
+                            name VARCHAR(100) NOT NULL,
+                            gender VARCHAR(10) NOT NULL,
+                            created_at TIMESTAMP DEFAULT NOW()
+                        );
+                    `);
+                    console.info('4. Ve a Project Settings > API');
+                    console.info('5. Copia "Project URL" y "anon public key"');
+                    console.info('6. Reemplázalos en el código');
+                    
+                    return false;
+                }
+                
+                console.log('✅ Conexión a Supabase exitosa');
+                return true;
+                
+            } catch (error) {
+                console.error('❌ Error de conexión:', error);
+                return false;
+            }
+        }
+        
+        // Probar conexión al cargar
+        window.addEventListener('load', () => {
+            setTimeout(testSupabaseConnection, 2000);
         });
     </script>
 </body>
