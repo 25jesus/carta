@@ -56,6 +56,46 @@
             100% { background-position-x: 1440px; }
         }
         
+        /* NUEVAS ANIMACIONES */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-15px);}
+            60% {transform: translateY(-7px);}
+        }
+        
+        @keyframes shake {
+            0%, 100% {transform: translateX(0);}
+            10%, 30%, 50%, 70%, 90% {transform: translateX(-5px);}
+            20%, 40%, 60%, 80% {transform: translateX(5px);}
+        }
+        
+        @keyframes floatCloud {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(20px) translateY(-10px); }
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+        
         .container {
             max-width: 1100px;
             margin: 0 auto;
@@ -66,7 +106,8 @@
         
         header {
             text-align: center;
-            padding: 20px 0;
+            padding: 30px 0;
+            animation: fadeInUp 1s ease-out;
         }
         
         .logo {
@@ -77,11 +118,12 @@
             justify-content: center;
             align-items: center;
             gap: 15px;
-            animation: fadeInDown 1s ease-out;
+            animation: pulse 2s infinite;
         }
         
         .logo i {
             color: #ff6b9d;
+            animation: sparkle 2s infinite alternate;
         }
         
         h1 {
@@ -89,7 +131,7 @@
             color: #013a5e;
             margin-bottom: 10px;
             text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
-            animation: fadeInDown 1s ease-out 0.2s both;
+            animation: fadeInUp 1s ease-out 0.3s both;
         }
         
         .subtitle {
@@ -97,31 +139,57 @@
             color: #ff6b9d;
             font-weight: 600;
             margin-bottom: 30px;
-            animation: fadeInDown 1s ease-out 0.4s both;
+            animation: fadeInUp 1s ease-out 0.5s both;
         }
         
-        /* Contenedor de imagen */
-        .image-container {
-            max-width: 500px;
-            margin: 20px auto;
-            border-radius: 15px;
+        /* IMAGEN DEL BABY SHOWER */
+        .baby-shower-image {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto 30px;
+            background: white;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            animation: fadeInUp 1s ease-out 0.6s both;
-            border: 5px solid white;
-            transform-style: preserve-3d;
-            perspective: 1000px;
+            box-shadow: 0 10px 30px rgba(0, 87, 146, 0.3);
+            animation: fadeInUp 1s ease-out 0.7s both;
+            position: relative;
+            border: 8px solid white;
         }
         
-        .image-container img {
+        .baby-shower-image img {
             width: 100%;
             height: auto;
             display: block;
             transition: transform 0.5s ease;
         }
         
-        .image-container:hover img {
+        .baby-shower-image:hover img {
             transform: scale(1.03);
+        }
+        
+        .image-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 4px solid #ff6b9d;
+            border-radius: 15px;
+            pointer-events: none;
+        }
+        
+        .image-title {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            color: #025e8c;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: pulse 3s infinite;
         }
         
         .date-box {
@@ -158,7 +226,7 @@
             gap: 15px;
             margin: 30px 0;
             flex-wrap: wrap;
-            animation: fadeInUp 1s ease-out 1s both;
+            animation: fadeInUp 1s ease-out 0.9s both;
         }
         
         .countdown-item {
@@ -170,12 +238,13 @@
             text-align: center;
             border: 2px solid #025e8c;
             transition: all 0.3s ease;
-            transform: translateY(0);
+            animation: pulse 4s infinite;
+            animation-delay: calc(var(--item-index) * 0.2s);
         }
         
         .countdown-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(1, 90, 140, 0.3);
+            box-shadow: 0 8px 15px rgba(1, 90, 140, 0.3);
         }
         
         .countdown-value {
@@ -206,12 +275,7 @@
             padding: 30px;
             box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2);
             border: 3px solid #025e8c;
-            animation: fadeInLeft 1s ease-out 1.2s both;
-            transition: transform 0.5s ease;
-        }
-        
-        .prediction-form:hover {
-            transform: translateY(-5px);
+            animation: fadeInUp 1s ease-out 1s both;
         }
         
         .prediction-list {
@@ -224,12 +288,7 @@
             border: 3px solid #ff6b9d;
             max-height: 500px;
             overflow-y: auto;
-            animation: fadeInRight 1s ease-out 1.4s both;
-            transition: transform 0.5s ease;
-        }
-        
-        .prediction-list:hover {
-            transform: translateY(-5px);
+            animation: fadeInUp 1s ease-out 1.1s both;
         }
         
         .section-title {
@@ -268,6 +327,7 @@
             outline: none;
             border-color: #025e8c;
             box-shadow: 0 0 0 3px rgba(2, 94, 140, 0.2);
+            animation: pulse 0.5s;
         }
         
         .gender-options {
@@ -301,10 +361,6 @@
             transition: transform 0.3s;
         }
         
-        .gender-btn:hover i {
-            transform: scale(1.2);
-        }
-        
         .gender-btn.boy {
             color: #4a90e2;
         }
@@ -315,7 +371,7 @@
         
         .gender-btn.selected {
             transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
         }
         
         .gender-btn.boy.selected {
@@ -323,9 +379,17 @@
             border-color: #4a90e2;
         }
         
+        .gender-btn.boy.selected i {
+            animation: bounce 1s;
+        }
+        
         .gender-btn.girl.selected {
             background-color: #ffe6ee;
             border-color: #ff6b9d;
+        }
+        
+        .gender-btn.girl.selected i {
+            animation: bounce 1s;
         }
         
         .submit-btn {
@@ -348,27 +412,29 @@
             overflow: hidden;
         }
         
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(255, 107, 157, 0.5);
+            animation: pulse 0.5s;
+        }
+        
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+        
         .submit-btn::after {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 5px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 0;
-            border-radius: 100%;
-            transform: scale(1, 1) translate(-50%);
-            transform-origin: 50% 50%;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
         }
         
-        .submit-btn:focus:not(:active)::after {
-            animation: ripple 1s ease-out;
-        }
-        
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 7px 15px rgba(255, 107, 157, 0.4);
+        .submit-btn:hover::after {
+            left: 100%;
         }
         
         .prediction-item {
@@ -378,14 +444,24 @@
             margin-bottom: 15px;
             border-left: 5px solid #025e8c;
             box-shadow: 0 3px 8px rgba(1, 90, 140, 0.1);
-            transition: all 0.3s ease;
-            animation: fadeInItem 0.5s ease-out;
-            transform-origin: top;
+            animation: slideIn 0.5s ease-out;
+            transition: transform 0.3s;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
         
         .prediction-item:hover {
             transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2);
+            box-shadow: 0 5px 12px rgba(1, 90, 140, 0.2);
         }
         
         .prediction-header {
@@ -405,6 +481,7 @@
             padding: 4px 12px;
             border-radius: 20px;
             font-size: 0.9rem;
+            animation: sparkle 2s infinite;
         }
         
         .boy-badge {
@@ -432,12 +509,7 @@
             box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2);
             border: 3px solid #025e8c;
             text-align: center;
-            animation: fadeInUp 1s ease-out 1.6s both;
-            transition: transform 0.5s ease;
-        }
-        
-        .stats-box:hover {
-            transform: translateY(-5px);
+            animation: fadeInUp 1s ease-out 1.2s both;
         }
         
         .stats-title {
@@ -460,18 +532,15 @@
         .stat-item {
             flex: 1;
             min-width: 150px;
-            transition: transform 0.3s;
-        }
-        
-        .stat-item:hover {
-            transform: scale(1.05);
+            animation: floatCloud 3s ease-in-out infinite;
+            animation-delay: calc(var(--item-index) * 0.3s);
         }
         
         .stat-value {
             font-size: 3rem;
             font-weight: bold;
             margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s infinite;
         }
         
         .boy-stat {
@@ -490,7 +559,7 @@
         .location-section {
             text-align: center;
             margin: 40px auto;
-            animation: fadeInUp 1s ease-out 1.8s both;
+            animation: fadeInUp 1s ease-out 1.3s both;
         }
         
         .location-btn {
@@ -507,28 +576,12 @@
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
             font-weight: bold;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .location-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
-        }
-        
-        .location-btn:hover::before {
-            left: 100%;
+            animation: pulse 3s infinite;
         }
         
         .location-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.6);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(74, 144, 226, 0.6);
         }
         
         .location-details {
@@ -539,7 +592,7 @@
             max-width: 500px;
             box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2);
             display: none;
-            animation: fadeIn 0.5s ease-out;
+            animation: fadeInUp 0.5s ease-out;
         }
         
         .location-details h3 {
@@ -557,7 +610,7 @@
             margin-top: 40px;
             color: #025e8c;
             font-size: 1rem;
-            animation: fadeInUp 1s ease-out 2s both;
+            animation: fadeInUp 1s ease-out 1.4s both;
         }
         
         .marine-decor {
@@ -565,7 +618,6 @@
             justify-content: space-around;
             margin: 30px 0;
             flex-wrap: wrap;
-            animation: fadeIn 1s ease-out 1.1s both;
         }
         
         .marine-item {
@@ -587,8 +639,8 @@
         }
         
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
         }
         
         .empty-list {
@@ -602,20 +654,21 @@
             background: linear-gradient(135deg, #ff6b6b 0%, #ff8a8a 100%);
             color: white;
             border: none;
-            padding: 12px 25px;
-            border-radius: 50px;
+            padding: 10px 20px;
+            border-radius: 5px;
             cursor: pointer;
             margin-top: 15px;
-            font-size: 1rem;
+            font-size: 0.9rem;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
+            gap: 5px;
+            transition: all 0.3s;
         }
         
         .delete-all-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            transform: scale(1.05);
+            box-shadow: 0 5px 10px rgba(255, 107, 107, 0.4);
+            animation: shake 0.5s;
         }
         
         .status-message {
@@ -624,11 +677,14 @@
             margin: 15px 0;
             border-radius: 10px;
             font-weight: bold;
-            display: none;
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
-            animation: fadeIn 0.5s ease-out;
+            animation: fadeInUp 0.5s ease-out, fadeOut 0.5s ease-out 4.5s forwards;
+        }
+        
+        @keyframes fadeOut {
+            to { opacity: 0; }
         }
         
         .status-success {
@@ -641,6 +697,7 @@
             background-color: #f8d7da;
             color: #721c24;
             border: 2px solid #f5c6cb;
+            animation: shake 0.5s, fadeInUp 0.5s ease-out, fadeOut 0.5s ease-out 4.5s forwards;
         }
         
         .status-warning {
@@ -677,19 +734,21 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            animation: fadeInRight 0.5s ease-out;
+            animation: slideIn 0.5s ease-out;
         }
         
         .connection-status.connected {
             background-color: #d4edda;
             color: #155724;
             border: 2px solid #c3e6cb;
+            animation: pulse 2s infinite;
         }
         
         .connection-status.disconnected {
             background-color: #f8d7da;
             color: #721c24;
             border: 2px solid #f5c6cb;
+            animation: pulse 1s infinite;
         }
         
         .connection-status.connecting {
@@ -698,84 +757,48 @@
             border: 2px solid #ffeaa7;
         }
         
-        /* Nuevas animaciones */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .floating-clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
         }
         
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50px;
+            animation: floatCloud 20s infinite linear;
         }
         
-        @keyframes fadeInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        .cloud:nth-child(1) {
+            width: 100px;
+            height: 40px;
+            top: 20%;
+            left: 5%;
+            animation-delay: 0s;
+            animation-duration: 25s;
         }
         
-        @keyframes fadeInRight {
-            from {
-                opacity: 0;
-                transform: translateX(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        .cloud:nth-child(2) {
+            width: 150px;
+            height: 60px;
+            top: 40%;
+            right: 10%;
+            animation-delay: 5s;
+            animation-duration: 30s;
         }
         
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        
-        @keyframes fadeInItem {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        
-        @keyframes ripple {
-            0% {
-                transform: scale(0, 0);
-                opacity: 1;
-            }
-            20% {
-                transform: scale(25, 25);
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-                transform: scale(40, 40);
-            }
+        .cloud:nth-child(3) {
+            width: 80px;
+            height: 30px;
+            bottom: 30%;
+            left: 15%;
+            animation-delay: 10s;
+            animation-duration: 20s;
         }
         
         @media (max-width: 768px) {
@@ -792,12 +815,19 @@
                 font-size: 0.8rem;
                 padding: 8px 12px;
             }
-            .prediction-section {
-                flex-direction: column;
+            .baby-shower-image {
+                max-width: 90%;
             }
-            .prediction-form, .prediction-list {
-                min-width: 100%;
-            }
+        }
+        
+        /* Animación para nuevos elementos */
+        .new-prediction {
+            animation: highlight 2s ease-out;
+        }
+        
+        @keyframes highlight {
+            0% { background-color: rgba(255, 255, 200, 0.8); }
+            100% { background-color: rgba(255, 255, 255, 0.9); }
         }
     </style>
 </head>
@@ -806,6 +836,13 @@
         <div class="wave"></div>
         <div class="wave"></div>
         <div class="wave"></div>
+    </div>
+    
+    <!-- Nubes flotantes -->
+    <div class="floating-clouds">
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
     </div>
     
     <!-- Indicador de conexión -->
@@ -823,12 +860,14 @@
             </div>
             <h1>¡Libro de Predicciones del Bebé!</h1>
             <div class="subtitle">¿Será niño o niña? ¡Deja tu predicción!</div>
+            
+            <!-- IMAGEN DEL BABY SHOWER -->
+            <div class="baby-shower-image">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxkZWZzPgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ3JhZGllbnQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMCUiIHkyPSIxMDAlIj4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3R5bGU9InN0b3AtY29sb3I6I2ZmZmZmZjsgc3RvcC1vcGFjaXR5OjEiIC8+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2UwZjdmZjsgc3RvcC1vcGFjaXR5OjEiIC8+CiAgICAgICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDwvZGVmcz4KICAgIDxyZWN0IHdpZHRoPSI2MDAiIGhlaWdodD0iNDAwIiBmaWxsPSJ1cmwoI2dyYWRpZW50KSIvPgogICAgCiAgICA8dGV4dCB4PSIzMDAiIHk9IjkwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iODAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMDI1ZTgiPjE1PC90ZXh0PgogICAgCiAgICA8dGV4dCB4PSIzMDAiIHk9IjE1MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjQwIiBmb250LXdlaWdodD0iYm9sZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzAxM2E1ZSI+TUFSWk88L3RleHQ+CiAgICAKICAgIDx0ZXh0IHg9IjMwMCIgeT0iMjIwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMDI1ZTgiPkFDT01QxEHDTk9TIEE8L3RleHQ+CiAgICAKICAgIDx0ZXh0IHg9IjMwMCIgeT0iMjYwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMzAiIGZvbnQtd2VpZ2h0PSJib2xkIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMDI1ZTgiPkNFTEVCUkFSTlVFU1RSTzwvdGV4dD4KICAgIAogICAgPHRleHQgeD0iMzAwIiB5PSIzMDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0NSIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmZjZiOWQiPkJhYnkgU2hvd2VyPC90ZXh0PgogICAgCiAgICA8Y2lyY2xlIGN4PSIxNTAiIGN5PSIyMDAiIHI9IjMwIiBmaWxsPSIjZmY2YjlkIiBvcGFjaXR5PSIwLjgiPgogICAgICAgIDxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9ImN5IiBmcm9tPSIxNzAiIHRvPSIyMzAiIGR1cj0iM3MiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIiBmaWxsPSJmcmVlemUiLz4KICAgIDwvY2lyY2xlPgogICAgCiAgICA8Y2lyY2xlIGN4PSI0NTAiIGN5PSIyMDAiIHI9IjMwIiBmaWxsPSIjNGE5MGUyIiBvcGFjaXR5PSIwLjgiPgogICAgICAgIDxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9ImN5IiBmcm9tPSIyMzAiIHRvPSIxNzAiIGR1cj0iMi41cyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiIGZpbGw9ImZyZWV6ZSIvPgogICAgPC9jaXJjbGU+Cjwvc3ZnPgo=" alt="Baby Shower 15 de Marzo">
+                <div class="image-frame"></div>
+                <div class="image-title">¡Te Esperamos!</div>
+            </div>
         </header>
-        
-        <!-- Imagen del baby shower -->
-        <div class="image-container">
-            <img src="babyshower1.jpg" alt="Baby Shower - 15 de Marzo">
-        </div>
         
         <div class="date-box">
             <div class="date-title">
@@ -839,19 +878,19 @@
         </div>
         
         <div class="countdown" id="countdown">
-            <div class="countdown-item">
+            <div class="countdown-item" style="--item-index: 0;">
                 <div class="countdown-value" id="days">00</div>
                 <div class="countdown-label">Días</div>
             </div>
-            <div class="countdown-item">
+            <div class="countdown-item" style="--item-index: 1;">
                 <div class="countdown-value" id="hours">00</div>
                 <div class="countdown-label">Horas</div>
             </div>
-            <div class="countdown-item">
+            <div class="countdown-item" style="--item-index: 2;">
                 <div class="countdown-value" id="minutes">00</div>
                 <div class="countdown-label">Minutos</div>
             </div>
-            <div class="countdown-item">
+            <div class="countdown-item" style="--item-index: 3;">
                 <div class="countdown-value" id="seconds">00</div>
                 <div class="countdown-label">Segundos</div>
             </div>
@@ -935,15 +974,15 @@
             </h2>
             
             <div class="stats-container">
-                <div class="stat-item">
+                <div class="stat-item" style="--item-index: 0;">
                     <div class="stat-value boy-stat" id="boyCount">0</div>
                     <div class="stat-label">Predicen niño</div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item" style="--item-index: 1;">
                     <div class="stat-value girl-stat" id="girlCount">0</div>
                     <div class="stat-label">Predicen niña</div>
                 </div>
-                <div class="stat-item">
+                <div class="stat-item" style="--item-index: 2;">
                     <div class="stat-value" style="color: #025e8c;" id="totalCount">0</div>
                     <div class="stat-label">Total de predicciones</div>
                 </div>
@@ -1004,7 +1043,18 @@
             setTimeout(function() {
                 showStatus('¡Bienvenidos al libro de predicciones del baby shower! 🐠', 'success');
             }, 1000);
+            
+            // Aplicar animaciones a los elementos del contador
+            applyCountdownAnimations();
         });
+        
+        // Aplicar animaciones a los elementos del contador
+        function applyCountdownAnimations() {
+            const countdownItems = document.querySelectorAll('.countdown-item');
+            countdownItems.forEach((item, index) => {
+                item.style.setProperty('--item-index', index);
+            });
+        }
         
         // Configurar event listeners
         function setupEventListeners() {
@@ -1012,22 +1062,31 @@
             const genderButtons = document.querySelectorAll('.gender-btn');
             genderButtons.forEach(function(button) {
                 button.addEventListener('click', function() {
-                    // Remover selección anterior
-                    genderButtons.forEach(function(btn) {
-                        btn.classList.remove('selected');
-                    });
+                    // Efecto visual de clic
+                    this.style.transform = 'scale(0.95)';
                     
-                    // Seleccionar actual
-                    this.classList.add('selected');
-                    selectedGender = this.getAttribute('data-gender');
-                    document.getElementById('selectedGender').value = selectedGender;
-                    
-                    // Efecto visual
-                    this.style.transform = 'scale(1.05)';
-                    setTimeout(function() {
-                        button.style.transform = '';
-                    }, 300);
+                    setTimeout(() => {
+                        this.style.transform = '';
+                        
+                        // Remover selección anterior
+                        genderButtons.forEach(function(btn) {
+                            btn.classList.remove('selected');
+                        });
+                        
+                        // Seleccionar actual
+                        this.classList.add('selected');
+                        selectedGender = this.getAttribute('data-gender');
+                        document.getElementById('selectedGender').value = selectedGender;
+                    }, 150);
                 });
+            });
+            
+            // Animación al hacer focus en el input
+            document.getElementById('guestName').addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    this.parentElement.style.transform = '';
+                }, 300);
             });
             
             // Manejar envío del formulario
@@ -1042,10 +1101,14 @@
             
             locationBtn.addEventListener('click', function() {
                 if (locationDetails.style.display === 'block') {
-                    locationDetails.style.display = 'none';
-                    locationBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i><span>Ver ubicación del evento</span>';
+                    locationDetails.style.animation = 'fadeInUp 0.5s ease-out reverse';
+                    setTimeout(() => {
+                        locationDetails.style.display = 'none';
+                        locationBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i><span>Ver ubicación del evento</span>';
+                    }, 500);
                 } else {
                     locationDetails.style.display = 'block';
+                    locationDetails.style.animation = 'fadeInUp 0.5s ease-out';
                     locationBtn.innerHTML = '<i class="fas fa-times"></i><span>Ocultar ubicación</span>';
                 }
             });
@@ -1112,12 +1175,29 @@
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
                 
-                document.getElementById('days').textContent = days.toString().padStart(2, '0');
-                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+                // Efecto de animación cuando cambian los números
+                const updateWithAnimation = (elementId, newValue) => {
+                    const element = document.getElementById(elementId);
+                    const oldValue = element.textContent;
+                    
+                    if (newValue.toString().padStart(2, '0') !== oldValue) {
+                        element.style.transform = 'scale(1.2)';
+                        element.style.color = '#ff6b9d';
+                        
+                        setTimeout(() => {
+                            element.textContent = newValue.toString().padStart(2, '0');
+                            element.style.transform = 'scale(1)';
+                            element.style.color = '';
+                        }, 150);
+                    }
+                };
+                
+                updateWithAnimation('days', days);
+                updateWithAnimation('hours', hours);
+                updateWithAnimation('minutes', minutes);
+                updateWithAnimation('seconds', seconds);
             } else {
-                document.getElementById('countdown').innerHTML = '<div class="date-details">¡El evento está en curso!</div>';
+                document.getElementById('countdown').innerHTML = '<div class="date-details" style="animation: pulse 2s infinite;">¡El evento está en curso!</div>';
             }
         }
         
@@ -1132,11 +1212,21 @@
             if (!guestName) {
                 showStatus('❌ Por favor, escribe tu nombre', 'error');
                 nameInput.focus();
+                // Animación de shake
+                nameInput.parentElement.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    nameInput.parentElement.style.animation = '';
+                }, 500);
                 return;
             }
             
             if (!selectedGender) {
                 showStatus('❌ Por favor, selecciona si crees que será niño o niña', 'error');
+                // Animación de shake en los botones de género
+                document.querySelector('.gender-options').style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    document.querySelector('.gender-options').style.animation = '';
+                }, 500);
                 return;
             }
             
@@ -1156,6 +1246,9 @@
             // Deshabilitar botón mientras se procesa
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<div class="loading"></div><span>Enviando...</span>';
+            
+            // Animación de envío
+            submitBtn.style.animation = 'pulse 0.5s infinite';
             
             try {
                 if (isConnected && supabaseClient) {
@@ -1193,9 +1286,17 @@
                 showStatus('✅ Predicción guardada localmente (se sincronizará cuando haya conexión)', 'warning');
             }
             
-            // Actualizar la UI
+            // Actualizar la UI con animaciones
             renderPredictions();
             updateStats();
+            
+            // Efecto visual en las estadísticas
+            document.querySelectorAll('.stat-value').forEach(item => {
+                item.style.transform = 'scale(1.3)';
+                setTimeout(() => {
+                    item.style.transform = 'scale(1)';
+                }, 300);
+            });
             
             // Limpiar formulario
             nameInput.value = '';
@@ -1209,11 +1310,11 @@
             setTimeout(function() {
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
                 submitBtn.disabled = false;
+                submitBtn.style.animation = '';
             }, 1500);
             
             // Mostrar mensaje de agradecimiento
-            const genderText = selectedGender === 'boy' ? 'niño 👶💙' : 'niña 👶💖';
-            showStatus(`¡Gracias ${guestName} por tu predicción!`, 'success');
+            showStatus(`¡Gracias ${guestName} por tu predicción! 🎉`, 'success');
         }
         
         // Cargar predicciones desde Supabase
@@ -1311,9 +1412,10 @@
             emptyList.style.display = 'none';
             
             // Generar HTML para cada predicción
-            const predictionsHTML = predictions.map(function(prediction) {
+            const predictionsHTML = predictions.map(function(prediction, index) {
+                const isNew = index === 0; // Marcar la primera como nueva para animación
                 return `
-                <div class="prediction-item" data-id="${prediction.id}">
+                <div class="prediction-item ${isNew ? 'new-prediction' : ''}" data-id="${prediction.id}">
                     <div class="prediction-header">
                         <div class="prediction-name">${prediction.name}</div>
                         <div class="prediction-gender ${prediction.gender === 'boy' ? 'boy-badge' : 'girl-badge'}">
@@ -1358,6 +1460,11 @@
             
             if (confirm(`¿Estás seguro de que quieres borrar todas las ${predictions.length} predicciones?\n\nEsta acción no se puede deshacer.`)) {
                 try {
+                    // Animación de eliminación
+                    const deleteBtn = document.getElementById('deleteAllBtn');
+                    deleteBtn.style.animation = 'shake 0.5s';
+                    deleteBtn.innerHTML = '<div class="loading"></div><span>Eliminando...</span>';
+                    
                     if (isConnected && supabaseClient) {
                         // Borrar todas las predicciones de Supabase
                         const { error } = await supabaseClient
@@ -1373,6 +1480,12 @@
                     localStorage.removeItem('babyShowerPredictions');
                     renderPredictions();
                     updateStats();
+                    
+                    // Restaurar botón
+                    setTimeout(() => {
+                        deleteBtn.innerHTML = '<i class="fas fa-trash"></i><span>Borrar todas las predicciones</span>';
+                        deleteBtn.style.animation = '';
+                    }, 1000);
                     
                     showStatus('✅ Todas las predicciones han sido borradas', 'success');
                     
@@ -1390,10 +1503,8 @@
             statusElement.className = 'status-message status-' + type;
             statusElement.style.display = 'block';
             
-            // Ocultar después de 5 segundos
-            setTimeout(function() {
-                statusElement.style.display = 'none';
-            }, 5000);
+            // Animación de entrada
+            statusElement.style.animation = 'fadeInUp 0.5s ease-out, fadeOut 0.5s ease-out 4.5s forwards';
         }
         
         // Sincronizar automáticamente cada 30 segundos si hay conexión
