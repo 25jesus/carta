@@ -114,11 +114,10 @@
         <header>
             <div class="logo">
                 <i class="fas fa-water"></i>
-                <h1>¡Acompañanos a celebrar nuestro</h1>
-                <span>Baby Shower Marino</span>
+                <h1>¡Acompañanos a celebrar nuestro Baby Shower Marino!</h1>
                 <i class="fas fa-water"></i>
             </div>
-            <h1>👶✨ ¡El Libro de las Predicciones del Bebé! ✨👶</h1>
+            <div class="subtitle">👶✨ ¡El Libro de las Predicciones del Bebé! ✨👶</div>
             <div class="subtitle">Un recuerdo especial lleno de amor y buenos deseos.</div>
             <div class="subtitle">¿Será niño o niña? ¡Deja tu predicción!</div>
         </header>
@@ -205,7 +204,12 @@
                     </div>
                 </div>
                 
-               
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="delete-all-btn" id="deleteAllBtn">
+                        <i class="fas fa-trash"></i>
+                        Borrar todas las predicciones
+                    </button>
+                </div>
             </div>
         </div>
         
@@ -231,12 +235,11 @@
             </div>
         </div>
         
-        <footer>
+        <footer style="text-align: center; margin-top: 40px; color: #025e8c; font-size: 1.1rem;">
             <p>¡Gracias por compartir tu predicción! La respuesta se revelará el día del baby shower.</p>
             <p>Con cariño, los futuros papás</p>
             <p>💙💖</p>
         </footer>
-     <br> <br> <br> <br> <br> <br>
     </div>
 
     <script>
@@ -245,6 +248,7 @@
         let selectedGender = null;
         let supabaseClient = null;
         let isConnected = false;
+        let countdownInterval = null;
         
         // Configuración de Supabase - REEMPLAZA CON TUS DATOS
         const SUPABASE_URL = 'https://fndskmqdvmndwiwjwewx.supabase.co';
@@ -518,8 +522,9 @@
                     predictions = [];
                     localStorage.removeItem('babyShowerPredictions');
                     
-                    document.getElementById('emptyList').innerHTML = '<p>¡Sé el primero en dejar tu predicción!</p><p>🐚 ¿Será niño o niña? 🐚</p>';
-                    document.getElementById('emptyList').style.display = 'block';
+                    const emptyList = document.getElementById('emptyList');
+                    emptyList.innerHTML = '<p>¡Sé el primero en dejar tu predicción!</p><p>🐚 ¿Será niño o niña? 🐚</p>';
+                    emptyList.style.display = 'block';
                     
                     updateStats();
                     showStatus('✅ Todas las predicciones han sido borradas', 'success');
@@ -545,8 +550,9 @@
         
         function startCountdown() {
             function updateCountdown() {
-                // FECHA CORREGIDA: 14:00 (2:00 PM) en lugar de 16:00 (4:00 PM)
-                const eventDate = new Date('March 15, 2026 14:00:00').getTime();
+                // FECHA CORREGIDA usando formato ISO (año-mes-día)
+                // Nota: Los meses en JavaScript son 0-indexed, pero en formato ISO usamos el número real del mes
+                const eventDate = new Date('2026-03-15T14:00:00').getTime();
                 const now = new Date().getTime();
                 const timeLeft = eventDate - now;
                 
@@ -560,13 +566,35 @@
                     document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
                     document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
                     document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+                    
+                    // Si quedan menos de 5 minutos, cambiar color
+                    if (days === 0 && hours === 0 && minutes < 5) {
+                        document.querySelectorAll('.countdown-value').forEach(el => {
+                            el.style.color = '#ff6b9d';
+                        });
+                    }
                 } else {
-                    document.getElementById('countdown').innerHTML = '<div class="date-details">¡El evento está en curso!</div>';
+                    // Si el evento ya pasó
+                    document.getElementById('countdown').innerHTML = `
+                        <div class="date-details" style="color: #ff6b9d; font-size: 2rem;">
+                            <i class="fas fa-baby"></i> ¡El bebé ya llegó! <i class="fas fa-baby"></i>
+                        </div>`;
+                    
+                    // Parar el intervalo
+                    if (countdownInterval) {
+                        clearInterval(countdownInterval);
+                    }
                 }
             }
             
+            // Actualizar inmediatamente y luego cada segundo
             updateCountdown();
-            setInterval(updateCountdown, 1000);
+            countdownInterval = setInterval(updateCountdown, 1000);
+            
+            // Para depuración
+            console.log('Contador iniciado');
+            console.log('Fecha objetivo:', new Date('2026-03-15T14:00:00'));
+            console.log('Ahora:', new Date());
         }
         
         function showStatus(message, type) {
@@ -588,4 +616,3 @@
     </script>
 </body>
 </html>
-
