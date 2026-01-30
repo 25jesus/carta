@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Baby Shower - Libro de Predicciones del Mar</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Incluir Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -495,50 +497,40 @@
             gap: 5px;
         }
         
-        .loading {
+        .status-message {
             text-align: center;
-            padding: 20px;
-            color: #025e8c;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+            display: none;
         }
         
-        .loading-spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
+        .status-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #025e8c;
             border-radius: 50%;
-            border-top: 4px solid #025e8c;
-            width: 40px;
-            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
         }
         
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: slideIn 0.3s ease-out;
-        }
-        
-        .notification.error {
-            background-color: #ff6b6b;
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
         }
         
         @media (max-width: 768px) {
@@ -604,6 +596,8 @@
             <div class="marine-item">🐙</div>
         </div>
         
+        <div id="statusMessage" class="status-message"></div>
+        
         <div class="prediction-section">
             <div class="prediction-form">
                 <h2 class="section-title">
@@ -636,7 +630,7 @@
                         <input type="hidden" id="selectedGender" name="gender" required>
                     </div>
                     
-                    <button type="submit" class="submit-btn">
+                    <button type="submit" class="submit-btn" id="submitBtn">
                         <i class="fas fa-paper-plane"></i>
                         <span>Enviar predicción</span>
                     </button>
@@ -650,9 +644,9 @@
                 </h2>
                 
                 <div id="predictionsContainer">
-                    <div class="loading" id="loadingPredictions">
-                        <div class="loading-spinner"></div>
+                    <div class="empty-list" id="emptyList">
                         <p>Cargando predicciones...</p>
+                        <div class="loading" style="margin: 10px auto;"></div>
                     </div>
                 </div>
                 
@@ -710,252 +704,68 @@
         </footer>
     </div>
 
-    <!-- Supabase JS SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.4/dist/umd/supabase.min.js"></script>
-
     <script>
-        // ============================================
-        // CONFIGURACIÓN DE SUPABASE
-        // ============================================
-        
-        // REEMPLAZA ESTAS CREDENCIALES CON LAS TUS
-        const SUPABASE_CONFIG = {
-            url: 'https://tuproyecto.supabase.co', // Tu URL de Supabase
-            key: 'tu_clave_anonima_publica' // Tu clave anónima pública
-        };
-        
-        // Crear cliente de Supabase
-        const supabase = window.supabase.createClient(
-            SUPABASE_CONFIG.url, 
-            SUPABASE_CONFIG.key
-        );
-        
-        // ============================================
-        // VARIABLES GLOBALES
-        // ============================================
+        // Variables globales
         let predictions = [];
         let selectedGender = null;
-        let isLoading = true;
+        let supabaseClient = null;
+        let isConnected = false;
         
-        // ============================================
-        // FUNCIONES DE NOTIFICACIÓN
-        // ============================================
+        // Configuración de Supabase - REEMPLAZA CON TUS DATOS REALES
+        const SUPABASE_URL = 'https://fndskmqdvmndwiwjewwx.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuZHNrbXFkdm1uZHdpd2pld3d4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA2NjU5MjUsImV4cCI6MjA1NjI0MTkyNX0.W7O8VzP8z7Q4Q4Q4Q4Q4Q4Q4Q4Q4Q4Q4Q4Q4Q4Q4Q4'; // Reemplaza con tu clave completa
         
-        function showNotification(message, isError = false) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${isError ? 'error' : ''}`;
-            notification.innerHTML = `
-                <i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
-                <span>${message}</span>
-            `;
+        // Cargar predicciones guardadas al iniciar
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Inicializar Supabase
+            await initializeSupabase();
             
-            document.body.appendChild(notification);
+            // Cargar predicciones
+            await loadPredictions();
             
+            // Iniciar cuenta regresiva
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+            
+            // Mostrar mensaje de bienvenida
             setTimeout(() => {
-                notification.style.opacity = '0';
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
+                showStatus('¡Bienvenidos al libro de predicciones del baby shower! 🐠', 'success');
+            }, 1000);
+        });
         
-        // ============================================
-        // FUNCIONES DE SUPABASE
-        // ============================================
-        
-        async function loadPredictions() {
+        // Inicializar Supabase
+        async function initializeSupabase() {
             try {
-                isLoading = true;
-                showLoading(true);
-                
-                const { data, error } = await supabase
-                    .from('predictions')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-                
-                if (error) {
-                    throw error;
+                // Verificar que Supabase esté disponible
+                if (typeof supabase === 'undefined') {
+                    throw new Error('Supabase no está disponible');
                 }
                 
-                predictions = data || [];
-                renderPredictions();
-                updateStats();
-                showNotification(`Cargadas ${predictions.length} predicciones`);
+                // Crear cliente Supabase
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                
+                // Probar conexión
+                const { data, error } = await supabaseClient
+                    .from('predictions')
+                    .select('count', { count: 'exact', head: true });
+                
+                if (error) throw error;
+                
+                isConnected = true;
+                console.log('✅ Conectado a Supabase correctamente');
+                showStatus('✅ Conectado a la base de datos', 'success');
                 
             } catch (error) {
-                console.error('Error cargando predicciones:', error);
+                console.error('❌ Error al conectar con Supabase:', error);
+                isConnected = false;
+                showStatus('⚠️ Modo sin conexión - usando almacenamiento local', 'error');
                 
-                // Si hay error, intentamos con datos de ejemplo
-                predictions = [
-                    {
-                        id: 1,
-                        name: "Ana García",
-                        gender: "girl",
-                        created_at: new Date().toISOString()
-                    },
-                    {
-                        id: 2,
-                        name: "Carlos López",
-                        gender: "boy",
-                        created_at: new Date(Date.now() - 86400000).toISOString()
-                    },
-                    {
-                        id: 3,
-                        name: "María Fernández",
-                        gender: "girl",
-                        created_at: new Date(Date.now() - 172800000).toISOString()
-                    }
-                ];
-                
-                renderPredictions();
-                updateStats();
-                showNotification("Usando datos de ejemplo. Configura Supabase para persistencia completa.", true);
-                
-            } finally {
-                isLoading = false;
-                showLoading(false);
+                // Cargar de localStorage como respaldo
+                loadFromLocalStorage();
             }
         }
         
-        async function savePrediction(name, gender) {
-            try {
-                const { data, error } = await supabase
-                    .from('predictions')
-                    .insert([
-                        {
-                            name: name,
-                            gender: gender
-                        }
-                    ])
-                    .select();
-                
-                if (error) {
-                    throw error;
-                }
-                
-                if (data && data.length > 0) {
-                    predictions.unshift(data[0]);
-                    return true;
-                }
-                
-                return false;
-                
-            } catch (error) {
-                console.error('Error guardando predicción:', error);
-                
-                // Si hay error, guardamos localmente
-                const localPrediction = {
-                    id: Date.now(),
-                    name: name,
-                    gender: gender,
-                    created_at: new Date().toISOString()
-                };
-                
-                predictions.unshift(localPrediction);
-                return true;
-            }
-        }
-        
-        async function deleteAllPredictions() {
-            try {
-                const { error } = await supabase
-                    .from('predictions')
-                    .delete()
-                    .neq('id', 0);
-                
-                if (error) {
-                    throw error;
-                }
-                
-                predictions = [];
-                return true;
-                
-            } catch (error) {
-                console.error('Error borrando predicciones:', error);
-                
-                // Si hay error, borramos localmente
-                predictions = [];
-                return true;
-            }
-        }
-        
-        // ============================================
-        // FUNCIONES DE UI
-        // ============================================
-        
-        function showLoading(show) {
-            const container = document.getElementById('predictionsContainer');
-            const loadingElement = document.getElementById('loadingPredictions');
-            
-            if (show) {
-                if (!loadingElement) {
-                    container.innerHTML = `
-                        <div class="loading" id="loadingPredictions">
-                            <div class="loading-spinner"></div>
-                            <p>Cargando predicciones...</p>
-                        </div>
-                    `;
-                } else {
-                    loadingElement.style.display = 'block';
-                }
-            } else {
-                if (loadingElement) {
-                    loadingElement.style.display = 'none';
-                }
-            }
-        }
-        
-        function renderPredictions() {
-            const container = document.getElementById('predictionsContainer');
-            
-            if (predictions.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-list">
-                        <p>¡Sé el primero en dejar tu predicción!</p>
-                        <p>🐚 ¿Será niño o niña? 🐚</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            const predictionsHTML = predictions.map(prediction => {
-                const date = new Date(prediction.created_at);
-                const formattedDate = date.toLocaleDateString('es-ES', {
-                    day: 'numeric',
-                    month: 'short',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-                
-                return `
-                    <div class="prediction-item">
-                        <div class="prediction-header">
-                            <div class="prediction-name">${prediction.name}</div>
-                            <div class="prediction-gender ${prediction.gender === 'boy' ? 'boy-badge' : 'girl-badge'}">
-                                ${prediction.gender === 'boy' ? '👶 Niño' : '👶 Niña'}
-                            </div>
-                        </div>
-                        <div class="prediction-date">
-                            <i class="far fa-clock"></i> ${formattedDate}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            
-            container.innerHTML = predictionsHTML;
-        }
-        
-        function updateStats() {
-            const boyCount = predictions.filter(p => p.gender === 'boy').length;
-            const girlCount = predictions.filter(p => p.gender === 'girl').length;
-            const totalCount = predictions.length;
-            
-            document.getElementById('boyCount').textContent = boyCount;
-            document.getElementById('girlCount').textContent = girlCount;
-            document.getElementById('totalCount').textContent = totalCount;
-        }
-        
+        // Cuenta regresiva
         function updateCountdown() {
             const eventDate = new Date('March 15, 2026 16:00:00').getTime();
             const now = new Date().getTime();
@@ -976,183 +786,336 @@
             }
         }
         
-        // ============================================
-        // EVENT LISTENERS
-        // ============================================
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            // Cargar predicciones
-            loadPredictions();
-            
-            // Iniciar cuenta regresiva
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
-            
-            // Mensaje de bienvenida
-            setTimeout(() => {
-                alert('¡Bienvenidos al libro de predicciones del baby shower! 🐠\n\nDeja tu nombre y tu predicción sobre si el bebé será niño o niña.\n\nFecha: 15 de marzo de 2026');
-            }, 1000);
-            
-            // Configurar botones de género
-            const genderButtons = document.querySelectorAll('.gender-btn');
-            genderButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    genderButtons.forEach(btn => btn.classList.remove('selected'));
-                    this.classList.add('selected');
-                    selectedGender = this.getAttribute('data-gender');
-                    document.getElementById('selectedGender').value = selectedGender;
-                });
+        // Seleccionar género
+        const genderButtons = document.querySelectorAll('.gender-btn');
+        genderButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remover selección anterior
+                genderButtons.forEach(btn => btn.classList.remove('selected'));
+                
+                // Seleccionar actual
+                this.classList.add('selected');
+                selectedGender = this.getAttribute('data-gender');
+                document.getElementById('selectedGender').value = selectedGender;
+                
+                // Efecto visual
+                this.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 300);
             });
+        });
+        
+        // Manejar envío del formulario
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
             
-            // Configurar formulario
-            document.getElementById('predictionForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const nameInput = document.getElementById('guestName');
-                const guestName = nameInput.value.trim();
-                
-                if (!guestName) {
-                    showNotification('Por favor, escribe tu nombre', true);
-                    nameInput.focus();
-                    return;
+            const nameInput = document.getElementById('guestName');
+            const guestName = nameInput.value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (!guestName) {
+                alert('Por favor, escribe tu nombre');
+                nameInput.focus();
+                return;
+            }
+            
+            if (!selectedGender) {
+                alert('Por favor, selecciona si crees que será niño o niña');
+                return;
+            }
+            
+            // Crear nueva predicción
+            const newPrediction = {
+                name: guestName,
+                gender: selectedGender,
+                date: new Date().toLocaleDateString('es-ES', {
+                    day: 'numeric',
+                    month: 'short',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }),
+                created_at: new Date().toISOString()
+            };
+            
+            // Deshabilitar botón mientras se procesa
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<div class="loading"></div><span>Enviando...</span>';
+            
+            try {
+                if (isConnected && supabaseClient) {
+                    // Guardar en Supabase
+                    const { data, error } = await supabaseClient
+                        .from('predictions')
+                        .insert([newPrediction])
+                        .select();
+                    
+                    if (error) throw error;
+                    
+                    // Agregar a la lista local con el ID generado por Supabase
+                    predictions.unshift({...newPrediction, id: data[0].id});
+                    
+                    showStatus('✅ Predicción guardada en la base de datos', 'success');
+                } else {
+                    // Guardar en localStorage (modo offline)
+                    newPrediction.id = Date.now();
+                    predictions.unshift(newPrediction);
+                    saveToLocalStorage();
+                    
+                    showStatus('✅ Predicción guardada localmente (modo offline)', 'error');
                 }
                 
-                if (!selectedGender) {
-                    showNotification('Por favor, selecciona niño o niña', true);
-                    return;
-                }
+                // Actualizar la UI
+                renderPredictions();
+                updateStats();
                 
-                // Deshabilitar botón temporalmente
-                const submitBtn = document.querySelector('.submit-btn');
-                const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Guardando...</span>';
-                submitBtn.disabled = true;
+                // Limpiar formulario
+                nameInput.value = '';
+                genderButtons.forEach(btn => btn.classList.remove('selected'));
+                selectedGender = null;
+                document.getElementById('selectedGender').value = '';
                 
-                // Guardar predicción
-                const saved = await savePrediction(guestName, selectedGender);
+                // Efecto visual de éxito
+                submitBtn.innerHTML = '<i class="fas fa-check"></i><span>¡Enviado!</span>';
+                submitBtn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%)';
                 
-                if (saved) {
-                    // Actualizar UI
+                setTimeout(() => {
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
+                    submitBtn.style.background = 'linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%)';
+                    submitBtn.disabled = false;
+                }, 1500);
+                
+                // Mostrar mensaje de agradecimiento
+                const genderText = selectedGender === 'boy' ? 'niño 👶💙' : 'niña 👶💖';
+                alert(`¡Gracias ${guestName} por tu predicción!\n\nHas dicho que será ${genderText}\n\n¡El día del baby shower revelaremos si tenías razón!`);
+                
+            } catch (error) {
+                console.error('Error al guardar la predicción:', error);
+                showStatus('❌ Error al guardar. Intentando guardar localmente...', 'error');
+                
+                // Intentar guardar localmente como respaldo
+                try {
+                    newPrediction.id = Date.now();
+                    predictions.unshift(newPrediction);
+                    saveToLocalStorage();
+                    
                     renderPredictions();
                     updateStats();
                     
-                    // Limpiar formulario
-                    nameInput.value = '';
-                    genderButtons.forEach(btn => btn.classList.remove('selected'));
-                    selectedGender = null;
-                    document.getElementById('selectedGender').value = '';
-                    
-                    // Mostrar confirmación
-                    submitBtn.innerHTML = '<i class="fas fa-check"></i><span>¡Guardado!</span>';
-                    submitBtn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%)';
-                    
-                    const genderText = selectedGender === 'boy' ? 'niño 👶💙' : 'niña 👶💖';
-                    showNotification(`¡Gracias ${guestName}! Prediciste ${genderText}`);
+                    submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Guardado localmente</span>';
+                    submitBtn.style.background = 'linear-gradient(135deg, #ff9800 0%, #ffb74d 100%)';
                     
                     setTimeout(() => {
-                        submitBtn.innerHTML = originalText;
+                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
                         submitBtn.style.background = 'linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%)';
                         submitBtn.disabled = false;
-                    }, 1500);
-                } else {
-                    showNotification('Error al guardar tu predicción', true);
-                    submitBtn.innerHTML = originalText;
+                    }, 2000);
+                    
+                } catch (localError) {
+                    alert('Hubo un error al guardar tu predicción. Por favor, intenta de nuevo.');
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
+                    submitBtn.style.background = 'linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%)';
                     submitBtn.disabled = false;
                 }
-            });
-            
-            // Configurar botón de borrar todo
-            document.getElementById('deleteAllBtn').addEventListener('click', async function() {
-                if (predictions.length === 0) {
-                    showNotification('No hay predicciones para borrar', true);
-                    return;
-                }
-                
-                if (confirm(`¿Estás seguro de borrar las ${predictions.length} predicciones?\n\nEsta acción no se puede deshacer.`)) {
-                    const deleted = await deleteAllPredictions();
-                    
-                    if (deleted) {
-                        renderPredictions();
-                        updateStats();
-                        showNotification('Todas las predicciones han sido borradas');
-                    } else {
-                        showNotification('Error al borrar predicciones', true);
-                    }
-                }
-            });
-            
-            // Configurar botón de ubicación
-            const locationBtn = document.getElementById('locationBtn');
-            const locationDetails = document.getElementById('locationDetails');
-            
-            locationBtn.addEventListener('click', function() {
-                if (locationDetails.style.display === 'block') {
-                    locationDetails.style.display = 'none';
-                    locationBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i><span>Ver ubicación del evento</span>';
-                } else {
-                    locationDetails.style.display = 'block';
-                    locationBtn.innerHTML = '<i class="fas fa-times"></i><span>Ocultar ubicación</span>';
-                }
-            });
-            
-            // Efectos decorativos
-            const marineItems = document.querySelectorAll('.marine-item');
-            marineItems.forEach(item => {
-                item.addEventListener('mouseover', function() {
-                    this.style.transform = 'scale(1.2)';
-                });
-                
-                item.addEventListener('mouseout', function() {
-                    this.style.transform = '';
-                });
-            });
+            }
         });
         
-        // ============================================
-        // CONFIGURACIÓN RÁPIDA DE SUPABASE
-        // ============================================
-        
-        // Esta función ayuda a probar la conexión
-        async function testSupabaseConnection() {
+        // Cargar predicciones desde Supabase
+        async function loadPredictions() {
             try {
-                const { data, error } = await supabase
-                    .from('predictions')
-                    .select('count', { count: 'exact', head: true });
-                
-                if (error) {
-                    console.warn('Error de conexión a Supabase:', error.message);
-                    console.info('ℹ️ Configura Supabase:');
-                    console.info('1. Ve a https://supabase.com');
-                    console.info('2. Crea un proyecto gratis');
-                    console.info('3. En el SQL Editor, ejecuta:');
-                    console.info(`
-                        CREATE TABLE predictions (
-                            id BIGSERIAL PRIMARY KEY,
-                            name VARCHAR(100) NOT NULL,
-                            gender VARCHAR(10) NOT NULL,
-                            created_at TIMESTAMP DEFAULT NOW()
-                        );
-                    `);
-                    console.info('4. Ve a Project Settings > API');
-                    console.info('5. Copia "Project URL" y "anon public key"');
-                    console.info('6. Reemplázalos en el código');
+                if (isConnected && supabaseClient) {
+                    const { data, error } = await supabaseClient
+                        .from('predictions')
+                        .select('*')
+                        .order('created_at', { ascending: false });
                     
-                    return false;
+                    if (error) throw error;
+                    
+                    predictions = data || [];
+                    renderPredictions();
+                    updateStats();
+                    
+                    // Sincronizar con localStorage
+                    saveToLocalStorage();
+                    
+                } else {
+                    // Cargar de localStorage
+                    loadFromLocalStorage();
                 }
-                
-                console.log('✅ Conexión a Supabase exitosa');
-                return true;
-                
             } catch (error) {
-                console.error('❌ Error de conexión:', error);
-                return false;
+                console.error('Error al cargar predicciones:', error);
+                loadFromLocalStorage();
             }
         }
         
-        // Probar conexión al cargar
-        window.addEventListener('load', () => {
-            setTimeout(testSupabaseConnection, 2000);
+        // Guardar en localStorage
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem('babyShowerPredictions', JSON.stringify(predictions));
+                localStorage.setItem('babyShowerLastSync', new Date().toISOString());
+            } catch (error) {
+                console.error('Error al guardar en localStorage:', error);
+            }
+        }
+        
+        // Cargar desde localStorage
+        function loadFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem('babyShowerPredictions');
+                if (saved) {
+                    predictions = JSON.parse(saved);
+                    renderPredictions();
+                    updateStats();
+                    showStatus('📂 Cargado desde almacenamiento local', 'error');
+                }
+            } catch (error) {
+                console.error('Error al cargar de localStorage:', error);
+            }
+        }
+        
+        // Mostrar predicciones en la lista
+        function renderPredictions() {
+            const container = document.getElementById('predictionsContainer');
+            const emptyList = document.getElementById('emptyList');
+            
+            if (predictions.length === 0) {
+                emptyList.style.display = 'block';
+                emptyList.innerHTML = '<p>¡Sé el primero en dejar tu predicción!</p><p>🐚 ¿Será niño o niña? 🐚</p>';
+                return;
+            }
+            
+            emptyList.style.display = 'none';
+            
+            // Generar HTML para cada predicción
+            const predictionsHTML = predictions.map(prediction => `
+                <div class="prediction-item" data-id="${prediction.id}">
+                    <div class="prediction-header">
+                        <div class="prediction-name">${prediction.name}</div>
+                        <div class="prediction-gender ${prediction.gender === 'boy' ? 'boy-badge' : 'girl-badge'}">
+                            ${prediction.gender === 'boy' ? '👶 Niño' : '👶 Niña'}
+                        </div>
+                    </div>
+                    <div class="prediction-date">
+                        <i class="far fa-clock"></i> ${prediction.date}
+                        ${!isConnected ? '<span style="color: #ff9800; font-size: 0.8em;"> (local)</span>' : ''}
+                    </div>
+                </div>
+            `).join('');
+            
+            container.innerHTML = predictionsHTML;
+        }
+        
+        // Actualizar estadísticas
+        function updateStats() {
+            const boyCount = predictions.filter(p => p.gender === 'boy').length;
+            const girlCount = predictions.filter(p => p.gender === 'girl').length;
+            const totalCount = predictions.length;
+            
+            document.getElementById('boyCount').textContent = boyCount;
+            document.getElementById('girlCount').textContent = girlCount;
+            document.getElementById('totalCount').textContent = totalCount;
+        }
+        
+        // Botón para borrar todas las predicciones
+        document.getElementById('deleteAllBtn').addEventListener('click', async function() {
+            if (predictions.length === 0) {
+                alert('No hay predicciones para borrar');
+                return;
+            }
+            
+            if (confirm(`¿Estás seguro de que quieres borrar todas las ${predictions.length} predicciones?\n\nEsta acción no se puede deshacer.`)) {
+                try {
+                    if (isConnected && supabaseClient) {
+                        // Borrar todas las predicciones de Supabase
+                        const { error } = await supabaseClient
+                            .from('predictions')
+                            .delete()
+                            .neq('id', 0);
+                        
+                        if (error) throw error;
+                    }
+                    
+                    // Borrar localmente
+                    predictions = [];
+                    localStorage.removeItem('babyShowerPredictions');
+                    renderPredictions();
+                    updateStats();
+                    
+                    showStatus('✅ Todas las predicciones han sido borradas', 'success');
+                    alert('Todas las predicciones han sido borradas');
+                    
+                } catch (error) {
+                    console.error('Error al borrar predicciones:', error);
+                    showStatus('❌ Error al borrar las predicciones', 'error');
+                    alert('Hubo un error al borrar las predicciones');
+                }
+            }
         });
+        
+        // Botón de ubicación
+        const locationBtn = document.getElementById('locationBtn');
+        const locationDetails = document.getElementById('locationDetails');
+        
+        locationBtn.addEventListener('click', function() {
+            if (locationDetails.style.display === 'block') {
+                locationDetails.style.display = 'none';
+                locationBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i><span>Ver ubicación del evento</span>';
+            } else {
+                locationDetails.style.display = 'block';
+                locationBtn.innerHTML = '<i class="fas fa-times"></i><span>Ocultar ubicación</span>';
+                
+                // Simular apertura de Google Maps
+                setTimeout(() => {
+                    alert('📍 Ubicación: Salón Azul Marino\nAvenida del Océano, 123\nZona Costera, Ciudad\n\n(En una página real, esto abriría Google Maps con la ubicación exacta)');
+                }, 300);
+            }
+        });
+        
+        // Mostrar mensajes de estado
+        function showStatus(message, type = 'success') {
+            const statusElement = document.getElementById('statusMessage');
+            statusElement.textContent = message;
+            statusElement.className = `status-message status-${type}`;
+            statusElement.style.display = 'block';
+            
+            // Ocultar después de 5 segundos
+            setTimeout(() => {
+                statusElement.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Efecto decorativo para elementos marinos
+        const marineItems = document.querySelectorAll('.marine-item');
+        marineItems.forEach(item => {
+            item.addEventListener('mouseover', function() {
+                this.style.transform = 'scale(1.2)';
+            });
+            
+            item.addEventListener('mouseout', function() {
+                this.style.transform = '';
+            });
+        });
+        
+        // Sincronizar automáticamente cada 30 segundos si hay conexión
+        setInterval(async () => {
+            if (isConnected && supabaseClient) {
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('predictions')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+                    
+                    if (!error && data) {
+                        predictions = data;
+                        renderPredictions();
+                        updateStats();
+                        saveToLocalStorage();
+                    }
+                } catch (error) {
+                    console.log('Error en sincronización automática:', error);
+                }
+            }
+        }, 30000); // 30 segundos
     </script>
 </body>
 </html>
