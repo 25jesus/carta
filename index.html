@@ -503,7 +503,7 @@
             margin: 15px 0;
             border-radius: 10px;
             font-weight: bold;
-            display: block;
+            display: none;
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
@@ -573,33 +573,6 @@
             background-color: #fff3cd;
             color: #856404;
             border: 2px solid #ffeaa7;
-        }
-        
-        .db-test-btn {
-            background: linear-gradient(135deg, #6c757d 0%, #868e96 100%);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .test-results {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            border-left: 5px solid #6c757d;
-            font-family: monospace;
-            font-size: 0.9rem;
-            white-space: pre-wrap;
-            max-height: 200px;
-            overflow-y: auto;
         }
         
         @media (max-width: 768px) {
@@ -679,29 +652,6 @@
         
         <!-- Mensajes de estado mejorados -->
         <div id="statusMessage" class="status-message" style="display: none;"></div>
-        
-        <!-- Panel de prueba de base de datos -->
-        <div id="dbTestPanel" class="prediction-form" style="margin-top: 20px; display: none;">
-            <h2 class="section-title">
-                <i class="fas fa-database"></i>
-                <span>Prueba de Conexión a Base de Datos</span>
-            </h2>
-            <div id="testResults" class="test-results">
-                Esperando prueba...
-            </div>
-            <button class="db-test-btn" id="testConnectionBtn">
-                <i class="fas fa-plug"></i>
-                <span>Probar conexión nuevamente</span>
-            </button>
-            <button class="db-test-btn" id="testInsertBtn">
-                <i class="fas fa-plus"></i>
-                <span>Probar inserción de datos</span>
-            </button>
-            <button class="db-test-btn" id="createTableBtn">
-                <i class="fas fa-table"></i>
-                <span>Crear tabla si no existe</span>
-            </button>
-        </div>
         
         <div class="prediction-section">
             <div class="prediction-form">
@@ -816,48 +766,85 @@
         let selectedGender = null;
         let supabaseClient = null;
         let isConnected = false;
-        let dbTestCount = 0;
         
         // Configuración de Supabase - REEMPLAZA CON TUS DATOS REALES
         const SUPABASE_URL = 'https://fndskmqdvmndwiwjewwx.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuZHNrbXFkdm1uZHdpd2p3ZXd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3MDk5MDQsImV4cCI6MjA4NTI4NTkwNH0.7cTUi4jb1eGYuCE8YVuUZi1dozTGRufWkVR-sHZAM88';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuZHNrbXFkdm1uZHdpd2pld3d4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3MDk5MDQsImV4cCI6MjA4NTI4NTkwNH0.7cTUi4jb1eGYuCE8YVuUZi1dozTGRufWkVR-sHZAM88';
         
         // Cargar predicciones guardadas al iniciar
-        document.addEventListener('DOMContentLoaded', async function() {
+        document.addEventListener('DOMContentLoaded', function() {
             // Inicializar Supabase
-            await initializeSupabase();
+            initializeSupabase();
             
             // Cargar predicciones
-            await loadPredictions();
+            loadPredictions();
             
             // Iniciar cuenta regresiva
             updateCountdown();
             setInterval(updateCountdown, 1000);
             
+            // Configurar event listeners
+            setupEventListeners();
+            
             // Mostrar mensaje de bienvenida
-            setTimeout(() => {
+            setTimeout(function() {
                 showStatus('¡Bienvenidos al libro de predicciones del baby shower! 🐠', 'success');
             }, 1000);
-            
-            // Configurar botones de prueba
-            setupTestButtons();
         });
         
-        // Configurar botones de prueba
-        function setupTestButtons() {
-            document.getElementById('testConnectionBtn').addEventListener('click', testSupabaseConnection);
-            document.getElementById('testInsertBtn').addEventListener('click', testSupabaseInsert);
-            document.getElementById('createTableBtn').addEventListener('click', createTableIfNotExists);
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Seleccionar género
+            const genderButtons = document.querySelectorAll('.gender-btn');
+            genderButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    // Remover selección anterior
+                    genderButtons.forEach(function(btn) {
+                        btn.classList.remove('selected');
+                    });
+                    
+                    // Seleccionar actual
+                    this.classList.add('selected');
+                    selectedGender = this.getAttribute('data-gender');
+                    document.getElementById('selectedGender').value = selectedGender;
+                    
+                    // Efecto visual
+                    this.style.transform = 'scale(1.05)';
+                    setTimeout(function() {
+                        button.style.transform = '';
+                    }, 300);
+                });
+            });
+            
+            // Manejar envío del formulario
+            document.getElementById('predictionForm').addEventListener('submit', handleFormSubmit);
+            
+            // Botón para borrar todas las predicciones
+            document.getElementById('deleteAllBtn').addEventListener('click', deleteAllPredictions);
+            
+            // Botón de ubicación
+            const locationBtn = document.getElementById('locationBtn');
+            const locationDetails = document.getElementById('locationDetails');
+            
+            locationBtn.addEventListener('click', function() {
+                if (locationDetails.style.display === 'block') {
+                    locationDetails.style.display = 'none';
+                    locationBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i><span>Ver ubicación del evento</span>';
+                } else {
+                    locationDetails.style.display = 'block';
+                    locationBtn.innerHTML = '<i class="fas fa-times"></i><span>Ocultar ubicación</span>';
+                }
+            });
         }
         
-        // Inicializar Supabase con mejor manejo de errores
+        // Inicializar Supabase
         async function initializeSupabase() {
             const connectionStatus = document.getElementById('connectionStatus');
             
             try {
                 // Verificar que Supabase esté disponible
                 if (typeof supabase === 'undefined') {
-                    throw new Error('Supabase no está disponible. Verifica que el script esté cargado.');
+                    throw new Error('Supabase no está disponible. Verifica tu conexión a internet.');
                 }
                 
                 connectionStatus.className = 'connection-status connecting';
@@ -866,26 +853,16 @@
                 // Crear cliente Supabase
                 supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 
-                // Probar conexión con timeout
-                const connectionPromise = supabaseClient
-                    .from('predictions')
-                    .select('count', { count: 'exact', head: true });
-                
-                // Timeout de 10 segundos
-                const timeoutPromise = new Promise((_, reject) => 
-                    setTimeout(() => reject(new Error('Timeout: La conexión tardó demasiado')), 10000)
-                );
-                
-                const { data, error } = await Promise.race([connectionPromise, timeoutPromise]);
+                // Probar conexión simple
+                const { error } = await supabaseClient.from('predictions').select('*').limit(1);
                 
                 if (error) {
                     // Si es un error de tabla no existente, no es crítico
                     if (error.message.includes('does not exist') || error.message.includes('relation')) {
-                        console.warn('La tabla no existe, se creará al insertar el primer dato');
                         isConnected = true;
                         connectionStatus.className = 'connection-status connected';
                         connectionStatus.innerHTML = '<i class="fas fa-check-circle"></i><span>Conectado (tabla no existe)</span>';
-                        showStatus('⚠️ La tabla de predicciones no existe. Se creará automáticamente al insertar el primer dato.', 'warning');
+                        showStatus('⚠️ La tabla de predicciones no existe. Se creará automáticamente.', 'warning');
                     } else {
                         throw error;
                     }
@@ -893,198 +870,19 @@
                     isConnected = true;
                     connectionStatus.className = 'connection-status connected';
                     connectionStatus.innerHTML = '<i class="fas fa-check-circle"></i><span>Conectado a la base de datos</span>';
-                    console.log('✅ Conectado a Supabase correctamente');
                     showStatus('✅ Conectado a la base de datos correctamente', 'success');
                 }
                 
-                // Mostrar panel de pruebas solo en desarrollo
-                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                    document.getElementById('dbTestPanel').style.display = 'block';
-                }
-                
             } catch (error) {
-                console.error('❌ Error al conectar con Supabase:', error);
+                console.error('Error al conectar con Supabase:', error);
                 isConnected = false;
                 connectionStatus.className = 'connection-status disconnected';
-                connectionStatus.innerHTML = '<i class="fas fa-times-circle"></i><span>Desconectado - Error de conexión</span>';
+                connectionStatus.innerHTML = '<i class="fas fa-times-circle"></i><span>Desconectado - Modo local</span>';
                 
-                let errorMsg = 'Error de conexión: ';
-                if (error.message.includes('Timeout')) {
-                    errorMsg += 'Tiempo de espera agotado. Verifica tu conexión a internet.';
-                } else if (error.message.includes('JWT')) {
-                    errorMsg += 'Clave de API inválida o expirada. Verifica SUPABASE_ANON_KEY.';
-                } else if (error.message.includes('fetch')) {
-                    errorMsg += 'Error de red. Verifica la URL de Supabase.';
-                } else {
-                    errorMsg += error.message;
-                }
-                
-                showStatus(`⚠️ ${errorMsg} Usando almacenamiento local.`, 'error');
+                showStatus('⚠️ Modo sin conexión - usando almacenamiento local', 'warning');
                 
                 // Cargar de localStorage como respaldo
                 loadFromLocalStorage();
-            }
-        }
-        
-        // Probar conexión a Supabase
-        async function testSupabaseConnection() {
-            const testResults = document.getElementById('testResults');
-            dbTestCount++;
-            
-            testResults.innerHTML = `Prueba #${dbTestCount} iniciada...\n`;
-            testResults.innerHTML += `URL: ${SUPABASE_URL}\n`;
-            testResults.innerHTML += `Clave: ${SUPABASE_ANON_KEY.substring(0, 20)}...\n\n`;
-            
-            try {
-                if (!supabaseClient) {
-                    throw new Error('Cliente Supabase no inicializado');
-                }
-                
-                const startTime = Date.now();
-                const { data, error } = await supabaseClient
-                    .from('predictions')
-                    .select('count', { count: 'exact', head: true });
-                
-                const endTime = Date.now();
-                const responseTime = endTime - startTime;
-                
-                if (error) {
-                    if (error.message.includes('does not exist') || error.message.includes('relation')) {
-                        testResults.innerHTML += `✅ Conexión exitosa (tabla no existe)\n`;
-                        testResults.innerHTML += `⏱️ Tiempo de respuesta: ${responseTime}ms\n`;
-                        testResults.innerHTML += `⚠️ La tabla 'predictions' no existe. Usa el botón "Crear tabla" o inserta un dato.`;
-                    } else {
-                        throw error;
-                    }
-                } else {
-                    testResults.innerHTML += `✅ Conexión exitosa\n`;
-                    testResults.innerHTML += `⏱️ Tiempo de respuesta: ${responseTime}ms\n`;
-                    testResults.innerHTML += `📊 Total de registros: ${data[0].count}\n`;
-                    testResults.innerHTML += `🎯 Estado: Conectado correctamente`;
-                }
-                
-            } catch (error) {
-                testResults.innerHTML += `❌ Error de conexión:\n`;
-                testResults.innerHTML += `${error.message}\n`;
-                testResults.innerHTML += `🔧 Solución: Verifica que:\n`;
-                testResults.innerHTML += `1. La URL de Supabase sea correcta\n`;
-                testResults.innerHTML += `2. La clave anónima sea válida\n`;
-                testResults.innerHTML += `3. Tu proyecto Supabase esté activo\n`;
-                testResults.innerHTML += `4. No haya restricciones de CORS`;
-            }
-        }
-        
-        // Probar inserción en Supabase
-        async function testSupabaseInsert() {
-            const testResults = document.getElementById('testResults');
-            
-            testResults.innerHTML = 'Probando inserción de datos...\n';
-            
-            try {
-                if (!supabaseClient) {
-                    throw new Error('Cliente Supabase no inicializado');
-                }
-                
-                const testData = {
-                    name: 'Prueba_' + Date.now(),
-                    gender: Math.random() > 0.5 ? 'boy' : 'girl',
-                    date: new Date().toLocaleDateString('es-ES'),
-                    created_at: new Date().toISOString()
-                };
-                
-                const { data, error } = await supabaseClient
-                    .from('predictions')
-                    .insert([testData])
-                    .select();
-                
-                if (error) {
-                    if (error.message.includes('does not exist') || error.message.includes('relation')) {
-                        testResults.innerHTML += `❌ La tabla no existe\n`;
-                        testResults.innerHTML += `Usa el botón "Crear tabla" primero`;
-                    } else {
-                        throw error;
-                    }
-                } else {
-                    testResults.innerHTML += `✅ Inserción exitosa\n`;
-                    testResults.innerHTML += `ID: ${data[0].id}\n`;
-                    testResults.innerHTML += `Nombre: ${data[0].name}\n`;
-                    testResults.innerHTML += `Género: ${data[0].gender}\n`;
-                    testResults.innerHTML += `Fecha: ${data[0].date}\n`;
-                    testResults.innerHTML += `Los datos persisten por más de un mes`;
-                }
-                
-            } catch (error) {
-                testResults.innerHTML += `❌ Error en inserción:\n`;
-                testResults.innerHTML += `${error.message}\n`;
-                testResults.innerHTML += `🔧 Verifica los permisos de la tabla`;
-            }
-        }
-        
-        // Crear tabla si no existe
-        async function createTableIfNotExists() {
-            const testResults = document.getElementById('testResults');
-            
-            testResults.innerHTML = 'Creando tabla mediante inserción...\n';
-            
-            try {
-                if (!supabaseClient) {
-                    throw new Error('Cliente Supabase no inicializado');
-                }
-                
-                // Intentamos insertar un registro
-                // Supabase creará la tabla automáticamente si tiene RLS desactivado
-                // o si el usuario anónimo tiene permisos
-                const testData = {
-                    name: 'Primer_Registro',
-                    gender: 'boy',
-                    date: new Date().toLocaleDateString('es-ES'),
-                    created_at: new Date().toISOString()
-                };
-                
-                const { data, error } = await supabaseClient
-                    .from('predictions')
-                    .insert([testData])
-                    .select();
-                
-                if (error) {
-                    testResults.innerHTML += `❌ Error al crear tabla:\n`;
-                    testResults.innerHTML += `${error.message}\n`;
-                    testResults.innerHTML += `🔧 Ve a Supabase Dashboard > SQL Editor y ejecuta:\n`;
-                    testResults.innerHTML += `
-CREATE TABLE predictions (
-  id BIGINT GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
-  name TEXT NOT NULL,
-  gender TEXT NOT NULL,
-  date TEXT NOT NULL,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
-);
-
-ALTER TABLE predictions ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Enable read access for all users" ON predictions
-  FOR SELECT USING (true);
-
-CREATE POLICY "Enable insert access for all users" ON predictions
-  FOR INSERT WITH CHECK (true);
-                    `;
-                } else {
-                    testResults.innerHTML += `✅ Tabla creada exitosamente\n`;
-                    testResults.innerHTML += `ID del primer registro: ${data[0].id}\n`;
-                    testResults.innerHTML += `Ahora puedes insertar predicciones normalmente`;
-                    
-                    // Actualizar estado de conexión
-                    isConnected = true;
-                    document.getElementById('connectionStatus').className = 'connection-status connected';
-                    document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-check-circle"></i><span>Conectado - Tabla creada</span>';
-                    
-                    // Recargar predicciones
-                    loadPredictions();
-                }
-                
-            } catch (error) {
-                testResults.innerHTML += `❌ Error crítico:\n`;
-                testResults.innerHTML += `${error.message}\n`;
-                testResults.innerHTML += `🔧 Contacta al administrador del sistema`;
             }
         }
         
@@ -1109,28 +907,8 @@ CREATE POLICY "Enable insert access for all users" ON predictions
             }
         }
         
-        // Seleccionar género
-        const genderButtons = document.querySelectorAll('.gender-btn');
-        genderButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Remover selección anterior
-                genderButtons.forEach(btn => btn.classList.remove('selected'));
-                
-                // Seleccionar actual
-                this.classList.add('selected');
-                selectedGender = this.getAttribute('data-gender');
-                document.getElementById('selectedGender').value = selectedGender;
-                
-                // Efecto visual
-                this.style.transform = 'scale(1.05)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 300);
-            });
-        });
-        
         // Manejar envío del formulario
-        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+        async function handleFormSubmit(e) {
             e.preventDefault();
             
             const nameInput = document.getElementById('guestName');
@@ -1174,98 +952,55 @@ CREATE POLICY "Enable insert access for all users" ON predictions
                         .select();
                     
                     if (error) {
-                        // Si es error de tabla no existente, intentar crearla
+                        // Si es error de tabla no existente, guardar localmente
                         if (error.message.includes('does not exist') || error.message.includes('relation')) {
-                            showStatus('⚠️ Creando tabla automáticamente...', 'warning');
-                            await createTableIfNotExists();
-                            
-                            // Reintentar inserción
-                            const { data: retryData, error: retryError } = await supabaseClient
-                                .from('predictions')
-                                .insert([newPrediction])
-                                .select();
-                            
-                            if (retryError) throw retryError;
-                            
-                            // Agregar a la lista local con el ID generado por Supabase
-                            predictions.unshift({...newPrediction, id: retryData[0].id});
-                            showStatus('✅ Tabla creada y predicción guardada', 'success');
+                            throw new Error('Tabla no existe');
                         } else {
                             throw error;
                         }
                     } else {
                         // Agregar a la lista local con el ID generado por Supabase
-                        predictions.unshift({...newPrediction, id: data[0].id});
+                        newPrediction.id = data[0].id;
+                        predictions.unshift(newPrediction);
                         showStatus('✅ Predicción guardada en la base de datos', 'success');
                     }
                 } else {
-                    // Guardar en localStorage (modo offline)
-                    newPrediction.id = Date.now();
-                    newPrediction.local = true;
-                    predictions.unshift(newPrediction);
-                    saveToLocalStorage();
-                    
-                    showStatus('✅ Predicción guardada localmente (se sincronizará cuando haya conexión)', 'warning');
+                    throw new Error('Sin conexión a la base de datos');
                 }
-                
-                // Actualizar la UI
-                renderPredictions();
-                updateStats();
-                
-                // Limpiar formulario
-                nameInput.value = '';
-                genderButtons.forEach(btn => btn.classList.remove('selected'));
-                selectedGender = null;
-                document.getElementById('selectedGender').value = '';
-                
-                // Efecto visual de éxito
-                submitBtn.innerHTML = '<i class="fas fa-check"></i><span>¡Enviado!</span>';
-                submitBtn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%)';
-                
-                setTimeout(() => {
-                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
-                    submitBtn.style.background = 'linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%)';
-                    submitBtn.disabled = false;
-                }, 1500);
-                
-                // Mostrar mensaje de agradecimiento
-                const genderText = selectedGender === 'boy' ? 'niño 👶💙' : 'niña 👶💖';
-                showStatus(`¡Gracias ${guestName} por tu predicción! Has dicho que será ${genderText}. Los datos se conservarán por más de un mes.`, 'success');
-                
             } catch (error) {
-                console.error('Error al guardar la predicción:', error);
-                showStatus('❌ Error al guardar. Intentando guardar localmente...', 'error');
+                console.log('Guardando localmente:', error.message);
                 
-                // Intentar guardar localmente como respaldo
-                try {
-                    newPrediction.id = Date.now();
-                    newPrediction.local = true;
-                    newPrediction.error = error.message;
-                    predictions.unshift(newPrediction);
-                    saveToLocalStorage();
-                    
-                    renderPredictions();
-                    updateStats();
-                    
-                    submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Guardado localmente</span>';
-                    submitBtn.style.background = 'linear-gradient(135deg, #ff9800 0%, #ffb74d 100%)';
-                    
-                    setTimeout(() => {
-                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
-                        submitBtn.style.background = 'linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%)';
-                        submitBtn.disabled = false;
-                    }, 2000);
-                    
-                    showStatus('⚠️ Predicción guardada localmente debido a error de conexión', 'warning');
-                    
-                } catch (localError) {
-                    showStatus('❌ Error crítico al guardar. Por favor, intenta de nuevo.', 'error');
-                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
-                    submitBtn.style.background = 'linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%)';
-                    submitBtn.disabled = false;
-                }
+                // Guardar en localStorage (modo offline)
+                newPrediction.id = Date.now();
+                newPrediction.local = true;
+                predictions.unshift(newPrediction);
+                saveToLocalStorage();
+                
+                showStatus('✅ Predicción guardada localmente (se sincronizará cuando haya conexión)', 'warning');
             }
-        });
+            
+            // Actualizar la UI
+            renderPredictions();
+            updateStats();
+            
+            // Limpiar formulario
+            nameInput.value = '';
+            document.querySelectorAll('.gender-btn').forEach(function(btn) {
+                btn.classList.remove('selected');
+            });
+            selectedGender = null;
+            document.getElementById('selectedGender').value = '';
+            
+            // Restaurar botón
+            setTimeout(function() {
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
+                submitBtn.disabled = false;
+            }, 1500);
+            
+            // Mostrar mensaje de agradecimiento
+            const genderText = selectedGender === 'boy' ? 'niño 👶💙' : 'niña 👶💖';
+            showStatus(`¡Gracias ${guestName} por tu predicción!`, 'success');
+        }
         
         // Cargar predicciones desde Supabase
         async function loadPredictions() {
@@ -1275,7 +1010,7 @@ CREATE POLICY "Enable insert access for all users" ON predictions
                         .from('predictions')
                         .select('*')
                         .order('created_at', { ascending: false })
-                        .limit(100); // Limitar a 100 predicciones
+                        .limit(100);
                     
                     if (error) {
                         if (error.message.includes('does not exist') || error.message.includes('relation')) {
@@ -1330,7 +1065,7 @@ CREATE POLICY "Enable insert access for all users" ON predictions
                     const twoMonthsAgo = new Date();
                     twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
                     
-                    predictions = predictions.filter(p => {
+                    predictions = predictions.filter(function(p) {
                         if (p.created_at) {
                             const createdDate = new Date(p.created_at);
                             return createdDate > twoMonthsAgo;
@@ -1362,7 +1097,8 @@ CREATE POLICY "Enable insert access for all users" ON predictions
             emptyList.style.display = 'none';
             
             // Generar HTML para cada predicción
-            const predictionsHTML = predictions.map(prediction => `
+            const predictionsHTML = predictions.map(function(prediction) {
+                return `
                 <div class="prediction-item" data-id="${prediction.id}">
                     <div class="prediction-header">
                         <div class="prediction-name">${prediction.name}</div>
@@ -1376,15 +1112,22 @@ CREATE POLICY "Enable insert access for all users" ON predictions
                         ${prediction.local ? '<span style="color: #ff9800; font-size: 0.8em;"> (local)</span>' : ''}
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
             
             container.innerHTML = predictionsHTML;
         }
         
         // Actualizar estadísticas
         function updateStats() {
-            const boyCount = predictions.filter(p => p.gender === 'boy').length;
-            const girlCount = predictions.filter(p => p.gender === 'girl').length;
+            const boyCount = predictions.filter(function(p) {
+                return p.gender === 'boy';
+            }).length;
+            
+            const girlCount = predictions.filter(function(p) {
+                return p.gender === 'girl';
+            }).length;
+            
             const totalCount = predictions.length;
             
             document.getElementById('boyCount').textContent = boyCount;
@@ -1393,7 +1136,7 @@ CREATE POLICY "Enable insert access for all users" ON predictions
         }
         
         // Botón para borrar todas las predicciones
-        document.getElementById('deleteAllBtn').addEventListener('click', async function() {
+        async function deleteAllPredictions() {
             if (predictions.length === 0) {
                 showStatus('No hay predicciones para borrar', 'warning');
                 return;
@@ -1424,43 +1167,34 @@ CREATE POLICY "Enable insert access for all users" ON predictions
                     showStatus('❌ Error al borrar las predicciones', 'error');
                 }
             }
-        });
-        
-        // Botón de ubicación
-        const locationBtn = document.getElementById('locationBtn');
-        const locationDetails = document.getElementById('locationDetails');
-        
-        locationBtn.addEventListener('click', function() {
-            if (locationDetails.style.display === 'block') {
-                locationDetails.style.display = 'none';
-                locationBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i><span>Ver ubicación del evento</span>';
-            } else {
-                locationDetails.style.display = 'block';
-                locationBtn.innerHTML = '<i class="fas fa-times"></i><span>Ocultar ubicación</span>';
-            }
-        });
+        }
         
         // Mostrar mensajes de estado
-        function showStatus(message, type = 'success') {
+        function showStatus(message, type) {
             const statusElement = document.getElementById('statusMessage');
             statusElement.textContent = message;
-            statusElement.className = `status-message status-${type}`;
+            statusElement.className = 'status-message status-' + type;
             statusElement.style.display = 'block';
             
             // Ocultar después de 5 segundos
-            setTimeout(() => {
+            setTimeout(function() {
                 statusElement.style.display = 'none';
             }, 5000);
         }
         
         // Sincronizar automáticamente cada 30 segundos si hay conexión
-        setInterval(async () => {
-            if (isConnected && supabaseClient && predictions.some(p => p.local)) {
+        setInterval(async function() {
+            if (isConnected && supabaseClient && predictions.some(function(p) {
+                return p.local;
+            })) {
                 try {
                     // Encontrar predicciones locales no sincronizadas
-                    const localPredictions = predictions.filter(p => p.local && !p.synced);
+                    const localPredictions = predictions.filter(function(p) {
+                        return p.local && !p.synced;
+                    });
                     
-                    for (const pred of localPredictions) {
+                    for (let i = 0; i < localPredictions.length; i++) {
+                        const pred = localPredictions[i];
                         const { data, error } = await supabaseClient
                             .from('predictions')
                             .insert([{
@@ -1492,7 +1226,7 @@ CREATE POLICY "Enable insert access for all users" ON predictions
         }, 30000); // 30 segundos
         
         // Verificar conexión periódicamente
-        setInterval(async () => {
+        setInterval(async function() {
             if (supabaseClient && !isConnected) {
                 try {
                     const { error } = await supabaseClient
