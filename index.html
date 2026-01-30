@@ -126,7 +126,8 @@
                 <i class="far fa-calendar-alt"></i>
                 <span>Fecha del evento</span>
             </div>
-            <div class="date-details">15 de Marzo de 2026 - 4:00 PM</div>
+            <!-- FECHA CORREGIDA: 2:00 PM en lugar de 4:00 PM -->
+            <div class="date-details">15 de Marzo de 2026 - 2:00 PM</div>
         </div>
         
         <div class="countdown" id="countdown">
@@ -203,7 +204,10 @@
                 </div>
                 
                 <div style="text-align: center; margin-top: 20px;">
-                   
+                    <button class="delete-all-btn" id="deleteAllBtn">
+                        <i class="fas fa-trash"></i>
+                        <span>Borrar todas las predicciones</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -543,7 +547,8 @@
         
         function startCountdown() {
             function updateCountdown() {
-                const eventDate = new Date('March 15, 2026 16:00:00').getTime();
+                // FECHA CORREGIDA: 14:00 (2:00 PM) en lugar de 16:00 (4:00 PM)
+                const eventDate = new Date('March 15, 2026 14:00:00').getTime();
                 const now = new Date().getTime();
                 const timeLeft = eventDate - now;
                 
