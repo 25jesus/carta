@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -575,6 +575,35 @@
             border: 2px solid #ffeaa7;
         }
         
+        .connection-status.warning {
+            background-color: #ffeaa7;
+            color: #856404;
+            border: 2px solid #ffcc00;
+        }
+        
+        .test-connection-btn {
+            background: linear-gradient(135deg, #4a90e2 0%, #6ba8ff 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 10px;
+        }
+        
+        .prediction-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
         @media (max-width: 768px) {
             h1 { font-size: 2rem; }
             .date-details { font-size: 1.5rem; }
@@ -588,6 +617,10 @@
                 right: 10px;
                 font-size: 0.8rem;
                 padding: 8px 12px;
+            }
+            .prediction-controls {
+                flex-direction: column;
+                align-items: center;
             }
         }
     </style>
@@ -705,10 +738,15 @@
                     </div>
                 </div>
                 
-                <div style="text-align: center; margin-top: 20px;">
+                <div class="prediction-controls">
                     <button class="delete-all-btn" id="deleteAllBtn">
                         <i class="fas fa-trash"></i>
                         <span>Borrar todas las predicciones</span>
+                    </button>
+                    
+                    <button class="test-connection-btn" id="testConnectionBtn">
+                        <i class="fas fa-wifi"></i>
+                        <span>Probar conexión con BD</span>
                     </button>
                 </div>
             </div>
@@ -776,9 +814,6 @@
             // Inicializar Supabase
             initializeSupabase();
             
-            // Cargar predicciones
-            loadPredictions();
-            
             // Iniciar cuenta regresiva
             updateCountdown();
             setInterval(updateCountdown, 1000);
@@ -822,6 +857,18 @@
             // Botón para borrar todas las predicciones
             document.getElementById('deleteAllBtn').addEventListener('click', deleteAllPredictions);
             
+            // Botón para probar conexión
+            document.getElementById('testConnectionBtn').addEventListener('click', async function() {
+                this.innerHTML = '<div class="loading"></div><span>Probando...</span>';
+                this.disabled = true;
+                
+                await testSupabaseConnection();
+                await loadPredictions();
+                
+                this.innerHTML = '<i class="fas fa-wifi"></i><span>Probar conexión con BD</span>';
+                this.disabled = false;
+            });
+            
             // Botón de ubicación
             const locationBtn = document.getElementById('locationBtn');
             const locationDetails = document.getElementById('locationDetails');
@@ -839,50 +886,88 @@
         
         // Inicializar Supabase
         async function initializeSupabase() {
-            const connectionStatus = document.getElementById('connectionStatus');
-            
             try {
                 // Verificar que Supabase esté disponible
                 if (typeof supabase === 'undefined') {
                     throw new Error('Supabase no está disponible. Verifica tu conexión a internet.');
                 }
                 
-                connectionStatus.className = 'connection-status connecting';
-                connectionStatus.innerHTML = '<div class="loading"></div><span>Conectando a Supabase...</span>';
-                
                 // Crear cliente Supabase
                 supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 
-                // Probar conexión simple
-                const { error } = await supabaseClient.from('predictions').select('*').limit(1);
+                console.log('Cliente Supabase creado');
+                
+                // Probar conexión
+                await testSupabaseConnection();
+                
+                // Cargar predicciones después de verificar conexión
+                await loadPredictions();
+                
+            } catch (error) {
+                console.error('Error al inicializar Supabase:', error);
+                isConnected = false;
+                const connectionStatus = document.getElementById('connectionStatus');
+                connectionStatus.className = 'connection-status disconnected';
+                connectionStatus.innerHTML = '<i class="fas fa-times-circle"></i><span>Error de inicialización</span>';
+                
+                // Cargar de localStorage como respaldo
+                loadFromLocalStorage();
+                
+                showStatus('⚠️ Error al conectar con la base de datos. Usando almacenamiento local.', 'warning');
+            }
+        }
+        
+        // Función para verificar la conexión con Supabase
+        async function testSupabaseConnection() {
+            try {
+                const connectionStatus = document.getElementById('connectionStatus');
+                connectionStatus.className = 'connection-status connecting';
+                connectionStatus.innerHTML = '<div class="loading"></div><span>Verificando conexión...</span>';
+                
+                console.log('Probando conexión con Supabase...');
+                
+                // Primero probar con una consulta simple
+                const { data, error } = await supabaseClient
+                    .from('predictions')
+                    .select('*')
+                    .limit(1);
+                
+                console.log('Resultado de prueba:', { data, error });
                 
                 if (error) {
-                    // Si es un error de tabla no existente, no es crítico
                     if (error.message.includes('does not exist') || error.message.includes('relation')) {
+                        // La tabla no existe, pero la conexión es exitosa
                         isConnected = true;
-                        connectionStatus.className = 'connection-status connected';
-                        connectionStatus.innerHTML = '<i class="fas fa-check-circle"></i><span>Conectado (tabla no existe)</span>';
-                        showStatus('⚠️ La tabla de predicciones no existe. Se creará automáticamente.', 'warning');
+                        connectionStatus.className = 'connection-status warning';
+                        connectionStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Conectado - Tabla no existe</span>';
+                        showStatus('⚠️ La tabla de predicciones no existe. Por favor créala en Supabase.', 'warning');
+                        console.log('Tabla no existe, pero conexión exitosa');
+                    } else if (error.message.includes('permission')) {
+                        isConnected = true;
+                        connectionStatus.className = 'connection-status warning';
+                        connectionStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Conectado - Error permisos</span>';
+                        showStatus('⚠️ Error de permisos. Verifica las políticas RLS en Supabase.', 'warning');
+                        console.log('Error de permisos');
                     } else {
                         throw error;
                     }
                 } else {
                     isConnected = true;
                     connectionStatus.className = 'connection-status connected';
-                    connectionStatus.innerHTML = '<i class="fas fa-check-circle"></i><span>Conectado a la base de datos</span>';
-                    showStatus('✅ Conectado a la base de datos correctamente', 'success');
+                    connectionStatus.innerHTML = '<i class="fas fa-check-circle"></i><span>Conectado correctamente</span>';
+                    showStatus('✅ Conexión exitosa con la base de datos', 'success');
+                    console.log('Conexión exitosa');
                 }
                 
+                return isConnected;
             } catch (error) {
-                console.error('Error al conectar con Supabase:', error);
+                console.error('Error en conexión:', error);
                 isConnected = false;
+                const connectionStatus = document.getElementById('connectionStatus');
                 connectionStatus.className = 'connection-status disconnected';
-                connectionStatus.innerHTML = '<i class="fas fa-times-circle"></i><span>Desconectado - Modo local</span>';
-                
-                showStatus('⚠️ Modo sin conexión - usando almacenamiento local', 'warning');
-                
-                // Cargar de localStorage como respaldo
-                loadFromLocalStorage();
+                connectionStatus.innerHTML = '<i class="fas fa-times-circle"></i><span>Error de conexión</span>';
+                showStatus('❌ No se pudo conectar a la base de datos', 'error');
+                return false;
             }
         }
         
@@ -945,24 +1030,41 @@
             
             try {
                 if (isConnected && supabaseClient) {
+                    console.log('Intentando guardar en Supabase...', newPrediction);
+                    
                     // Guardar en Supabase
                     const { data, error } = await supabaseClient
                         .from('predictions')
-                        .insert([newPrediction])
+                        .insert([
+                            {
+                                name: newPrediction.name,
+                                gender: newPrediction.gender,
+                                date: newPrediction.date,
+                                created_at: newPrediction.created_at
+                            }
+                        ])
                         .select();
                     
                     if (error) {
-                        // Si es error de tabla no existente, guardar localmente
-                        if (error.message.includes('does not exist') || error.message.includes('relation')) {
-                            throw new Error('Tabla no existe');
+                        console.error('Error detallado al insertar:', error);
+                        
+                        // Mostrar error específico
+                        if (error.message.includes('does not exist')) {
+                            showStatus('❌ La tabla no existe. Por favor, crea la tabla primero.', 'error');
+                        } else if (error.message.includes('permission')) {
+                            showStatus('❌ No tienes permisos para escribir en la base de datos', 'error');
                         } else {
-                            throw error;
+                            showStatus('❌ Error al guardar: ' + error.message, 'error');
                         }
+                        
+                        throw new Error('Error de Supabase: ' + error.message);
                     } else {
+                        console.log('Insertado correctamente, respuesta:', data);
+                        
                         // Agregar a la lista local con el ID generado por Supabase
                         newPrediction.id = data[0].id;
                         predictions.unshift(newPrediction);
-                        showStatus('✅ Predicción guardada en la base de datos', 'success');
+                        showStatus('✅ Predicción guardada exitosamente!', 'success');
                     }
                 } else {
                     throw new Error('Sin conexión a la base de datos');
@@ -971,12 +1073,12 @@
                 console.log('Guardando localmente:', error.message);
                 
                 // Guardar en localStorage (modo offline)
-                newPrediction.id = Date.now();
+                newPrediction.id = 'local_' + Date.now();
                 newPrediction.local = true;
                 predictions.unshift(newPrediction);
                 saveToLocalStorage();
                 
-                showStatus('✅ Predicción guardada localmente (se sincronizará cuando haya conexión)', 'warning');
+                showStatus('✅ Predicción guardada localmente', 'warning');
             }
             
             // Actualizar la UI
@@ -996,45 +1098,66 @@
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
                 submitBtn.disabled = false;
             }, 1500);
-            
-            // Mostrar mensaje de agradecimiento
-            const genderText = selectedGender === 'boy' ? 'niño 👶💙' : 'niña 👶💖';
-            showStatus(`¡Gracias ${guestName} por tu predicción!`, 'success');
         }
         
         // Cargar predicciones desde Supabase
         async function loadPredictions() {
             try {
+                // Mostrar estado de carga
+                const container = document.getElementById('predictionsContainer');
+                container.innerHTML = '<div class="empty-list"><p>Cargando predicciones...</p><div class="loading" style="margin: 10px auto;"></div></div>';
+                
+                console.log('Cargando predicciones, conexión:', isConnected);
+                
                 if (isConnected && supabaseClient) {
+                    console.log('Intentando cargar desde Supabase...');
+                    
                     const { data, error } = await supabaseClient
                         .from('predictions')
                         .select('*')
-                        .order('created_at', { ascending: false })
-                        .limit(100);
+                        .order('created_at', { ascending: false });
                     
                     if (error) {
-                        if (error.message.includes('does not exist') || error.message.includes('relation')) {
-                            console.log('Tabla no existe, cargando de localStorage');
-                            loadFromLocalStorage();
-                            return;
+                        console.error('Error detallado de Supabase:', error);
+                        
+                        // Mostrar error específico
+                        if (error.message.includes('does not exist')) {
+                            showStatus('❌ La tabla de predicciones no existe en la base de datos', 'error');
+                        } else if (error.message.includes('permission')) {
+                            showStatus('❌ Error de permisos. Verifica las políticas RLS', 'error');
+                        } else {
+                            showStatus('❌ Error al cargar: ' + error.message, 'error');
                         }
-                        throw error;
+                        
+                        // Cargar de localStorage como respaldo
+                        loadFromLocalStorage();
+                        return;
                     }
                     
-                    predictions = data || [];
-                    renderPredictions();
-                    updateStats();
+                    console.log('Datos recibidos de Supabase:', data);
                     
-                    // Sincronizar con localStorage
-                    saveToLocalStorage();
+                    if (data && data.length > 0) {
+                        predictions = data;
+                        console.log(`Se cargaron ${data.length} predicciones de Supabase`);
+                        renderPredictions();
+                        updateStats();
+                        showStatus(`✅ Se cargaron ${data.length} predicciones`, 'success');
+                        
+                        // Guardar en localStorage como caché
+                        saveToLocalStorage();
+                    } else {
+                        console.log('No hay datos en Supabase, cargando de localStorage...');
+                        predictions = [];
+                        loadFromLocalStorage();
+                    }
                     
                 } else {
-                    // Cargar de localStorage
+                    console.log('Sin conexión o cliente no disponible, cargando de localStorage...');
                     loadFromLocalStorage();
                 }
             } catch (error) {
-                console.error('Error al cargar predicciones:', error);
-                showStatus('⚠️ Error al cargar predicciones. Usando datos locales.', 'error');
+                console.error('Error inesperado al cargar predicciones:', error);
+                showStatus('❌ Error inesperado al cargar predicciones', 'error');
                 loadFromLocalStorage();
             }
         }
@@ -1043,11 +1166,12 @@
         function saveToLocalStorage() {
             try {
                 const dataToSave = {
-                    predictions: predictions,
+                    predictions: predictions.filter(p => p.local), // Solo guardar locales
                     lastUpdate: new Date().toISOString(),
                     totalCount: predictions.length
                 };
                 localStorage.setItem('babyShowerPredictions', JSON.stringify(dataToSave));
+                console.log('Datos guardados en localStorage:', dataToSave);
             } catch (error) {
                 console.error('Error al guardar en localStorage:', error);
             }
@@ -1061,21 +1185,17 @@
                     const data = JSON.parse(saved);
                     predictions = data.predictions || [];
                     
-                    // Filtrar predicciones viejas (más de 2 meses)
-                    const twoMonthsAgo = new Date();
-                    twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
-                    
-                    predictions = predictions.filter(function(p) {
-                        if (p.created_at) {
-                            const createdDate = new Date(p.created_at);
-                            return createdDate > twoMonthsAgo;
-                        }
-                        return true;
-                    });
+                    console.log('Datos cargados de localStorage:', predictions);
                     
                     renderPredictions();
                     updateStats();
                     showStatus('📂 Cargado desde almacenamiento local', 'warning');
+                } else {
+                    predictions = [];
+                    const emptyList = document.getElementById('emptyList');
+                    emptyList.style.display = 'block';
+                    emptyList.innerHTML = '<p>¡Sé el primero en dejar tu predicción!</p><p>🐚 ¿Será niño o niña? 🐚</p>';
+                    updateStats();
                 }
             } catch (error) {
                 console.error('Error al cargar de localStorage:', error);
@@ -1088,6 +1208,8 @@
             const container = document.getElementById('predictionsContainer');
             const emptyList = document.getElementById('emptyList');
             
+            console.log('Renderizando predicciones:', predictions.length);
+            
             if (predictions.length === 0) {
                 emptyList.style.display = 'block';
                 emptyList.innerHTML = '<p>¡Sé el primero en dejar tu predicción!</p><p>🐚 ¿Será niño o niña? 🐚</p>';
@@ -1098,18 +1220,19 @@
             
             // Generar HTML para cada predicción
             const predictionsHTML = predictions.map(function(prediction) {
+                const isLocal = prediction.id && prediction.id.toString().startsWith('local_');
                 return `
                 <div class="prediction-item" data-id="${prediction.id}">
                     <div class="prediction-header">
                         <div class="prediction-name">${prediction.name}</div>
                         <div class="prediction-gender ${prediction.gender === 'boy' ? 'boy-badge' : 'girl-badge'}">
                             ${prediction.gender === 'boy' ? '👶 Niño' : '👶 Niña'}
-                            ${prediction.local ? ' 📱' : ''}
+                            ${isLocal ? ' 📱' : ''}
                         </div>
                     </div>
                     <div class="prediction-date">
                         <i class="far fa-clock"></i> ${prediction.date}
-                        ${prediction.local ? '<span style="color: #ff9800; font-size: 0.8em;"> (local)</span>' : ''}
+                        ${isLocal ? '<span style="color: #ff9800; font-size: 0.8em;"> (local)</span>' : ''}
                     </div>
                 </div>
             `;
@@ -1133,6 +1256,8 @@
             document.getElementById('boyCount').textContent = boyCount;
             document.getElementById('girlCount').textContent = girlCount;
             document.getElementById('totalCount').textContent = totalCount;
+            
+            console.log('Estadísticas actualizadas:', { boyCount, girlCount, totalCount });
         }
         
         // Botón para borrar todas las predicciones
@@ -1151,7 +1276,12 @@
                             .delete()
                             .neq('id', 0);
                         
-                        if (error) throw error;
+                        if (error) {
+                            console.error('Error al borrar de Supabase:', error);
+                            showStatus('❌ Error al borrar de la base de datos', 'error');
+                        } else {
+                            console.log('Predicciones borradas de Supabase');
+                        }
                     }
                     
                     // Borrar localmente
@@ -1176,6 +1306,8 @@
             statusElement.className = 'status-message status-' + type;
             statusElement.style.display = 'block';
             
+            console.log(`Estado [${type}]: ${message}`);
+            
             // Ocultar después de 5 segundos
             setTimeout(function() {
                 statusElement.style.display = 'none';
@@ -1185,39 +1317,55 @@
         // Sincronizar automáticamente cada 30 segundos si hay conexión
         setInterval(async function() {
             if (isConnected && supabaseClient && predictions.some(function(p) {
-                return p.local;
+                return p.id && p.id.toString().startsWith('local_');
             })) {
                 try {
+                    console.log('Intentando sincronizar predicciones locales...');
+                    
                     // Encontrar predicciones locales no sincronizadas
                     const localPredictions = predictions.filter(function(p) {
-                        return p.local && !p.synced;
+                        return p.id && p.id.toString().startsWith('local_');
                     });
+                    
+                    console.log(`Predicciones locales a sincronizar: ${localPredictions.length}`);
                     
                     for (let i = 0; i < localPredictions.length; i++) {
                         const pred = localPredictions[i];
+                        
+                        // Quitar el prefijo 'local_' para crear un objeto limpio
+                        const cleanPred = {
+                            name: pred.name,
+                            gender: pred.gender,
+                            date: pred.date,
+                            created_at: pred.created_at || new Date().toISOString()
+                        };
+                        
                         const { data, error } = await supabaseClient
                             .from('predictions')
-                            .insert([{
-                                name: pred.name,
-                                gender: pred.gender,
-                                date: pred.date,
-                                created_at: pred.created_at || new Date().toISOString()
-                            }])
+                            .insert([cleanPred])
                             .select();
                         
                         if (!error && data) {
-                            // Marcar como sincronizada
-                            pred.id = data[0].id;
-                            pred.local = false;
-                            pred.synced = true;
+                            console.log(`Predicción sincronizada: ${pred.name}`);
+                            
+                            // Actualizar en el array predictions
+                            const index = predictions.findIndex(p => p.id === pred.id);
+                            if (index !== -1) {
+                                predictions[index].id = data[0].id;
+                                predictions[index].local = false;
+                                
+                                // Actualizar UI
+                                renderPredictions();
+                            }
                             
                             showStatus(`✅ Sincronizada predicción de ${pred.name}`, 'success');
+                        } else {
+                            console.error('Error al sincronizar:', error);
                         }
                     }
                     
                     // Guardar cambios
                     saveToLocalStorage();
-                    renderPredictions();
                     
                 } catch (error) {
                     console.log('Error en sincronización automática:', error);
@@ -1228,22 +1376,13 @@
         // Verificar conexión periódicamente
         setInterval(async function() {
             if (supabaseClient && !isConnected) {
-                try {
-                    const { error } = await supabaseClient
-                        .from('predictions')
-                        .select('count', { count: 'exact', head: true });
-                    
-                    if (!error) {
-                        isConnected = true;
-                        document.getElementById('connectionStatus').className = 'connection-status connected';
-                        document.getElementById('connectionStatus').innerHTML = '<i class="fas fa-check-circle"></i><span>Conectado</span>';
-                        showStatus('✅ Conexión restablecida', 'success');
-                        
-                        // Intentar sincronizar predicciones locales
-                        loadPredictions();
-                    }
-                } catch (error) {
-                    // Seguir desconectado
+                console.log('Verificando reconexión...');
+                await testSupabaseConnection();
+                
+                if (isConnected) {
+                    // Intentar sincronizar predicciones locales
+                    console.log('Reconectado, sincronizando...');
+                    await loadPredictions();
                 }
             }
         }, 60000); // 1 minuto
