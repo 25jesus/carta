@@ -5,604 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Baby Shower - Libro de Predicciones del Mar</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Incluir Supabase JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(180deg, #e0f7ff 0%, #b3e0ff 100%);
-            color: #025e8c;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        
-        .ocean-bg {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 150px;
-            background: linear-gradient(180deg, transparent 0%, #0077be 100%);
-            z-index: -1;
-        }
-        
-        .wave {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 100px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%2301558c" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
-            animation: wave 12s linear infinite;
-        }
-        
-        .wave:nth-child(2) {
-            animation: wave 8s linear infinite;
-            opacity: 0.7;
-        }
-        
-        .wave:nth-child(3) {
-            animation: wave 10s linear infinite;
-            opacity: 0.5;
-        }
-        
-        @keyframes wave {
-            0% { background-position-x: 0; }
-            100% { background-position-x: 1440px; }
-        }
-        
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        header {
-            text-align: center;
-            padding: 30px 0;
-        }
-        
-        .logo {
-            font-size: 2.8rem;
-            color: #025e8c;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .logo i {
-            color: #ff6b9d;
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            color: #013a5e;
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
-        }
-        
-        .subtitle {
-            font-size: 1.3rem;
-            color: #ff6b9d;
-            font-weight: 600;
-            margin-bottom: 30px;
-        }
-        
-        .date-box {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 25px auto;
-            max-width: 500px;
-            box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2);
-            border: 3px solid #ff6b9d;
-        }
-        
-        .date-title {
-            font-size: 1.5rem;
-            color: #ff6b9d;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .date-details {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #013a5e;
-            text-align: center;
-        }
-        
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 30px 0;
-            flex-wrap: wrap;
-        }
-        
-        .countdown-item {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 10px;
-            padding: 15px;
-            min-width: 80px;
-            box-shadow: 0 3px 10px rgba(1, 90, 140, 0.2);
-            text-align: center;
-            border: 2px solid #025e8c;
-        }
-        
-        .countdown-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #ff6b9d;
-        }
-        
-        .countdown-label {
-            font-size: 0.9rem;
-            color: #025e8c;
-            margin-top: 5px;
-        }
-        
-        .prediction-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            margin: 40px 0;
-            justify-content: center;
-        }
-        
-        .prediction-form {
-            flex: 1;
-            min-width: 300px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2);
-            border: 3px solid #025e8c;
-        }
-        
-        .prediction-list {
-            flex: 1;
-            min-width: 300px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2);
-            border: 3px solid #ff6b9d;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-        
-        .section-title {
-            font-size: 1.8rem;
-            color: #013a5e;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            font-size: 1.1rem;
-            color: #025e8c;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-        
-        input[type="text"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #b3e0ff;
-            border-radius: 10px;
-            font-size: 1rem;
-            color: #013a5e;
-            background-color: rgba(255, 255, 255, 0.8);
-            transition: border-color 0.3s;
-        }
-        
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #025e8c;
-        }
-        
-        .gender-options {
-            display: flex;
-            gap: 20px;
-            margin-top: 10px;
-        }
-        
-        .gender-option {
-            flex: 1;
-            text-align: center;
-        }
-        
-        .gender-btn {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #b3e0ff;
-            border-radius: 10px;
-            background-color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1.1rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .gender-btn i {
-            font-size: 1.8rem;
-        }
-        
-        .gender-btn.boy {
-            color: #4a90e2;
-        }
-        
-        .gender-btn.girl {
-            color: #ff6b9d;
-        }
-        
-        .gender-btn.selected {
-            transform: scale(1.05);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .gender-btn.boy.selected {
-            background-color: #e6f2ff;
-            border-color: #4a90e2;
-        }
-        
-        .gender-btn.girl.selected {
-            background-color: #ffe6ee;
-            border-color: #ff6b9d;
-        }
-        
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 7px 15px rgba(255, 107, 157, 0.4);
-        }
-        
-        .prediction-item {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-left: 5px solid #025e8c;
-            box-shadow: 0 3px 8px rgba(1, 90, 140, 0.1);
-        }
-        
-        .prediction-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-        
-        .prediction-name {
-            font-weight: bold;
-            font-size: 1.2rem;
-            color: #013a5e;
-        }
-        
-        .prediction-gender {
-            font-weight: bold;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
-        
-        .boy-badge {
-            background-color: #e6f2ff;
-            color: #4a90e2;
-        }
-        
-        .girl-badge {
-            background-color: #ffe6ee;
-            color: #ff6b9d;
-        }
-        
-        .prediction-date {
-            font-size: 0.9rem;
-            color: #7a9eb5;
-            font-style: italic;
-        }
-        
-        .stats-box {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 25px;
-            margin: 30px auto;
-            max-width: 800px;
-            box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2);
-            border: 3px solid #025e8c;
-            text-align: center;
-        }
-        
-        .stats-title {
-            font-size: 1.8rem;
-            color: #013a5e;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .stats-container {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        
-        .stat-item {
-            flex: 1;
-            min-width: 150px;
-        }
-        
-        .stat-value {
-            font-size: 3rem;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .boy-stat {
-            color: #4a90e2;
-        }
-        
-        .girl-stat {
-            color: #ff6b9d;
-        }
-        
-        .stat-label {
-            font-size: 1.1rem;
-            color: #025e8c;
-        }
-        
-        .location-section {
-            text-align: center;
-            margin: 40px auto;
-        }
-        
-        .location-btn {
-            background: linear-gradient(135deg, #4a90e2 0%, #6ba8ff 100%);
-            color: white;
-            border: none;
-            padding: 18px 35px;
-            font-size: 1.3rem;
-            border-radius: 50px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
-            font-weight: bold;
-        }
-        
-        .location-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.6);
-        }
-        
-        .location-details {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 20px;
-            margin: 25px auto;
-            max-width: 500px;
-            box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2);
-            display: none;
-        }
-        
-        .location-details h3 {
-            color: #025e8c;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 30px 0;
-            margin-top: 40px;
-            color: #025e8c;
-            font-size: 1rem;
-        }
-        
-        .marine-decor {
-            display: flex;
-            justify-content: space-around;
-            margin: 30px 0;
-            flex-wrap: wrap;
-        }
-        
-        .marine-item {
-            font-size: 2.5rem;
-            color: #025e8c;
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        .marine-item:nth-child(2) {
-            animation-delay: 0.5s;
-        }
-        
-        .marine-item:nth-child(3) {
-            animation-delay: 1s;
-        }
-        
-        .marine-item:nth-child(4) {
-            animation-delay: 1.5s;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-        
-        .empty-list {
-            text-align: center;
-            color: #7a9eb5;
-            font-style: italic;
-            padding: 40px 20px;
-        }
-        
-        .delete-all-btn {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8a8a 100%);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15px;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .status-message {
-            text-align: center;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 10px;
-            font-weight: bold;
-            display: none;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .status-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 2px solid #c3e6cb;
-        }
-        
-        .status-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 2px solid #f5c6cb;
-        }
-        
-        .status-warning {
-            background-color: #fff3cd;
-            color: #856404;
-            border: 2px solid #ffeaa7;
-        }
-        
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #025e8c;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .connection-status {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 10px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            z-index: 1000;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .connection-status.connected {
-            background-color: #d4edda;
-            color: #155724;
-            border: 2px solid #c3e6cb;
-        }
-        
-        .connection-status.disconnected {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 2px solid #f5c6cb;
-        }
-        
-        .connection-status.connecting {
-            background-color: #fff3cd;
-            color: #856404;
-            border: 2px solid #ffeaa7;
-        }
-        
-        .connection-status.warning {
-            background-color: #ffeaa7;
-            color: #856404;
-            border: 2px solid #ffcc00;
-        }
-        
-        .test-connection-btn {
-            background: linear-gradient(135deg, #4a90e2 0%, #6ba8ff 100%);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15px;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            margin-left: 10px;
-        }
-        
-        .prediction-controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: linear-gradient(180deg, #e0f7ff 0%, #b3e0ff 100%); color: #025e8c; min-height: 100vh; }
+        
+        .ocean-bg { position: fixed; bottom: 0; left: 0; width: 100%; height: 150px; background: linear-gradient(180deg, transparent 0%, #0077be 100%); z-index: -1; }
+        .wave { position: absolute; bottom: 0; width: 100%; height: 100px; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%2301558c" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x; animation: wave 12s linear infinite; }
+        .wave:nth-child(2) { animation: wave 8s linear infinite; opacity: 0.7; }
+        .wave:nth-child(3) { animation: wave 10s linear infinite; opacity: 0.5; }
+        @keyframes wave { 0% { background-position-x: 0; } 100% { background-position-x: 1440px; } }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
+        header { text-align: center; padding: 30px 0; }
+        .logo { font-size: 2.8rem; color: #025e8c; margin-bottom: 10px; display: flex; justify-content: center; align-items: center; gap: 15px; }
+        .logo i { color: #ff6b9d; }
+        h1 { font-size: 2.5rem; color: #013a5e; margin-bottom: 10px; }
+        .subtitle { font-size: 1.3rem; color: #ff6b9d; font-weight: 600; margin-bottom: 30px; }
+        
+        .date-box { background-color: rgba(255, 255, 255, 0.9); border-radius: 15px; padding: 20px; margin: 25px auto; max-width: 500px; box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2); border: 3px solid #ff6b9d; }
+        .date-title { font-size: 1.5rem; color: #ff6b9d; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .date-details { font-size: 1.8rem; font-weight: bold; color: #013a5e; text-align: center; }
+        
+        .countdown { display: flex; justify-content: center; gap: 15px; margin: 30px 0; flex-wrap: wrap; }
+        .countdown-item { background-color: rgba(255, 255, 255, 0.95); border-radius: 10px; padding: 15px; min-width: 80px; box-shadow: 0 3px 10px rgba(1, 90, 140, 0.2); text-align: center; border: 2px solid #025e8c; }
+        .countdown-value { font-size: 2rem; font-weight: bold; color: #ff6b9d; }
+        .countdown-label { font-size: 0.9rem; color: #025e8c; margin-top: 5px; }
+        
+        .prediction-section { display: flex; flex-wrap: wrap; gap: 30px; margin: 40px 0; justify-content: center; }
+        .prediction-form, .prediction-list { flex: 1; min-width: 300px; background-color: rgba(255, 255, 255, 0.9); border-radius: 15px; padding: 30px; box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2); border: 3px solid #025e8c; }
+        .prediction-list { border-color: #ff6b9d; max-height: 500px; overflow-y: auto; }
+        
+        .section-title { font-size: 1.8rem; color: #013a5e; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 1.1rem; color: #025e8c; margin-bottom: 8px; font-weight: 600; }
+        input[type="text"] { width: 100%; padding: 12px 15px; border: 2px solid #b3e0ff; border-radius: 10px; font-size: 1rem; color: #013a5e; background-color: rgba(255, 255, 255, 0.8); }
+        input[type="text"]:focus { outline: none; border-color: #025e8c; }
+        
+        .gender-options { display: flex; gap: 20px; margin-top: 10px; }
+        .gender-option { flex: 1; text-align: center; }
+        .gender-btn { width: 100%; padding: 15px; border: 2px solid #b3e0ff; border-radius: 10px; background-color: white; cursor: pointer; transition: all 0.3s; font-size: 1.1rem; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .gender-btn i { font-size: 1.8rem; }
+        .gender-btn.boy { color: #4a90e2; }
+        .gender-btn.girl { color: #ff6b9d; }
+        .gender-btn.selected { transform: scale(1.05); box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); }
+        .gender-btn.boy.selected { background-color: #e6f2ff; border-color: #4a90e2; }
+        .gender-btn.girl.selected { background-color: #ffe6ee; border-color: #ff6b9d; }
+        
+        .submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%); color: white; border: none; border-radius: 10px; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.3s; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 7px 15px rgba(255, 107, 157, 0.4); }
+        
+        .prediction-item { background-color: rgba(255, 255, 255, 0.9); border-radius: 10px; padding: 15px; margin-bottom: 15px; border-left: 5px solid #025e8c; box-shadow: 0 3px 8px rgba(1, 90, 140, 0.1); }
+        .prediction-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .prediction-name { font-weight: bold; font-size: 1.2rem; color: #013a5e; }
+        .prediction-gender { font-weight: bold; padding: 4px 12px; border-radius: 20px; font-size: 0.9rem; }
+        .boy-badge { background-color: #e6f2ff; color: #4a90e2; }
+        .girl-badge { background-color: #ffe6ee; color: #ff6b9d; }
+        .prediction-date { font-size: 0.9rem; color: #7a9eb5; font-style: italic; }
+        
+        .stats-box { background-color: rgba(255, 255, 255, 0.9); border-radius: 15px; padding: 25px; margin: 30px auto; max-width: 800px; box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2); border: 3px solid #025e8c; text-align: center; }
+        .stats-title { font-size: 1.8rem; color: #013a5e; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .stats-container { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; }
+        .stat-item { flex: 1; min-width: 150px; }
+        .stat-value { font-size: 3rem; font-weight: bold; margin-bottom: 5px; }
+        .boy-stat { color: #4a90e2; }
+        .girl-stat { color: #ff6b9d; }
+        .stat-label { font-size: 1.1rem; color: #025e8c; }
+        
+        .empty-list { text-align: center; color: #7a9eb5; font-style: italic; padding: 40px 20px; }
+        .delete-all-btn { background: linear-gradient(135deg, #ff6b6b 0%, #ff8a8a 100%); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 15px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 5px; }
+        
+        .status-message { text-align: center; padding: 15px; margin: 15px 0; border-radius: 10px; font-weight: bold; display: none; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .status-success { background-color: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
+        .status-error { background-color: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
+        .status-warning { background-color: #fff3cd; color: #856404; border: 2px solid #ffeaa7; }
+        
+        .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid #025e8c; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .connection-status { position: fixed; top: 20px; right: 20px; padding: 10px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; z-index: 1000; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); display: flex; align-items: center; gap: 8px; }
+        .connection-status.connected { background-color: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
+        .connection-status.disconnected { background-color: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
+        .connection-status.connecting { background-color: #fff3cd; color: #856404; border: 2px solid #ffeaa7; }
         
         @media (max-width: 768px) {
             h1 { font-size: 2rem; }
@@ -611,17 +95,6 @@
             .section-title { font-size: 1.5rem; }
             .stats-container { flex-direction: column; }
             .stat-item { min-width: 100%; }
-            .location-btn { padding: 15px 25px; font-size: 1.1rem; }
-            .connection-status {
-                top: 10px;
-                right: 10px;
-                font-size: 0.8rem;
-                padding: 8px 12px;
-            }
-            .prediction-controls {
-                flex-direction: column;
-                align-items: center;
-            }
         }
     </style>
 </head>
@@ -632,10 +105,9 @@
         <div class="wave"></div>
     </div>
     
-    <!-- Indicador de conexión -->
     <div id="connectionStatus" class="connection-status connecting">
         <div class="loading"></div>
-        <span>Conectando a la base de datos...</span>
+        <span>Conectando...</span>
     </div>
     
     <div class="container">
@@ -676,15 +148,7 @@
             </div>
         </div>
         
-        <div class="marine-decor">
-            <div class="marine-item">🐠</div>
-            <div class="marine-item">🐬</div>
-            <div class="marine-item">🐳</div>
-            <div class="marine-item">🐙</div>
-        </div>
-        
-        <!-- Mensajes de estado mejorados -->
-        <div id="statusMessage" class="status-message" style="display: none;"></div>
+        <div id="statusMessage" class="status-message"></div>
         
         <div class="prediction-section">
             <div class="prediction-form">
@@ -738,15 +202,10 @@
                     </div>
                 </div>
                 
-                <div class="prediction-controls">
+                <div style="text-align: center; margin-top: 20px;">
                     <button class="delete-all-btn" id="deleteAllBtn">
                         <i class="fas fa-trash"></i>
                         <span>Borrar todas las predicciones</span>
-                    </button>
-                    
-                    <button class="test-connection-btn" id="testConnectionBtn">
-                        <i class="fas fa-wifi"></i>
-                        <span>Probar conexión con BD</span>
                     </button>
                 </div>
             </div>
@@ -774,25 +233,8 @@
             </div>
         </div>
         
-        <div class="location-section">
-            <button class="location-btn" id="locationBtn">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>Ver ubicación del evento</span>
-            </button>
-            
-            <div class="location-details" id="locationDetails">
-                <h3><i class="fas fa-map-pin"></i> Lugar del Baby Shower</h3>
-                <p><strong>Salón Azul Marino</strong></p>
-                <p>Avenida del Océano, 123</p>
-                <p>Zona Costera, Ciudad</p>
-                <p><em>Estacionamiento disponible en el lugar</em></p>
-                <p>Para confirmar asistencia: 555-123-4567</p>
-            </div>
-        </div>
-        
         <footer>
             <p>¡Gracias por compartir tu predicción! La respuesta se revelará el día del baby shower.</p>
-            <p>Los datos se conservarán por más de un mes en la base de datos.</p>
             <p>Con cariño, los futuros papás</p>
             <p>💙💖</p>
         </footer>
@@ -805,379 +247,103 @@
         let supabaseClient = null;
         let isConnected = false;
         
-        // Configuración de Supabase - REEMPLAZA CON TUS DATOS REALES
+        // Configuración de Supabase - REEMPLAZA CON TUS DATOS
         const SUPABASE_URL = 'https://fndskmqdvmndwiwjwewx.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuZHNrbXFkdm1uZHdpd2p3ZXd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3MDk5MDQsImV4cCI6MjA4NTI4NTkwNH0.7cTUi4jb1eGYuCE8YVuUZi1dozTGRufWkVR-sHZAM88';
         
-        // Cargar predicciones guardadas al iniciar
-        document.addEventListener('DOMContentLoaded', function() {
-            // Inicializar Supabase
-            initializeSupabase();
-            
-            // Iniciar cuenta regresiva
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
-            
-            // Configurar event listeners
+        // Inicializar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', async function() {
+            await initializeApp();
             setupEventListeners();
-            
-            // Mostrar mensaje de bienvenida
-            setTimeout(function() {
-                showStatus('¡Bienvenidos al libro de predicciones del baby shower! 🐠', 'success');
-            }, 1000);
+            startCountdown();
         });
         
-        // Configurar event listeners
-        function setupEventListeners() {
-            // Seleccionar género
-            const genderButtons = document.querySelectorAll('.gender-btn');
-            genderButtons.forEach(function(button) {
-                button.addEventListener('click', function() {
-                    // Remover selección anterior
-                    genderButtons.forEach(function(btn) {
-                        btn.classList.remove('selected');
-                    });
-                    
-                    // Seleccionar actual
-                    this.classList.add('selected');
-                    selectedGender = this.getAttribute('data-gender');
-                    document.getElementById('selectedGender').value = selectedGender;
-                    
-                    // Efecto visual
-                    this.style.transform = 'scale(1.05)';
-                    setTimeout(function() {
-                        button.style.transform = '';
-                    }, 300);
-                });
-            });
-            
-            // Manejar envío del formulario
-            document.getElementById('predictionForm').addEventListener('submit', handleFormSubmit);
-            
-            // Botón para borrar todas las predicciones
-            document.getElementById('deleteAllBtn').addEventListener('click', deleteAllPredictions);
-            
-            // Botón para probar conexión
-            document.getElementById('testConnectionBtn').addEventListener('click', async function() {
-                this.innerHTML = '<div class="loading"></div><span>Probando...</span>';
-                this.disabled = true;
-                
-                await testSupabaseConnection();
-                await loadPredictions();
-                
-                this.innerHTML = '<i class="fas fa-wifi"></i><span>Probar conexión con BD</span>';
-                this.disabled = false;
-            });
-            
-            // Botón de ubicación
-            const locationBtn = document.getElementById('locationBtn');
-            const locationDetails = document.getElementById('locationDetails');
-            
-            locationBtn.addEventListener('click', function() {
-                if (locationDetails.style.display === 'block') {
-                    locationDetails.style.display = 'none';
-                    locationBtn.innerHTML = '<i class="fas fa-map-marker-alt"></i><span>Ver ubicación del evento</span>';
-                } else {
-                    locationDetails.style.display = 'block';
-                    locationBtn.innerHTML = '<i class="fas fa-times"></i><span>Ocultar ubicación</span>';
-                }
-            });
-        }
-        
-        // Inicializar Supabase
-        async function initializeSupabase() {
+        async function initializeApp() {
             try {
-                // Verificar que Supabase esté disponible
-                if (typeof supabase === 'undefined') {
-                    throw new Error('Supabase no está disponible. Verifica tu conexión a internet.');
-                }
-                
-                // Crear cliente Supabase
+                // Inicializar Supabase
                 supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 
-                console.log('Cliente Supabase creado');
-                
                 // Probar conexión
-                await testSupabaseConnection();
+                await testConnection();
                 
-                // Cargar predicciones después de verificar conexión
+                // Cargar predicciones
                 await loadPredictions();
                 
             } catch (error) {
-                console.error('Error al inicializar Supabase:', error);
+                console.error('Error inicializando:', error);
+                showStatus('⚠️ Error al conectar con la base de datos', 'error');
+            }
+        }
+        
+        async function testConnection() {
+            const status = document.getElementById('connectionStatus');
+            try {
+                status.className = 'connection-status connecting';
+                status.innerHTML = '<div class="loading"></div><span>Conectando...</span>';
+                
+                // Intentar una consulta simple
+                const { data, error } = await supabaseClient
+                    .from('predictions')
+                    .select('count')
+                    .limit(1);
+                
+                if (error) throw error;
+                
+                isConnected = true;
+                status.className = 'connection-status connected';
+                status.innerHTML = '<i class="fas fa-check-circle"></i><span>Conectado</span>';
+                
+            } catch (error) {
+                console.error('Error de conexión:', error);
                 isConnected = false;
-                const connectionStatus = document.getElementById('connectionStatus');
-                connectionStatus.className = 'connection-status disconnected';
-                connectionStatus.innerHTML = '<i class="fas fa-times-circle"></i><span>Error de inicialización</span>';
+                status.className = 'connection-status disconnected';
+                status.innerHTML = '<i class="fas fa-times-circle"></i><span>Desconectado</span>';
                 
                 // Cargar de localStorage como respaldo
                 loadFromLocalStorage();
-                
-                showStatus('⚠️ Error al conectar con la base de datos. Usando almacenamiento local.', 'warning');
             }
         }
         
-        // Función para verificar la conexión con Supabase
-        async function testSupabaseConnection() {
+        async function loadPredictions() {
+            const container = document.getElementById('predictionsContainer');
+            const emptyList = document.getElementById('emptyList');
+            
             try {
-                const connectionStatus = document.getElementById('connectionStatus');
-                connectionStatus.className = 'connection-status connecting';
-                connectionStatus.innerHTML = '<div class="loading"></div><span>Verificando conexión...</span>';
+                if (!isConnected || !supabaseClient) {
+                    throw new Error('No hay conexión');
+                }
                 
-                console.log('Probando conexión con Supabase...');
+                // Mostrar carga
+                emptyList.innerHTML = '<p>Cargando predicciones...</p><div class="loading" style="margin: 10px auto;"></div>';
                 
-                // Primero probar con una consulta simple
+                // Obtener predicciones de Supabase
                 const { data, error } = await supabaseClient
                     .from('predictions')
                     .select('*')
-                    .limit(1);
+                    .order('created_at', { ascending: false });
                 
-                console.log('Resultado de prueba:', { data, error });
+                if (error) throw error;
                 
-                if (error) {
-                    if (error.message.includes('does not exist') || error.message.includes('relation')) {
-                        // La tabla no existe, pero la conexión es exitosa
-                        isConnected = true;
-                        connectionStatus.className = 'connection-status warning';
-                        connectionStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Conectado - Tabla no existe</span>';
-                        showStatus('⚠️ La tabla de predicciones no existe. Por favor créala en Supabase.', 'warning');
-                        console.log('Tabla no existe, pero conexión exitosa');
-                    } else if (error.message.includes('permission')) {
-                        isConnected = true;
-                        connectionStatus.className = 'connection-status warning';
-                        connectionStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Conectado - Error permisos</span>';
-                        showStatus('⚠️ Error de permisos. Verifica las políticas RLS en Supabase.', 'warning');
-                        console.log('Error de permisos');
-                    } else {
-                        throw error;
-                    }
+                predictions = data || [];
+                
+                if (predictions.length === 0) {
+                    emptyList.innerHTML = '<p>¡Sé el primero en dejar tu predicción!</p><p>🐚 ¿Será niño o niña? 🐚</p>';
                 } else {
-                    isConnected = true;
-                    connectionStatus.className = 'connection-status connected';
-                    connectionStatus.innerHTML = '<i class="fas fa-check-circle"></i><span>Conectado correctamente</span>';
-                    showStatus('✅ Conexión exitosa con la base de datos', 'success');
-                    console.log('Conexión exitosa');
+                    emptyList.style.display = 'none';
+                    renderPredictions();
                 }
                 
-                return isConnected;
+                updateStats();
+                
             } catch (error) {
-                console.error('Error en conexión:', error);
-                isConnected = false;
-                const connectionStatus = document.getElementById('connectionStatus');
-                connectionStatus.className = 'connection-status disconnected';
-                connectionStatus.innerHTML = '<i class="fas fa-times-circle"></i><span>Error de conexión</span>';
-                showStatus('❌ No se pudo conectar a la base de datos', 'error');
-                return false;
-            }
-        }
-        
-        // Cuenta regresiva
-        function updateCountdown() {
-            const eventDate = new Date('March 15, 2026 16:00:00').getTime();
-            const now = new Date().getTime();
-            const timeLeft = eventDate - now;
-            
-            if (timeLeft > 0) {
-                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                console.error('Error cargando predicciones:', error);
+                emptyList.innerHTML = '<p>Error al cargar predicciones</p><p>Usando datos locales...</p>';
                 
-                document.getElementById('days').textContent = days.toString().padStart(2, '0');
-                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-            } else {
-                document.getElementById('countdown').innerHTML = '<div class="date-details">¡El evento está en curso!</div>';
-            }
-        }
-        
-        // Manejar envío del formulario
-        async function handleFormSubmit(e) {
-            e.preventDefault();
-            
-            const nameInput = document.getElementById('guestName');
-            const guestName = nameInput.value.trim();
-            const submitBtn = document.getElementById('submitBtn');
-            
-            if (!guestName) {
-                showStatus('❌ Por favor, escribe tu nombre', 'error');
-                nameInput.focus();
-                return;
-            }
-            
-            if (!selectedGender) {
-                showStatus('❌ Por favor, selecciona si crees que será niño o niña', 'error');
-                return;
-            }
-            
-            // Crear nueva predicción
-            const newPrediction = {
-                name: guestName,
-                gender: selectedGender,
-                date: new Date().toLocaleDateString('es-ES', {
-                    day: 'numeric',
-                    month: 'short',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                }),
-                created_at: new Date().toISOString()
-            };
-            
-            // Deshabilitar botón mientras se procesa
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<div class="loading"></div><span>Enviando...</span>';
-            
-            try {
-                if (isConnected && supabaseClient) {
-                    console.log('Intentando guardar en Supabase...', newPrediction);
-                    
-                    // Guardar en Supabase
-                    const { data, error } = await supabaseClient
-                        .from('predictions')
-                        .insert([
-                            {
-                                name: newPrediction.name,
-                                gender: newPrediction.gender,
-                                date: newPrediction.date,
-                                created_at: newPrediction.created_at
-                            }
-                        ])
-                        .select();
-                    
-                    if (error) {
-                        console.error('Error detallado al insertar:', error);
-                        
-                        // Mostrar error específico
-                        if (error.message.includes('does not exist')) {
-                            showStatus('❌ La tabla no existe. Por favor, crea la tabla primero.', 'error');
-                        } else if (error.message.includes('permission')) {
-                            showStatus('❌ No tienes permisos para escribir en la base de datos', 'error');
-                        } else {
-                            showStatus('❌ Error al guardar: ' + error.message, 'error');
-                        }
-                        
-                        throw new Error('Error de Supabase: ' + error.message);
-                    } else {
-                        console.log('Insertado correctamente, respuesta:', data);
-                        
-                        // Agregar a la lista local con el ID generado por Supabase
-                        newPrediction.id = data[0].id;
-                        predictions.unshift(newPrediction);
-                        showStatus('✅ Predicción guardada exitosamente!', 'success');
-                    }
-                } else {
-                    throw new Error('Sin conexión a la base de datos');
-                }
-            } catch (error) {
-                console.log('Guardando localmente:', error.message);
-                
-                // Guardar en localStorage (modo offline)
-                newPrediction.id = 'local_' + Date.now();
-                newPrediction.local = true;
-                predictions.unshift(newPrediction);
-                saveToLocalStorage();
-                
-                showStatus('✅ Predicción guardada localmente', 'warning');
-            }
-            
-            // Actualizar la UI
-            renderPredictions();
-            updateStats();
-            
-            // Limpiar formulario
-            nameInput.value = '';
-            document.querySelectorAll('.gender-btn').forEach(function(btn) {
-                btn.classList.remove('selected');
-            });
-            selectedGender = null;
-            document.getElementById('selectedGender').value = '';
-            
-            // Restaurar botón
-            setTimeout(function() {
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
-                submitBtn.disabled = false;
-            }, 1500);
-        }
-        
-        // Cargar predicciones desde Supabase
-        async function loadPredictions() {
-            try {
-                // Mostrar estado de carga
-                const container = document.getElementById('predictionsContainer');
-                container.innerHTML = '<div class="empty-list"><p>Cargando predicciones...</p><div class="loading" style="margin: 10px auto;"></div></div>';
-                
-                console.log('Cargando predicciones, conexión:', isConnected);
-                
-                if (isConnected && supabaseClient) {
-                    console.log('Intentando cargar desde Supabase...');
-                    
-                    const { data, error } = await supabaseClient
-                        .from('predictions')
-                        .select('*')
-                        .order('created_at', { ascending: false });
-                    
-                    if (error) {
-                        console.error('Error detallado de Supabase:', error);
-                        
-                        // Mostrar error específico
-                        if (error.message.includes('does not exist')) {
-                            showStatus('❌ La tabla de predicciones no existe en la base de datos', 'error');
-                        } else if (error.message.includes('permission')) {
-                            showStatus('❌ Error de permisos. Verifica las políticas RLS', 'error');
-                        } else {
-                            showStatus('❌ Error al cargar: ' + error.message, 'error');
-                        }
-                        
-                        // Cargar de localStorage como respaldo
-                        loadFromLocalStorage();
-                        return;
-                    }
-                    
-                    console.log('Datos recibidos de Supabase:', data);
-                    
-                    if (data && data.length > 0) {
-                        predictions = data;
-                        console.log(`Se cargaron ${data.length} predicciones de Supabase`);
-                        renderPredictions();
-                        updateStats();
-                        showStatus(`✅ Se cargaron ${data.length} predicciones`, 'success');
-                        
-                        // Guardar en localStorage como caché
-                        saveToLocalStorage();
-                    } else {
-                        console.log('No hay datos en Supabase, cargando de localStorage...');
-                        predictions = [];
-                        loadFromLocalStorage();
-                    }
-                    
-                } else {
-                    console.log('Sin conexión o cliente no disponible, cargando de localStorage...');
-                    loadFromLocalStorage();
-                }
-            } catch (error) {
-                console.error('Error inesperado al cargar predicciones:', error);
-                showStatus('❌ Error inesperado al cargar predicciones', 'error');
+                // Cargar de localStorage
                 loadFromLocalStorage();
             }
         }
         
-        // Guardar en localStorage
-        function saveToLocalStorage() {
-            try {
-                const dataToSave = {
-                    predictions: predictions.filter(p => p.local), // Solo guardar locales
-                    lastUpdate: new Date().toISOString(),
-                    totalCount: predictions.length
-                };
-                localStorage.setItem('babyShowerPredictions', JSON.stringify(dataToSave));
-                console.log('Datos guardados en localStorage:', dataToSave);
-            } catch (error) {
-                console.error('Error al guardar en localStorage:', error);
-            }
-        }
-        
-        // Cargar desde localStorage
         function loadFromLocalStorage() {
             try {
                 const saved = localStorage.getItem('babyShowerPredictions');
@@ -1185,207 +351,240 @@
                     const data = JSON.parse(saved);
                     predictions = data.predictions || [];
                     
-                    console.log('Datos cargados de localStorage:', predictions);
-                    
-                    renderPredictions();
-                    updateStats();
-                    showStatus('📂 Cargado desde almacenamiento local', 'warning');
-                } else {
-                    predictions = [];
-                    const emptyList = document.getElementById('emptyList');
-                    emptyList.style.display = 'block';
-                    emptyList.innerHTML = '<p>¡Sé el primero en dejar tu predicción!</p><p>🐚 ¿Será niño o niña? 🐚</p>';
-                    updateStats();
+                    if (predictions.length > 0) {
+                        document.getElementById('emptyList').style.display = 'none';
+                        renderPredictions();
+                        updateStats();
+                        showStatus('📂 Cargado desde almacenamiento local', 'warning');
+                    }
                 }
             } catch (error) {
-                console.error('Error al cargar de localStorage:', error);
+                console.error('Error cargando de localStorage:', error);
                 predictions = [];
             }
         }
         
-        // Mostrar predicciones en la lista
         function renderPredictions() {
             const container = document.getElementById('predictionsContainer');
-            const emptyList = document.getElementById('emptyList');
             
-            console.log('Renderizando predicciones:', predictions.length);
-            
-            if (predictions.length === 0) {
-                emptyList.style.display = 'block';
-                emptyList.innerHTML = '<p>¡Sé el primero en dejar tu predicción!</p><p>🐚 ¿Será niño o niña? 🐚</p>';
-                return;
-            }
-            
-            emptyList.style.display = 'none';
-            
-            // Generar HTML para cada predicción
-            const predictionsHTML = predictions.map(function(prediction) {
-                const isLocal = prediction.id && prediction.id.toString().startsWith('local_');
-                return `
-                <div class="prediction-item" data-id="${prediction.id}">
+            const predictionsHTML = predictions.map(prediction => `
+                <div class="prediction-item">
                     <div class="prediction-header">
-                        <div class="prediction-name">${prediction.name}</div>
+                        <div class="prediction-name">${escapeHtml(prediction.name)}</div>
                         <div class="prediction-gender ${prediction.gender === 'boy' ? 'boy-badge' : 'girl-badge'}">
                             ${prediction.gender === 'boy' ? '👶 Niño' : '👶 Niña'}
-                            ${isLocal ? ' 📱' : ''}
                         </div>
                     </div>
                     <div class="prediction-date">
-                        <i class="far fa-clock"></i> ${prediction.date}
-                        ${isLocal ? '<span style="color: #ff9800; font-size: 0.8em;"> (local)</span>' : ''}
+                        <i class="far fa-clock"></i> ${prediction.date || 'Recién'}
                     </div>
                 </div>
-            `;
-            }).join('');
+            `).join('');
             
             container.innerHTML = predictionsHTML;
         }
         
-        // Actualizar estadísticas
         function updateStats() {
-            const boyCount = predictions.filter(function(p) {
-                return p.gender === 'boy';
-            }).length;
-            
-            const girlCount = predictions.filter(function(p) {
-                return p.gender === 'girl';
-            }).length;
-            
+            const boyCount = predictions.filter(p => p.gender === 'boy').length;
+            const girlCount = predictions.filter(p => p.gender === 'girl').length;
             const totalCount = predictions.length;
             
             document.getElementById('boyCount').textContent = boyCount;
             document.getElementById('girlCount').textContent = girlCount;
             document.getElementById('totalCount').textContent = totalCount;
-            
-            console.log('Estadísticas actualizadas:', { boyCount, girlCount, totalCount });
         }
         
-        // Botón para borrar todas las predicciones
-        async function deleteAllPredictions() {
-            if (predictions.length === 0) {
-                showStatus('No hay predicciones para borrar', 'warning');
-                return;
-            }
+        function setupEventListeners() {
+            // Botones de género
+            document.querySelectorAll('.gender-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedGender = this.getAttribute('data-gender');
+                    document.getElementById('selectedGender').value = selectedGender;
+                });
+            });
             
-            if (confirm(`¿Estás seguro de que quieres borrar todas las ${predictions.length} predicciones?\n\nEsta acción no se puede deshacer.`)) {
+            // Formulario de predicción
+            document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const nameInput = document.getElementById('guestName');
+                const guestName = nameInput.value.trim();
+                const submitBtn = document.getElementById('submitBtn');
+                
+                if (!guestName) {
+                    showStatus('❌ Por favor, escribe tu nombre', 'error');
+                    nameInput.focus();
+                    return;
+                }
+                
+                if (!selectedGender) {
+                    showStatus('❌ Por favor, selecciona niño o niña', 'error');
+                    return;
+                }
+                
+                // Crear predicción
+                const newPrediction = {
+                    name: guestName,
+                    gender: selectedGender,
+                    date: new Date().toLocaleDateString('es-ES', {
+                        day: 'numeric',
+                        month: 'short',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    }),
+                    created_at: new Date().toISOString()
+                };
+                
+                // Deshabilitar botón
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<div class="loading"></div><span>Enviando...</span>';
+                
                 try {
                     if (isConnected && supabaseClient) {
-                        // Borrar todas las predicciones de Supabase
+                        // Guardar en Supabase
+                        const { data, error } = await supabaseClient
+                            .from('predictions')
+                            .insert([newPrediction])
+                            .select();
+                        
+                        if (error) throw error;
+                        
+                        newPrediction.id = data[0].id;
+                        showStatus('✅ Predicción guardada exitosamente!', 'success');
+                        
+                    } else {
+                        // Guardar localmente
+                        newPrediction.id = 'local_' + Date.now();
+                        newPrediction.local = true;
+                        showStatus('✅ Predicción guardada localmente', 'warning');
+                    }
+                    
+                    // Agregar a la lista
+                    predictions.unshift(newPrediction);
+                    
+                    // Actualizar UI
+                    const emptyList = document.getElementById('emptyList');
+                    if (emptyList.style.display !== 'none') {
+                        emptyList.style.display = 'none';
+                    }
+                    
+                    renderPredictions();
+                    updateStats();
+                    
+                    // Guardar en localStorage
+                    saveToLocalStorage();
+                    
+                    // Limpiar formulario
+                    nameInput.value = '';
+                    document.querySelectorAll('.gender-btn').forEach(btn => btn.classList.remove('selected'));
+                    selectedGender = null;
+                    document.getElementById('selectedGender').value = '';
+                    
+                } catch (error) {
+                    console.error('Error guardando predicción:', error);
+                    showStatus('❌ Error al guardar la predicción', 'error');
+                    
+                    // Guardar localmente como respaldo
+                    newPrediction.id = 'local_' + Date.now();
+                    newPrediction.local = true;
+                    predictions.unshift(newPrediction);
+                    saveToLocalStorage();
+                    renderPredictions();
+                    updateStats();
+                } finally {
+                    // Restaurar botón
+                    setTimeout(() => {
+                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
+                        submitBtn.disabled = false;
+                    }, 1500);
+                }
+            });
+            
+            // Botón para borrar todas las predicciones
+            document.getElementById('deleteAllBtn').addEventListener('click', async function() {
+                if (!confirm(`¿Estás seguro de borrar las ${predictions.length} predicciones?`)) return;
+                
+                try {
+                    if (isConnected && supabaseClient) {
                         const { error } = await supabaseClient
                             .from('predictions')
                             .delete()
                             .neq('id', 0);
                         
-                        if (error) {
-                            console.error('Error al borrar de Supabase:', error);
-                            showStatus('❌ Error al borrar de la base de datos', 'error');
-                        } else {
-                            console.log('Predicciones borradas de Supabase');
-                        }
+                        if (error) throw error;
                     }
                     
-                    // Borrar localmente
                     predictions = [];
                     localStorage.removeItem('babyShowerPredictions');
-                    renderPredictions();
-                    updateStats();
                     
+                    document.getElementById('emptyList').innerHTML = '<p>¡Sé el primero en dejar tu predicción!</p><p>🐚 ¿Será niño o niña? 🐚</p>';
+                    document.getElementById('emptyList').style.display = 'block';
+                    
+                    updateStats();
                     showStatus('✅ Todas las predicciones han sido borradas', 'success');
                     
                 } catch (error) {
-                    console.error('Error al borrar predicciones:', error);
-                    showStatus('❌ Error al borrar las predicciones', 'error');
+                    console.error('Error borrando predicciones:', error);
+                    showStatus('❌ Error al borrar predicciones', 'error');
                 }
+            });
+        }
+        
+        function saveToLocalStorage() {
+            try {
+                const dataToSave = {
+                    predictions: predictions.filter(p => p.local || !p.id || p.id.toString().startsWith('local_')),
+                    lastUpdate: new Date().toISOString()
+                };
+                localStorage.setItem('babyShowerPredictions', JSON.stringify(dataToSave));
+            } catch (error) {
+                console.error('Error guardando en localStorage:', error);
             }
         }
         
-        // Mostrar mensajes de estado
+        function startCountdown() {
+            function updateCountdown() {
+                const eventDate = new Date('March 15, 2026 16:00:00').getTime();
+                const now = new Date().getTime();
+                const timeLeft = eventDate - now;
+                
+                if (timeLeft > 0) {
+                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                    
+                    document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+                } else {
+                    document.getElementById('countdown').innerHTML = '<div class="date-details">¡El evento está en curso!</div>';
+                }
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+        
         function showStatus(message, type) {
             const statusElement = document.getElementById('statusMessage');
             statusElement.textContent = message;
-            statusElement.className = 'status-message status-' + type;
+            statusElement.className = `status-message status-${type}`;
             statusElement.style.display = 'block';
             
-            console.log(`Estado [${type}]: ${message}`);
-            
-            // Ocultar después de 5 segundos
-            setTimeout(function() {
+            setTimeout(() => {
                 statusElement.style.display = 'none';
             }, 5000);
         }
         
-        // Sincronizar automáticamente cada 30 segundos si hay conexión
-        setInterval(async function() {
-            if (isConnected && supabaseClient && predictions.some(function(p) {
-                return p.id && p.id.toString().startsWith('local_');
-            })) {
-                try {
-                    console.log('Intentando sincronizar predicciones locales...');
-                    
-                    // Encontrar predicciones locales no sincronizadas
-                    const localPredictions = predictions.filter(function(p) {
-                        return p.id && p.id.toString().startsWith('local_');
-                    });
-                    
-                    console.log(`Predicciones locales a sincronizar: ${localPredictions.length}`);
-                    
-                    for (let i = 0; i < localPredictions.length; i++) {
-                        const pred = localPredictions[i];
-                        
-                        // Quitar el prefijo 'local_' para crear un objeto limpio
-                        const cleanPred = {
-                            name: pred.name,
-                            gender: pred.gender,
-                            date: pred.date,
-                            created_at: pred.created_at || new Date().toISOString()
-                        };
-                        
-                        const { data, error } = await supabaseClient
-                            .from('predictions')
-                            .insert([cleanPred])
-                            .select();
-                        
-                        if (!error && data) {
-                            console.log(`Predicción sincronizada: ${pred.name}`);
-                            
-                            // Actualizar en el array predictions
-                            const index = predictions.findIndex(p => p.id === pred.id);
-                            if (index !== -1) {
-                                predictions[index].id = data[0].id;
-                                predictions[index].local = false;
-                                
-                                // Actualizar UI
-                                renderPredictions();
-                            }
-                            
-                            showStatus(`✅ Sincronizada predicción de ${pred.name}`, 'success');
-                        } else {
-                            console.error('Error al sincronizar:', error);
-                        }
-                    }
-                    
-                    // Guardar cambios
-                    saveToLocalStorage();
-                    
-                } catch (error) {
-                    console.log('Error en sincronización automática:', error);
-                }
-            }
-        }, 30000); // 30 segundos
-        
-        // Verificar conexión periódicamente
-        setInterval(async function() {
-            if (supabaseClient && !isConnected) {
-                console.log('Verificando reconexión...');
-                await testSupabaseConnection();
-                
-                if (isConnected) {
-                    // Intentar sincronizar predicciones locales
-                    console.log('Reconectado, sincronizando...');
-                    await loadPredictions();
-                }
-            }
-        }, 60000); // 1 minuto
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
     </script>
 </body>
 </html>
