@@ -23,6 +23,60 @@
         h1 { font-size: 2.5rem; color: #013a5e; margin-bottom: 10px; }
         .subtitle { font-size: 1.3rem; color: #ff6b9d; font-weight: 600; margin-bottom: 30px; }
         
+        .location-section { text-align: center; margin: 20px 0; }
+        .location-btn { 
+            background: linear-gradient(135deg, #025e8c 0%, #0077be 100%); 
+            color: white; 
+            border: none; 
+            padding: 18px 30px; 
+            border-radius: 12px; 
+            font-size: 1.4rem; 
+            font-weight: bold; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            box-shadow: 0 5px 15px rgba(1, 90, 140, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .location-btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 7px 20px rgba(1, 90, 140, 0.4);
+            background: linear-gradient(135deg, #0077be 0%, #025e8c 100%);
+        }
+        .location-btn i { font-size: 1.8rem; }
+        
+        .location-details { 
+            background-color: rgba(255, 255, 255, 0.95); 
+            border-radius: 12px; 
+            padding: 20px; 
+            margin: 20px auto; 
+            max-width: 600px; 
+            box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2); 
+            border: 3px solid #ff6b9d;
+            display: none;
+        }
+        .location-details.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .location-title { font-size: 1.5rem; color: #ff6b9d; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .location-address { font-size: 1.3rem; color: #013a5e; margin-bottom: 15px; line-height: 1.5; }
+        .maps-link { 
+            display: inline-block; 
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%); 
+            color: white; 
+            padding: 12px 25px; 
+            border-radius: 8px; 
+            text-decoration: none; 
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        .maps-link:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 10px rgba(255, 107, 157, 0.3);
+        }
+        
         .date-box { background-color: rgba(255, 255, 255, 0.9); border-radius: 15px; padding: 20px; margin: 25px auto; max-width: 500px; box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2); border: 3px solid #ff6b9d; }
         .date-title { font-size: 1.5rem; color: #ff6b9d; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .date-details { font-size: 1.8rem; font-weight: bold; color: #013a5e; text-align: center; }
@@ -73,7 +127,6 @@
         .stat-label { font-size: 1.1rem; color: #025e8c; }
         
         .empty-list { text-align: center; color: #7a9eb5; font-style: italic; padding: 40px 20px; }
-        .delete-all-btn { background: linear-gradient(135deg, #ff6b6b 0%, #ff8a8a 100%); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 15px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 5px; }
         
         .status-message { text-align: center; padding: 15px; margin: 15px 0; border-radius: 10px; font-weight: bold; display: none; max-width: 800px; margin-left: auto; margin-right: auto; }
         .status-success { background-color: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
@@ -95,6 +148,8 @@
             .section-title { font-size: 1.5rem; }
             .stats-container { flex-direction: column; }
             .stat-item { min-width: 100%; }
+            .location-btn { font-size: 1.2rem; padding: 15px 20px; }
+            .location-address { font-size: 1.1rem; }
         }
     </style>
 </head>
@@ -122,10 +177,36 @@
             <div class="subtitle">¿Será niño o niña? ¡Deja tu predicción!</div>
         </header>
         
+        <!-- Nueva sección de ubicación -->
+        <div class="location-section">
+            <button id="locationBtn" class="location-btn">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>📍 Ver ubicación del evento</span>
+            </button>
+            
+            <div id="locationDetails" class="location-details">
+                <div class="location-title">
+                    <i class="fas fa-map-pin"></i>
+                    <span>Ubicación del Baby Shower</span>
+                </div>
+                <div class="location-address">
+                    <p><strong>Salón de Eventos "La Concha Marina"</strong></p>
+                    <p>Avenida del Mar #123, Planta Alta</p>
+                    <p>Colonia Costa Azul, Puerto Vallarta, Jalisco</p>
+                    <p>Código Postal: 48300</p>
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Salón+de+Eventos+La+Concha+Marina+Puerto+Vallarta" 
+                   target="_blank" class="maps-link">
+                    <i class="fas fa-external-link-alt"></i>
+                    <span>Abrir en Google Maps</span>
+                </a>
+            </div>
+        </div>
+        
         <div class="date-box">
             <div class="date-title">
                 <i class="far fa-calendar-alt"></i>
-                <span>Fecha del evento Te esperamos!!!!</span>
+                <span>Fecha del evento ¡Te esperamos!</span>
             </div>
           
             <div class="date-details">15 de Marzo de 2026 - 2:00 PM</div>
@@ -202,13 +283,6 @@
                         <p>Cargando predicciones...</p>
                         <div class="loading" style="margin: 10px auto;"></div>
                     </div>
-                </div>
-                
-                <div style="text-align: center; margin-top: 20px;">
-                    <button class="delete-all-btn" id="deleteAllBtn">
-                        <i class="fas fa-trash"></i>
-                        Borrar todas las predicciones
-                    </button>
                 </div>
             </div>
         </div>
@@ -398,6 +472,25 @@
         }
         
         function setupEventListeners() {
+            // Botón de ubicación
+            document.getElementById('locationBtn').addEventListener('click', function() {
+                const locationDetails = document.getElementById('locationDetails');
+                locationDetails.classList.toggle('active');
+                
+                // Cambiar texto del botón
+                const icon = this.querySelector('i');
+                const textSpan = this.querySelector('span');
+                
+                if (locationDetails.classList.contains('active')) {
+                    icon.className = 'fas fa-map-marked-alt';
+                    textSpan.textContent = '📍 Ocultar ubicación';
+                    showStatus('📍 Ubicación del evento mostrada', 'success');
+                } else {
+                    icon.className = 'fas fa-map-marker-alt';
+                    textSpan.textContent = '📍 Ver ubicación del evento';
+                }
+            });
+            
             // Botones de género
             document.querySelectorAll('.gender-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -504,36 +597,6 @@
                     }, 1500);
                 }
             });
-            
-            // Botón para borrar todas las predicciones
-            document.getElementById('deleteAllBtn').addEventListener('click', async function() {
-                if (!confirm(`¿Estás seguro de borrar las ${predictions.length} predicciones?`)) return;
-                
-                try {
-                    if (isConnected && supabaseClient) {
-                        const { error } = await supabaseClient
-                            .from('predictions')
-                            .delete()
-                            .neq('id', 0);
-                        
-                        if (error) throw error;
-                    }
-                    
-                    predictions = [];
-                    localStorage.removeItem('babyShowerPredictions');
-                    
-                    const emptyList = document.getElementById('emptyList');
-                    emptyList.innerHTML = '<p>¡Sé el primero en dejar tu predicción!</p><p>🐚 ¿Será niño o niña? 🐚</p>';
-                    emptyList.style.display = 'block';
-                    
-                    updateStats();
-                    showStatus('✅ Todas las predicciones han sido borradas', 'success');
-                    
-                } catch (error) {
-                    console.error('Error borrando predicciones:', error);
-                    showStatus('❌ Error al borrar predicciones', 'error');
-                }
-            });
         }
         
         function saveToLocalStorage() {
@@ -551,7 +614,6 @@
         function startCountdown() {
             function updateCountdown() {
                 // FECHA CORREGIDA usando formato ISO (año-mes-día)
-                // Nota: Los meses en JavaScript son 0-indexed, pero en formato ISO usamos el número real del mes
                 const eventDate = new Date('2026-03-15T14:00:00').getTime();
                 const now = new Date().getTime();
                 const timeLeft = eventDate - now;
@@ -590,11 +652,6 @@
             // Actualizar inmediatamente y luego cada segundo
             updateCountdown();
             countdownInterval = setInterval(updateCountdown, 1000);
-            
-            // Para depuración
-            console.log('Contador iniciado');
-            console.log('Fecha objetivo:', new Date('2026-03-15T14:00:00'));
-            console.log('Ahora:', new Date());
         }
         
         function showStatus(message, type) {
