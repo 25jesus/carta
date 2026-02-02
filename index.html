@@ -190,12 +190,10 @@
                     <span>Ubicación del Baby Shower</span>
                 </div>
                 <div class="location-address">
-                    <p><strong>Salón de Eventos "La Concha Marina"</strong></p>
-                    <p>Avenida del Mar #123, Planta Alta</p>
-                    <p>Colonia Costa Azul, Puerto Vallarta, Jalisco</p>
-                    <p>Código Postal: 48300</p>
+                    <p><strong>Loma Alta Cabresteros</strong></p>
+                    <p>Aculco, Estado de México</p>
                 </div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Salón+de+Eventos+La+Concha+Marina+Puerto+Vallarta" 
+                <a href="https://maps.app.goo.gl/xFucR1ASeofwNPse8" 
                    target="_blank" class="maps-link">
                     <i class="fas fa-external-link-alt"></i>
                     <span>Abrir en Google Maps</span>
@@ -209,7 +207,7 @@
                 <span>Fecha del evento ¡Te esperamos!</span>
             </div>
           
-            <div class="date-details">15 de Marzo de 2026 - 2:00 PM</div>
+            <div class="date-details">15 de Marzo de 2026 - 1:00 PM</div>
         </div>
         
         <div class="countdown" id="countdown">
@@ -613,8 +611,8 @@
         
         function startCountdown() {
             function updateCountdown() {
-                // FECHA CORREGIDA usando formato ISO (año-mes-día)
-                const eventDate = new Date('2026-03-15T14:00:00').getTime();
+                // FECHA MODIFICADA: 15 de marzo de 2026 a la 1:00 PM (13:00)
+                const eventDate = new Date('2026-03-15T13:00:00').getTime();
                 const now = new Date().getTime();
                 const timeLeft = eventDate - now;
                 
