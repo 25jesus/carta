@@ -2,673 +2,637 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baby Shower - Libro de Predicciones del Mar</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Administración de Boda - Planifica tu Gran Día</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: linear-gradient(180deg, #e0f7ff 0%, #b3e0ff 100%); color: #025e8c; min-height: 100vh; }
-        
-        .ocean-bg { position: fixed; bottom: 0; left: 0; width: 100%; height: 150px; background: linear-gradient(180deg, transparent 0%, #0077be 100%); z-index: -1; }
-        .wave { position: absolute; bottom: 0; width: 100%; height: 100px; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%2301558c" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x; animation: wave 12s linear infinite; }
-        .wave:nth-child(2) { animation: wave 8s linear infinite; opacity: 0.7; }
-        .wave:nth-child(3) { animation: wave 10s linear infinite; opacity: 0.5; }
-        @keyframes wave { 0% { background-position-x: 0; } 100% { background-position-x: 1440px; } }
-        
-        .container { max-width: 1100px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
-        header { text-align: center; padding: 30px 0; }
-        .logo { font-size: 2.8rem; color: #025e8c; margin-bottom: 10px; display: flex; justify-content: center; align-items: center; gap: 15px; }
-        .logo i { color: #ff6b9d; }
-        h1 { font-size: 2.5rem; color: #013a5e; margin-bottom: 10px; }
-        .subtitle { font-size: 1.3rem; color: #ff6b9d; font-weight: 600; margin-bottom: 30px; }
-        
-        .location-section { text-align: center; margin: 20px 0; }
-        .location-btn { 
-            background: linear-gradient(135deg, #025e8c 0%, #0077be 100%); 
-            color: white; 
-            border: none; 
-            padding: 18px 30px; 
-            border-radius: 12px; 
-            font-size: 1.4rem; 
-            font-weight: bold; 
-            cursor: pointer; 
-            transition: all 0.3s; 
-            box-shadow: 0 5px 15px rgba(1, 90, 140, 0.3);
-            display: inline-flex;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #fef9e8 0%, #f7e9d7 100%);
+            min-height: 100vh;
+            color: #3a2c29;
+            padding: 20px;
+        }
+
+        /* Contenedor principal */
+        .app-container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* Tarjetas */
+        .card {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.02);
+            padding: 24px 28px;
+            margin-bottom: 28px;
+            transition: all 0.2s;
+        }
+
+        h1, h2, h3 {
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, #b9573a, #d48d6b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .logo {
+            display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        button {
+            background: #d48d6b;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 60px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        button:hover {
+            background: #b9573a;
+            transform: scale(0.97);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #d48d6b;
+            color: #b9573a;
+        }
+
+        .btn-outline:hover {
+            background: #fef3e9;
+        }
+
+        .btn-danger {
+            background: #c95a5a;
+        }
+        .btn-danger:hover {
+            background: #a13e3e;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            margin-top: 6px;
+            margin-bottom: 14px;
+            border: 1.5px solid #f0dfcf;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            background: #fefaf5;
+            transition: 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #d48d6b;
+            box-shadow: 0 0 0 3px rgba(212,141,107,0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            overflow-x: auto;
+            display: block;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px 8px;
+            border-bottom: 1px solid #f0e2d6;
+        }
+
+        th {
+            color: #8b5a42;
+            font-weight: 600;
+        }
+
+        .badge {
+            background: #f3e1d4;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #b9573a;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+        }
+
+        @media (max-width: 780px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                padding: 18px;
+            }
+        }
+
+        .login-box {
+            max-width: 450px;
+            margin: 80px auto;
+            text-align: center;
+        }
+
+        .itinerary-item {
+            background: #fef7f0;
+            border-radius: 20px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .time {
+            font-weight: 700;
+            color: #b9573a;
+            min-width: 80px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .stats {
+            background: #f9ede3;
+            border-radius: 32px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
             margin-bottom: 20px;
         }
-        .location-btn:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 7px 20px rgba(1, 90, 140, 0.4);
-            background: linear-gradient(135deg, #0077be 0%, #025e8c 100%);
-        }
-        .location-btn i { font-size: 1.8rem; }
-        
-        .location-details { 
-            background-color: rgba(255, 255, 255, 0.95); 
-            border-radius: 12px; 
-            padding: 20px; 
-            margin: 20px auto; 
-            max-width: 600px; 
-            box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2); 
-            border: 3px solid #ff6b9d;
-            display: none;
-        }
-        .location-details.active { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .location-title { font-size: 1.5rem; color: #ff6b9d; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .location-address { font-size: 1.3rem; color: #013a5e; margin-bottom: 15px; line-height: 1.5; }
-        .maps-link { 
-            display: inline-block; 
-            background: linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%); 
-            color: white; 
-            padding: 12px 25px; 
-            border-radius: 8px; 
-            text-decoration: none; 
-            font-weight: bold;
-            transition: all 0.3s;
-            margin-top: 10px;
-        }
-        .maps-link:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 5px 10px rgba(255, 107, 157, 0.3);
-        }
-        
-        .date-box { background-color: rgba(255, 255, 255, 0.9); border-radius: 15px; padding: 20px; margin: 25px auto; max-width: 500px; box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2); border: 3px solid #ff6b9d; }
-        .date-title { font-size: 1.5rem; color: #ff6b9d; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .date-details { font-size: 1.8rem; font-weight: bold; color: #013a5e; text-align: center; }
-        
-        .countdown { display: flex; justify-content: center; gap: 15px; margin: 30px 0; flex-wrap: wrap; }
-        .countdown-item { background-color: rgba(255, 255, 255, 0.95); border-radius: 10px; padding: 15px; min-width: 80px; box-shadow: 0 3px 10px rgba(1, 90, 140, 0.2); text-align: center; border: 2px solid #025e8c; }
-        .countdown-value { font-size: 2rem; font-weight: bold; color: #ff6b9d; }
-        .countdown-label { font-size: 0.9rem; color: #025e8c; margin-top: 5px; }
-        
-        .prediction-section { display: flex; flex-wrap: wrap; gap: 30px; margin: 40px 0; justify-content: center; }
-        .prediction-form, .prediction-list { flex: 1; min-width: 300px; background-color: rgba(255, 255, 255, 0.9); border-radius: 15px; padding: 30px; box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2); border: 3px solid #025e8c; }
-        .prediction-list { border-color: #ff6b9d; max-height: 500px; overflow-y: auto; }
-        
-        .section-title { font-size: 1.8rem; color: #013a5e; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-size: 1.1rem; color: #025e8c; margin-bottom: 8px; font-weight: 600; }
-        input[type="text"] { width: 100%; padding: 12px 15px; border: 2px solid #b3e0ff; border-radius: 10px; font-size: 1rem; color: #013a5e; background-color: rgba(255, 255, 255, 0.8); }
-        input[type="text"]:focus { outline: none; border-color: #025e8c; }
-        
-        .gender-options { display: flex; gap: 20px; margin-top: 10px; }
-        .gender-option { flex: 1; text-align: center; }
-        .gender-btn { width: 100%; padding: 15px; border: 2px solid #b3e0ff; border-radius: 10px; background-color: white; cursor: pointer; transition: all 0.3s; font-size: 1.1rem; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .gender-btn i { font-size: 1.8rem; }
-        .gender-btn.boy { color: #4a90e2; }
-        .gender-btn.girl { color: #ff6b9d; }
-        .gender-btn.selected { transform: scale(1.05); box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); }
-        .gender-btn.boy.selected { background-color: #e6f2ff; border-color: #4a90e2; }
-        .gender-btn.girl.selected { background-color: #ffe6ee; border-color: #ff6b9d; }
-        
-        .submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #ff6b9d 0%, #ff8ab0 100%); color: white; border: none; border-radius: 10px; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.3s; margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 7px 15px rgba(255, 107, 157, 0.4); }
-        
-        .prediction-item { background-color: rgba(255, 255, 255, 0.9); border-radius: 10px; padding: 15px; margin-bottom: 15px; border-left: 5px solid #025e8c; box-shadow: 0 3px 8px rgba(1, 90, 140, 0.1); }
-        .prediction-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
-        .prediction-name { font-weight: bold; font-size: 1.2rem; color: #013a5e; }
-        .prediction-gender { font-weight: bold; padding: 4px 12px; border-radius: 20px; font-size: 0.9rem; }
-        .boy-badge { background-color: #e6f2ff; color: #4a90e2; }
-        .girl-badge { background-color: #ffe6ee; color: #ff6b9d; }
-        .prediction-date { font-size: 0.9rem; color: #7a9eb5; font-style: italic; }
-        
-        .stats-box { background-color: rgba(255, 255, 255, 0.9); border-radius: 15px; padding: 25px; margin: 30px auto; max-width: 800px; box-shadow: 0 5px 15px rgba(1, 90, 140, 0.2); border: 3px solid #025e8c; text-align: center; }
-        .stats-title { font-size: 1.8rem; color: #013a5e; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .stats-container { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; }
-        .stat-item { flex: 1; min-width: 150px; }
-        .stat-value { font-size: 3rem; font-weight: bold; margin-bottom: 5px; }
-        .boy-stat { color: #4a90e2; }
-        .girl-stat { color: #ff6b9d; }
-        .stat-label { font-size: 1.1rem; color: #025e8c; }
-        
-        .empty-list { text-align: center; color: #7a9eb5; font-style: italic; padding: 40px 20px; }
-        
-        .status-message { text-align: center; padding: 15px; margin: 15px 0; border-radius: 10px; font-weight: bold; display: none; max-width: 800px; margin-left: auto; margin-right: auto; }
-        .status-success { background-color: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
-        .status-error { background-color: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
-        .status-warning { background-color: #fff3cd; color: #856404; border: 2px solid #ffeaa7; }
-        
-        .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid #025e8c; border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .connection-status { position: fixed; top: 20px; right: 20px; padding: 10px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; z-index: 1000; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); display: flex; align-items: center; gap: 8px; }
-        .connection-status.connected { background-color: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
-        .connection-status.disconnected { background-color: #f8d7da; color: #721c24; border: 2px solid #f5c6cb; }
-        .connection-status.connecting { background-color: #fff3cd; color: #856404; border: 2px solid #ffeaa7; }
-        
-        @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            .date-details { font-size: 1.5rem; }
-            .logo { font-size: 2.2rem; }
-            .section-title { font-size: 1.5rem; }
-            .stats-container { flex-direction: column; }
-            .stat-item { min-width: 100%; }
-            .location-btn { font-size: 1.2rem; padding: 15px 20px; }
-            .location-address { font-size: 1.1rem; }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: #b48c72;
         }
     </style>
 </head>
 <body>
-    <div class="ocean-bg">
-        <div class="wave"></div>
-        <div class="wave"></div>
-        <div class="wave"></div>
-    </div>
-    
-    <div id="connectionStatus" class="connection-status connecting">
-        <div class="loading"></div>
-        <span>Conectando...</span>
-    </div>
-    
-    <div class="container">
-        <header>
-            <div class="logo">
-                <i class="fas fa-water"></i>
-                <h1>¡Acompañanos a celebrar nuestro Baby Shower Marino!</h1>
-                <i class="fas fa-water"></i>
-            </div>
-            <div class="subtitle">👶✨ ¡El Libro de las Predicciones del Bebé! ✨👶</div>
-            <div class="subtitle">Un recuerdo especial lleno de amor y buenos deseos.</div>
-            <div class="subtitle">¿Será niño o niña? ¡Deja tu predicción!</div>
-        </header>
-        
-        <!-- Sección de ubicación -->
-        <div class="location-section">
-            <button id="locationBtn" class="location-btn">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>📍 Ver ubicación del evento</span>
-            </button>
-            
-            <div id="locationDetails" class="location-details">
-                <div class="location-title">
-                    <i class="fas fa-map-pin"></i>
-                    <span>Ubicación del Baby Shower</span>
-                </div>
-                <div class="location-address">
-                    <p><strong>Loma Alta Cabresteros</strong></p>
-                    <p>Aculco, Estado de México</p>
-                </div>
-                <a href="https://maps.app.goo.gl/xFucR1ASeofwNPse8" 
-                   target="_blank" class="maps-link">
-                    <i class="fas fa-external-link-alt"></i>
-                    <span>Abrir en Google Maps</span>
-                </a>
-            </div>
-        </div>
-        
-        <div class="date-box">
-            <div class="date-title">
-                <i class="far fa-calendar-alt"></i>
-                <span>Fecha del evento ¡Te esperamos!</span>
-            </div>
-          
-            <!-- Fecha modificada al 12 de abril de 2026 -->
-            <div class="date-details">12 de Abril de 2026 - 1:00 PM</div>
-        </div>
-        
-        <div class="countdown" id="countdown">
-            <div class="countdown-item">
-                <div class="countdown-value" id="days">00</div>
-                <div class="countdown-label">Días</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-value" id="hours">00</div>
-                <div class="countdown-label">Horas</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-value" id="minutes">00</div>
-                <div class="countdown-label">Minutos</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-value" id="seconds">00</div>
-                <div class="countdown-label">Segundos</div>
-            </div>
-        </div>
-        
-        <div id="statusMessage" class="status-message"></div>
-        
-        <div class="prediction-section">
-            <div class="prediction-form">
-                <h2 class="section-title">
-                    <i class="fas fa-feather-alt"></i>
-                    <span>Deja tu predicción</span>
-                </h2>
-                
-                <form id="predictionForm">
-                    <div class="form-group">
-                        <label for="guestName">Tu nombre:</label>
-                        <input type="text" id="guestName" placeholder="Escribe tu nombre aquí" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>¿Qué crees que será?</label>
-                        <div class="gender-options">
-                            <div class="gender-option">
-                                <button type="button" class="gender-btn boy" data-gender="boy">
-                                    <i class="fas fa-mars"></i>
-                                    <span>Niño</span>
-                                </button>
-                            </div>
-                            <div class="gender-option">
-                                <button type="button" class="gender-btn girl" data-gender="girl">
-                                    <i class="fas fa-venus"></i>
-                                    <span>Niña</span>
-                                </button>
-                            </div>
-                        </div>
-                        <input type="hidden" id="selectedGender" name="gender" required>
-                    </div>
-                    
-                    <button type="submit" class="submit-btn" id="submitBtn">
-                        <i class="fas fa-paper-plane"></i>
-                        <span>Enviar predicción</span>
-                    </button>
-                </form>
-            </div>
-            
-            <div class="prediction-list">
-                <h2 class="section-title">
-                    <i class="fas fa-book"></i>
-                    <span>Predicciones recibidas</span>
-                </h2>
-                
-                <div id="predictionsContainer">
-                    <div class="empty-list" id="emptyList">
-                        <p>Cargando predicciones...</p>
-                        <div class="loading" style="margin: 10px auto;"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="stats-box">
-            <h2 class="stats-title">
-                <i class="fas fa-chart-pie"></i>
-                <span>Estadísticas de predicciones</span>
-            </h2>
-            
-            <div class="stats-container">
-                <div class="stat-item">
-                    <div class="stat-value boy-stat" id="boyCount">0</div>
-                    <div class="stat-label">Predicen niño</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value girl-stat" id="girlCount">0</div>
-                    <div class="stat-label">Predicen niña</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" style="color: #025e8c;" id="totalCount">0</div>
-                    <div class="stat-label">Total de predicciones</div>
-                </div>
-            </div>
-        </div>
-        
-        <footer style="text-align: center; margin-top: 40px; color: #025e8c; font-size: 1.1rem;">
-            <p>¡Gracias por compartir tu predicción! La respuesta se revelará el día del baby shower.</p>
-            <p>Con cariño, los futuros papás</p>
-            <p>💙💖</p>
-        </footer>
-    </div>
+<div class="app-container" id="appRoot">
+    <!-- Pantalla de login dinámica -->
+</div>
 
-    <script>
-        // Variables globales
-        let predictions = [];
-        let selectedGender = null;
-        let supabaseClient = null;
-        let isConnected = false;
-        let countdownInterval = null;
-        
-        // Configuración de Supabase - SIN MODIFICAR
-        const SUPABASE_URL = 'https://fndskmqdvmndwiwjwewx.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuZHNrbXFkdm1uZHdpd2p3ZXd4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3MDk5MDQsImV4cCI6MjA4NTI4NTkwNH0.7cTUi4jb1eGYuCE8YVuUZi1dozTGRufWkVR-sHZAM88';
-        
-        // Inicializar cuando el DOM esté listo
-        document.addEventListener('DOMContentLoaded', async function() {
-            await initializeApp();
-            setupEventListeners();
-            startCountdown();
+<script>
+    // ---------- CONFIGURACIÓN ----------
+    // Usamos localStorage como base de datos (simula "gipgup")
+    const DB_KEYS = {
+        USERS: 'wedding_users',
+        GUESTS: 'wedding_guests',
+        ITINERARY: 'wedding_itinerary'
+    };
+
+    // Credenciales demo (solo para inicio rápido)
+    // usuario: admin@boda.com / contraseña: boda2025
+    function initDatabase() {
+        if (!localStorage.getItem(DB_KEYS.USERS)) {
+            const defaultUsers = [
+                { email: "admin@boda.com", password: "boda2025", name: "Administrador" }
+            ];
+            localStorage.setItem(DB_KEYS.USERS, JSON.stringify(defaultUsers));
+        }
+        if (!localStorage.getItem(DB_KEYS.GUESTS)) {
+            localStorage.setItem(DB_KEYS.GUESTS, JSON.stringify([]));
+        }
+        if (!localStorage.getItem(DB_KEYS.ITINERARY)) {
+            const defaultItinerary = [
+                { id: "1", time: "11:00 AM", title: "Ceremonia Religiosa", location: "Iglesia del Pueblo", description: "Llegar con 15 min de anticipación" },
+                { id: "2", time: "1:00 PM", title: "Coctel de Bienvenida", location: "Jardín del Salón", description: "Brindis y música ambiental" },
+                { id: "3", time: "3:00 PM", title: "Banquete", location: "Salón Principal", description: "Comida de 3 tiempos" },
+                { id: "4", time: "5:00 PM", title: "Baile y Pastel", location: "Pista de baile", description: "Tradicional vals y sorpresas" }
+            ];
+            localStorage.setItem(DB_KEYS.ITINERARY, JSON.stringify(defaultItinerary));
+        }
+    }
+
+    // Estado global
+    let currentUser = null;
+
+    // Helper: leer/guardar invitados
+    function getGuests() {
+        return JSON.parse(localStorage.getItem(DB_KEYS.GUESTS)) || [];
+    }
+    function saveGuests(guests) {
+        localStorage.setItem(DB_KEYS.GUESTS, JSON.stringify(guests));
+    }
+    function getItinerary() {
+        return JSON.parse(localStorage.getItem(DB_KEYS.ITINERARY)) || [];
+    }
+    function saveItinerary(itinerary) {
+        localStorage.setItem(DB_KEYS.ITINERARY, JSON.stringify(itinerary));
+    }
+
+    // ---------- TRES PREGUNTAS (simulacro de configuración) ----------
+    // Se mostrarán al iniciar sesión por primera vez o cuando se llame a "mostrarPreguntas"
+    // Las respuestas se guardan en localStorage para no repetir, pero las preguntas son parte del flujo.
+    function hacerTresPreguntas() {
+        const yaRespondio = localStorage.getItem('wedding_questions_answered');
+        if (yaRespondio === 'true') return Promise.resolve(true);
+
+        return new Promise((resolve) => {
+            // Preguntas con respuestas estilo alert, pero mejor usamos modal con prompt custom
+            // Se puede hacer con confirm moderno pero usaremos prompts secuenciales para simplicidad y funcionalidad.
+            const pregunta1 = prompt("❓ PREGUNTA 1/3 - Organización:\n¿Cuál es el color principal de la decoración de tu boda? (ejemplo: 'Rosa pastel', 'Verde esmeralda')");
+            const pregunta2 = prompt("❓ PREGUNTA 2/3 - Invitados:\n¿Cuántas mesas aproximadas tendrá el salón? (número)");
+            const pregunta3 = prompt("❓ PREGUNTA 3/3 - Música:\n¿Canción favorita para el primer baile?");
+            
+            // Guardamos respuestas en 'db' como dato curioso
+            const respuestas = {
+                fecha: new Date().toISOString(),
+                colorDecoracion: pregunta1 || "No especificado",
+                numeroMesas: pregunta2 || "No especificado",
+                cancionPrimerBaile: pregunta3 || "No especificado"
+            };
+            localStorage.setItem('wedding_answers', JSON.stringify(respuestas));
+            localStorage.setItem('wedding_questions_answered', 'true');
+            alert("¡Gracias! Tus respuestas han sido guardadas. Puedes verlas más tarde en la consola o sección de info.");
+            resolve(true);
         });
-        
-        async function initializeApp() {
-            try {
-                // Inicializar Supabase
-                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                
-                // Probar conexión
-                await testConnection();
-                
-                // Cargar predicciones
-                await loadPredictions();
-                
-            } catch (error) {
-                console.error('Error inicializando:', error);
-                showStatus('⚠️ Error al conectar con la base de datos', 'error');
+    }
+
+    // ----- AUTENTICACIÓN -----
+    function login(email, password) {
+        const users = JSON.parse(localStorage.getItem(DB_KEYS.USERS)) || [];
+        const user = users.find(u => u.email === email && u.password === password);
+        if (user) {
+            currentUser = { email: user.email, name: user.name };
+            localStorage.setItem('wedding_current_session', JSON.stringify(currentUser));
+            renderApp();
+            // Al hacer login por primera vez (si no ha respondido) lanzamos preguntas
+            const yaPreguntas = localStorage.getItem('wedding_questions_answered');
+            if (!yaPreguntas) {
+                hacerTresPreguntas().then(() => renderApp());
+            } else {
+                renderApp();
             }
+            return true;
         }
-        
-        async function testConnection() {
-            const status = document.getElementById('connectionStatus');
-            try {
-                status.className = 'connection-status connecting';
-                status.innerHTML = '<div class="loading"></div><span>Conectando...</span>';
-                
-                // Intentar una consulta simple
-                const { data, error } = await supabaseClient
-                    .from('predictions')
-                    .select('count')
-                    .limit(1);
-                
-                if (error) throw error;
-                
-                isConnected = true;
-                status.className = 'connection-status connected';
-                status.innerHTML = '<i class="fas fa-check-circle"></i><span>Conectado</span>';
-                
-            } catch (error) {
-                console.error('Error de conexión:', error);
-                isConnected = false;
-                status.className = 'connection-status disconnected';
-                status.innerHTML = '<i class="fas fa-times-circle"></i><span>Desconectado</span>';
-                
-                // Cargar de localStorage como respaldo
-                loadFromLocalStorage();
-            }
+        return false;
+    }
+
+    function logout() {
+        currentUser = null;
+        localStorage.removeItem('wedding_current_session');
+        renderApp();
+    }
+
+    // Verificar sesión existente
+    function checkSession() {
+        const stored = localStorage.getItem('wedding_current_session');
+        if (stored) {
+            currentUser = JSON.parse(stored);
+        } else {
+            currentUser = null;
         }
-        
-        async function loadPredictions() {
-            const container = document.getElementById('predictionsContainer');
-            const emptyList = document.getElementById('emptyList');
-            
-            try {
-                if (!isConnected || !supabaseClient) {
-                    throw new Error('No hay conexión');
-                }
-                
-                // Mostrar carga
-                emptyList.innerHTML = '<p>Cargando predicciones...</p><div class="loading" style="margin: 10px auto;"></div>';
-                
-                // Obtener predicciones de Supabase
-                const { data, error } = await supabaseClient
-                    .from('predictions')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-                
-                if (error) throw error;
-                
-                predictions = data || [];
-                
-                if (predictions.length === 0) {
-                    emptyList.innerHTML = '<p>¡Sé el primero en dejar tu predicción!</p><p>🐚 ¿Será niño o niña? 🐚</p>';
-                } else {
-                    emptyList.style.display = 'none';
-                    renderPredictions();
-                }
-                
-                updateStats();
-                
-            } catch (error) {
-                console.error('Error cargando predicciones:', error);
-                emptyList.innerHTML = '<p>Error al cargar predicciones</p><p>Usando datos locales...</p>';
-                
-                // Cargar de localStorage
-                loadFromLocalStorage();
-            }
+        renderApp();
+    }
+
+    // ---- CRUD INVITADOS (iglesia / salon) ----
+    function agregarInvitado(nombre, tipo, asistenciaConfirmada = false) {
+        // tipo: 'iglesia' o 'salon'
+        if (!nombre.trim()) return false;
+        const guests = getGuests();
+        const newId = Date.now().toString();
+        guests.push({
+            id: newId,
+            nombre: nombre.trim(),
+            tipo: tipo,      // 'iglesia' o 'salon'
+            confirmado: asistenciaConfirmada,
+            createdAt: new Date().toISOString()
+        });
+        saveGuests(guests);
+        return true;
+    }
+
+    function toggleConfirmacion(id) {
+        const guests = getGuests();
+        const guest = guests.find(g => g.id === id);
+        if (guest) {
+            guest.confirmado = !guest.confirmado;
+            saveGuests(guests);
         }
-        
-        function loadFromLocalStorage() {
-            try {
-                const saved = localStorage.getItem('babyShowerPredictions');
-                if (saved) {
-                    const data = JSON.parse(saved);
-                    predictions = data.predictions || [];
-                    
-                    if (predictions.length > 0) {
-                        document.getElementById('emptyList').style.display = 'none';
-                        renderPredictions();
-                        updateStats();
-                        showStatus('📂 Cargado desde almacenamiento local', 'warning');
-                    }
-                }
-            } catch (error) {
-                console.error('Error cargando de localStorage:', error);
-                predictions = [];
-            }
+        renderApp();
+    }
+
+    function eliminarInvitado(id) {
+        let guests = getGuests();
+        guests = guests.filter(g => g.id !== id);
+        saveGuests(guests);
+        renderApp();
+    }
+
+    // ---- ITINERARIO (nuevo, editar, eliminar) ----
+    function agregarEventoItinerario(time, title, location, description) {
+        if (!time.trim() || !title.trim()) return false;
+        const itinerary = getItinerary();
+        const newId = Date.now().toString();
+        itinerary.push({ id: newId, time, title, location, description });
+        saveItinerary(itinerary);
+        renderApp();
+        return true;
+    }
+
+    function eliminarEventoItinerario(id) {
+        let itinerary = getItinerary();
+        itinerary = itinerary.filter(ev => ev.id !== id);
+        saveItinerary(itinerary);
+        renderApp();
+    }
+
+    function actualizarEventoItinerario(id, time, title, location, description) {
+        const itinerary = getItinerary();
+        const index = itinerary.findIndex(ev => ev.id === id);
+        if (index !== -1) {
+            itinerary[index] = { ...itinerary[index], time, title, location, description };
+            saveItinerary(itinerary);
+            renderApp();
         }
-        
-        function renderPredictions() {
-            const container = document.getElementById('predictionsContainer');
-            
-            const predictionsHTML = predictions.map(prediction => `
-                <div class="prediction-item">
-                    <div class="prediction-header">
-                        <div class="prediction-name">${escapeHtml(prediction.name)}</div>
-                        <div class="prediction-gender ${prediction.gender === 'boy' ? 'boy-badge' : 'girl-badge'}">
-                            ${prediction.gender === 'boy' ? '👶 Niño' : '👶 Niña'}
-                        </div>
+    }
+
+    // ---- UI RENDER (enfoque total) ----
+    function renderApp() {
+        const root = document.getElementById('appRoot');
+        if (!root) return;
+
+        if (!currentUser) {
+            // Pantalla login
+            root.innerHTML = `
+                <div class="login-box card">
+                    <div class="logo" style="justify-content:center;">
+                        <h1>💍 Planifica tu Boda</h1>
                     </div>
-                    <div class="prediction-date">
-                        <i class="far fa-clock"></i> ${prediction.date || 'Recién'}
+                    <p style="margin-bottom: 20px;">Accede al panel de administración de invitados e itinerarios.</p>
+                    <input type="email" id="loginEmail" placeholder="Email" value="admin@boda.com">
+                    <input type="password" id="loginPassword" placeholder="Contraseña" value="boda2025">
+                    <button id="doLoginBtn" style="width:100%;">Iniciar Sesión</button>
+                    <p style="margin-top: 20px; font-size:0.8rem;">Demo: admin@boda.com / boda2025</p>
+                </div>
+            `;
+            document.getElementById('doLoginBtn')?.addEventListener('click', () => {
+                const email = document.getElementById('loginEmail').value;
+                const pwd = document.getElementById('loginPassword').value;
+                if (!login(email, pwd)) {
+                    alert("Credenciales incorrectas. Usa admin@boda.com / boda2025");
+                }
+            });
+            return;
+        }
+
+        // ======= PANEL PRINCIPAL ========
+        const guests = getGuests();
+        const itinerarios = getItinerary();
+        
+        // Filtrar invitados por tipo
+        const invitadosIglesia = guests.filter(g => g.tipo === 'iglesia');
+        const invitadosSalon = guests.filter(g => g.tipo === 'salon');
+        
+        const totalIglesia = invitadosIglesia.length;
+        const confirmadosIglesia = invitadosIglesia.filter(g => g.confirmado).length;
+        const totalSalon = invitadosSalon.length;
+        const confirmadosSalon = invitadosSalon.filter(g => g.confirmado).length;
+
+        // Obtener respuestas curiosas si existen
+        const respuestas = JSON.parse(localStorage.getItem('wedding_answers') || '{}');
+        const muestraPregunta = respuestas.colorDecoracion ? `🎨 Decoración: ${respuestas.colorDecoracion} | 🕺 Canción: ${respuestas.cancionPrimerBaile || '—'}` : 'Responde las 3 preguntas para personalizar';
+
+        root.innerHTML = `
+            <div class="app-container">
+                <div class="logo">
+                    <h1>✨ Mi Boda - Panel Administrador ✨</h1>
+                    <div>
+                        <span class="badge">${currentUser.email}</span>
+                        <button id="logoutBtn" class="btn-outline" style="margin-left:12px;">Cerrar sesión</button>
                     </div>
                 </div>
-            `).join('');
-            
-            container.innerHTML = predictionsHTML;
-        }
-        
-        function updateStats() {
-            const boyCount = predictions.filter(p => p.gender === 'boy').length;
-            const girlCount = predictions.filter(p => p.gender === 'girl').length;
-            const totalCount = predictions.length;
-            
-            document.getElementById('boyCount').textContent = boyCount;
-            document.getElementById('girlCount').textContent = girlCount;
-            document.getElementById('totalCount').textContent = totalCount;
-        }
-        
-        function setupEventListeners() {
-            // Botón de ubicación
-            document.getElementById('locationBtn').addEventListener('click', function() {
-                const locationDetails = document.getElementById('locationDetails');
-                locationDetails.classList.toggle('active');
                 
-                // Cambiar texto del botón
-                const icon = this.querySelector('i');
-                const textSpan = this.querySelector('span');
-                
-                if (locationDetails.classList.contains('active')) {
-                    icon.className = 'fas fa-map-marked-alt';
-                    textSpan.textContent = '📍 Ocultar ubicación';
-                    showStatus('📍 Ubicación del evento mostrada', 'success');
-                } else {
-                    icon.className = 'fas fa-map-marker-alt';
-                    textSpan.textContent = '📍 Ver ubicación del evento';
+                <div class="stats card">
+                    <div><strong>💒 Iglesia</strong><br>${totalIglesia} invitados · ${confirmadosIglesia} confirmados</div>
+                    <div><strong>🍾 Salón/Fiesta</strong><br>${totalSalon} invitados · ${confirmadosSalon} confirmados</div>
+                    <div><strong>📋 Itinerario</strong><br>${itinerarios.length} actividades</div>
+                    <div><small>${muestraPregunta}</small></div>
+                </div>
+
+                <div class="grid-2">
+                    <!-- COLUMNA IZQUIERDA: Gestión invitados -->
+                    <div class="card">
+                        <h2>📝 Gestión de Invitados</h2>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
+                            <input type="text" id="newGuestName" placeholder="Nombre completo" style="flex:2;">
+                            <select id="newGuestType" style="flex:1;">
+                                <option value="iglesia">Iglesia</option>
+                                <option value="salon">Salón / Fiesta</option>
+                            </select>
+                            <button id="addGuestBtn">➕ Añadir</button>
+                        </div>
+                        <div style="overflow-x:auto;">
+                            <table>
+                                <thead>
+                                    <tr><th>Nombre</th><th>Tipo</th><th>Confirmado</th><th>Acciones</th></tr>
+                                </thead>
+                                <tbody id="guestsTableBody">
+                                    ${guests.map(guest => `
+                                        <tr>
+                                            <td>${escapeHtml(guest.nombre)}</td>
+                                            <td>${guest.tipo === 'iglesia' ? '⛪ Iglesia' : '🎉 Salón'}</td>
+                                            <td>${guest.confirmado ? '✅ Sí Asiste' : '⏳ Pendiente'}</td>
+                                            <td>
+                                                <button class="toggle-confirm" data-id="${guest.id}" style="background:#6c8b6e; padding:5px 12px;">✉️ Confirmar</button>
+                                                <button class="delete-guest" data-id="${guest.id}" style="background:#c95a5a; padding:5px 12px;">🗑️</button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                    ${guests.length === 0 ? '<tr><td colspan="4">Sin invitados aún. ¡Agrega el primero!</td></tr>' : ''}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- COLUMNA DERECHA: Itinerarios + preguntas dinámicas -->
+                    <div class="card">
+                        <h2>⏰ Itinerario del día</h2>
+                        <div id="itineraryList">
+                            ${itinerarios.map(ev => `
+                                <div class="itinerary-item" data-id="${ev.id}">
+                                    <div style="flex:3;">
+                                        <span class="time">${escapeHtml(ev.time)}</span>
+                                        <strong>${escapeHtml(ev.title)}</strong><br>
+                                        <small>📍 ${escapeHtml(ev.location)}</small>
+                                        <p style="font-size:0.8rem;">${escapeHtml(ev.description)}</p>
+                                    </div>
+                                    <div class="action-buttons">
+                                        <button class="edit-itinerary" data-id="${ev.id}">✏️ Editar</button>
+                                        <button class="delete-itinerary" data-id="${ev.id}" style="background:#c95a5a;">🗑️</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                            ${itinerarios.length === 0 ? '<p>No hay eventos, crea uno nuevo.</p>' : ''}
+                        </div>
+                        <hr style="margin: 20px 0;">
+                        <h3>➕ Nuevo evento</h3>
+                        <input type="text" id="newEventTime" placeholder="Hora (ej: 10:00 AM)">
+                        <input type="text" id="newEventTitle" placeholder="Título (ej: Llegada novios)">
+                        <input type="text" id="newEventLocation" placeholder="Ubicación">
+                        <textarea id="newEventDesc" rows="2" placeholder="Descripción"></textarea>
+                        <button id="addEventBtn">Añadir al Itinerario</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📊 Reporte rápido</h3>
+                    <button id="exportDataBtn" class="btn-outline">📎 Exportar datos (JSON) - gipgup compatible</button>
+                    <button id="importDataBtn" class="btn-outline" style="margin-left:12px;">📂 Importar respaldo</button>
+                    <input type="file" id="importFileInput" accept=".json" style="display:none;">
+                    <p style="margin-top:12px; font-size:0.75rem;">* La base de datos se guarda en localStorage (simula gipgup) - exporta para respaldo físico.</p>
+                </div>
+                <footer>💖 Administrador de Boda - Organiza invitados, iglesia, salón e itinerarios con estilo</footer>
+            </div>
+        `;
+
+        // Eventos
+        document.getElementById('logoutBtn')?.addEventListener('click', logout);
+        document.getElementById('addGuestBtn')?.addEventListener('click', () => {
+            const nombre = document.getElementById('newGuestName').value;
+            const tipo = document.getElementById('newGuestType').value;
+            if (!nombre.trim()) return alert("Escribe un nombre");
+            agregarInvitado(nombre, tipo);
+            document.getElementById('newGuestName').value = '';
+        });
+
+        // botones dinámicos confirmar/eliminar invitados
+        document.querySelectorAll('.toggle-confirm').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = btn.getAttribute('data-id');
+                toggleConfirmacion(id);
+            });
+        });
+        document.querySelectorAll('.delete-guest').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if(confirm("¿Eliminar este invitado?")) eliminarInvitado(btn.getAttribute('data-id'));
+            });
+        });
+
+        // Itinerario: eliminar
+        document.querySelectorAll('.delete-itinerary').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if(confirm("Eliminar evento del itinerario")) eliminarEventoItinerario(btn.getAttribute('data-id'));
+            });
+        });
+        // Editar itinerario (simple prompt mejorable)
+        document.querySelectorAll('.edit-itinerary').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-id');
+                const evento = itinerarios.find(ev => ev.id === id);
+                if(evento) {
+                    const newTime = prompt("Editar hora:", evento.time);
+                    const newTitle = prompt("Editar título:", evento.title);
+                    const newLoc = prompt("Editar ubicación:", evento.location);
+                    const newDesc = prompt("Editar descripción:", evento.description);
+                    if(newTime && newTitle) actualizarEventoItinerario(id, newTime, newTitle, newLoc || "", newDesc || "");
                 }
             });
-            
-            // Botones de género
-            document.querySelectorAll('.gender-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('selected'));
-                    this.classList.add('selected');
-                    selectedGender = this.getAttribute('data-gender');
-                    document.getElementById('selectedGender').value = selectedGender;
-                });
-            });
-            
-            // Formulario de predicción
-            document.getElementById('predictionForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const nameInput = document.getElementById('guestName');
-                const guestName = nameInput.value.trim();
-                const submitBtn = document.getElementById('submitBtn');
-                
-                if (!guestName) {
-                    showStatus('❌ Por favor, escribe tu nombre', 'error');
-                    nameInput.focus();
-                    return;
-                }
-                
-                if (!selectedGender) {
-                    showStatus('❌ Por favor, selecciona niño o niña', 'error');
-                    return;
-                }
-                
-                // Crear predicción
-                const newPrediction = {
-                    name: guestName,
-                    gender: selectedGender,
-                    date: new Date().toLocaleDateString('es-ES', {
-                        day: 'numeric',
-                        month: 'short',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    }),
-                    created_at: new Date().toISOString()
-                };
-                
-                // Deshabilitar botón
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<div class="loading"></div><span>Enviando...</span>';
-                
+        });
+
+        document.getElementById('addEventBtn')?.addEventListener('click', () => {
+            const time = document.getElementById('newEventTime').value;
+            const title = document.getElementById('newEventTitle').value;
+            const loc = document.getElementById('newEventLocation').value;
+            const desc = document.getElementById('newEventDesc').value;
+            if(!time || !title) return alert("Hora y título requeridos");
+            agregarEventoItinerario(time, title, loc, desc);
+            document.getElementById('newEventTime').value = '';
+            document.getElementById('newEventTitle').value = '';
+            document.getElementById('newEventLocation').value = '';
+            document.getElementById('newEventDesc').value = '';
+        });
+
+        // Exportar completo (invitados + itinerario + respuestas)
+        document.getElementById('exportDataBtn')?.addEventListener('click', () => {
+            const exportData = {
+                guests: getGuests(),
+                itinerary: getItinerary(),
+                weddingAnswers: JSON.parse(localStorage.getItem('wedding_answers') || '{}'),
+                exportDate: new Date().toISOString()
+            };
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const blob = new Blob([dataStr], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `boda_backup_${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // Importar backup
+        const importBtn = document.getElementById('importDataBtn');
+        const fileInput = document.getElementById('importFileInput');
+        importBtn?.addEventListener('click', () => fileInput.click());
+        fileInput?.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
                 try {
-                    if (isConnected && supabaseClient) {
-                        // Guardar en Supabase
-                        const { data, error } = await supabaseClient
-                            .from('predictions')
-                            .insert([newPrediction])
-                            .select();
-                        
-                        if (error) throw error;
-                        
-                        newPrediction.id = data[0].id;
-                        showStatus('✅ Predicción guardada exitosamente!', 'success');
-                        
-                    } else {
-                        // Guardar localmente
-                        newPrediction.id = 'local_' + Date.now();
-                        newPrediction.local = true;
-                        showStatus('✅ Predicción guardada localmente', 'warning');
-                    }
-                    
-                    // Agregar a la lista
-                    predictions.unshift(newPrediction);
-                    
-                    // Actualizar UI
-                    const emptyList = document.getElementById('emptyList');
-                    if (emptyList.style.display !== 'none') {
-                        emptyList.style.display = 'none';
-                    }
-                    
-                    renderPredictions();
-                    updateStats();
-                    
-                    // Guardar en localStorage
-                    saveToLocalStorage();
-                    
-                    // Limpiar formulario
-                    nameInput.value = '';
-                    document.querySelectorAll('.gender-btn').forEach(btn => btn.classList.remove('selected'));
-                    selectedGender = null;
-                    document.getElementById('selectedGender').value = '';
-                    
-                } catch (error) {
-                    console.error('Error guardando predicción:', error);
-                    showStatus('❌ Error al guardar la predicción', 'error');
-                    
-                    // Guardar localmente como respaldo
-                    newPrediction.id = 'local_' + Date.now();
-                    newPrediction.local = true;
-                    predictions.unshift(newPrediction);
-                    saveToLocalStorage();
-                    renderPredictions();
-                    updateStats();
-                } finally {
-                    // Restaurar botón
-                    setTimeout(() => {
-                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Enviar predicción</span>';
-                        submitBtn.disabled = false;
-                    }, 1500);
-                }
-            });
-        }
-        
-        function saveToLocalStorage() {
-            try {
-                const dataToSave = {
-                    predictions: predictions.filter(p => p.local || !p.id || p.id.toString().startsWith('local_')),
-                    lastUpdate: new Date().toISOString()
-                };
-                localStorage.setItem('babyShowerPredictions', JSON.stringify(dataToSave));
-            } catch (error) {
-                console.error('Error guardando en localStorage:', error);
-            }
-        }
-        
-        function startCountdown() {
-            function updateCountdown() {
-                // FECHA MODIFICADA: 12 de abril de 2026 a la 1:00 PM (13:00)
-                const eventDate = new Date('2026-04-12T13:00:00').getTime();
-                const now = new Date().getTime();
-                const timeLeft = eventDate - now;
-                
-                if (timeLeft > 0) {
-                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                    
-                    document.getElementById('days').textContent = days.toString().padStart(2, '0');
-                    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-                    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-                    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-                    
-                    // Si quedan menos de 5 minutos, cambiar color
-                    if (days === 0 && hours === 0 && minutes < 5) {
-                        document.querySelectorAll('.countdown-value').forEach(el => {
-                            el.style.color = '#ff6b9d';
-                        });
-                    }
-                } else {
-                    // Si el evento ya pasó
-                    document.getElementById('countdown').innerHTML = `
-                        <div class="date-details" style="color: #ff6b9d; font-size: 2rem;">
-                            <i class="fas fa-baby"></i> ¡El bebé ya llegó! <i class="fas fa-baby"></i>
-                        </div>`;
-                    
-                    // Parar el intervalo
-                    if (countdownInterval) {
-                        clearInterval(countdownInterval);
-                    }
-                }
-            }
-            
-            // Actualizar inmediatamente y luego cada segundo
-            updateCountdown();
-            countdownInterval = setInterval(updateCountdown, 1000);
-        }
-        
-        function showStatus(message, type) {
-            const statusElement = document.getElementById('statusMessage');
-            statusElement.textContent = message;
-            statusElement.className = `status-message status-${type}`;
-            statusElement.style.display = 'block';
-            
-            setTimeout(() => {
-                statusElement.style.display = 'none';
-            }, 5000);
-        }
-        
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-    </script>
+                    const data = JSON.parse(ev.target.result);
+                    if(data.guests) saveGuests(data.guests);
+                    if(data.itinerary) saveItinerary(data.itinerary);
+                    if(data.weddingAnswers) localStorage.setItem('wedding_answers', JSON.stringify(data.weddingAnswers));
+                    alert("Restauración exitosa. Recarga la vista.");
+                    renderApp();
+                } catch(e) { alert("Archivo inválido"); }
+            };
+            reader.readAsText(file);
+            fileInput.value = '';
+        });
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    // Arranque
+    initDatabase();
+    checkSession();
+</script>
 </body>
 </html>
