@@ -2,726 +2,412 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Mi Boda - Portal de Invitados</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Boda - Con Base de Datos Supabase</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background: #f0f4f8;
-            min-height: 100vh;
             color: #1e3a5f;
             padding: 20px;
         }
-
-        :root {
-            --navy: #1e3a5f;
-            --navy-light: #2c4e7a;
-            --white: #ffffff;
-            --gold: #c9a03d;
-            --success: #28a745;
-            --warning: #ffc107;
-            --danger: #dc3545;
-        }
-
-        .app-container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
         .card {
-            background: var(--white);
+            background: white;
             border-radius: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            padding: 24px 28px;
-            margin-bottom: 28px;
-            border: 1px solid rgba(30,58,95,0.1);
-        }
-
-        h1, h2, h3 {
-            color: var(--navy);
-        }
-
-        h1 {
-            font-size: 2rem;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
+            padding: 24px;
             margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-
         button {
-            background: var(--navy);
-            border: none;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: 600;
+            background: #1e3a5f;
             color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
             cursor: pointer;
-            transition: 0.2s;
-            font-size: 1rem;
+            margin: 5px;
         }
-
-        button:hover {
-            background: var(--navy-light);
-            transform: scale(1.02);
-        }
-
-        .btn-success {
-            background: var(--success);
-        }
-
-        .btn-warning {
-            background: var(--warning);
-            color: #1e3a5f;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-        }
-
-        input, select, textarea {
+        input, select {
             width: 100%;
-            padding: 12px 16px;
-            margin-top: 6px;
-            margin-bottom: 14px;
-            border: 2px solid #d1d9e6;
-            border-radius: 12px;
-            font-size: 1rem;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 10px;
         }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--navy);
-        }
-
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 28px;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
         }
-
         @media (max-width: 768px) {
-            .grid-2 {
-                grid-template-columns: 1fr;
-            }
-            .card {
-                padding: 18px;
-            }
+            .grid-2 { grid-template-columns: 1fr; }
         }
-
-        .login-box {
-            max-width: 500px;
-            margin: 80px auto;
-        }
-
-        .perfil-header {
-            background: linear-gradient(135deg, var(--navy), var(--navy-light));
-            color: white;
-            padding: 20px;
-            border-radius: 20px;
-            margin-bottom: 20px;
-        }
-
-        .perfil-header h2, .perfil-header p {
-            color: white;
-        }
-
-        .ubicacion-btn {
-            background: var(--success);
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .mesa-info {
-            background: #e8f0fe;
-            padding: 15px;
-            border-radius: 12px;
-            margin-top: 10px;
-        }
-
-        .itinerario-item {
-            background: #f8fafc;
-            border-left: 4px solid var(--navy);
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-        }
-
-        .badge {
-            background: var(--gold);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-        }
-
-        .puntualidad {
+        .config-box {
             background: #fff3cd;
-            border-left: 4px solid var(--warning);
-            padding: 12px;
-            margin-top: 10px;
-            border-radius: 8px;
-        }
-
-        .admin-table {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        th {
-            background: #f8fafc;
-            color: var(--navy);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-<div id="appRoot"></div>
+<div id="app"></div>
 
 <script>
-    // ========== CONFIGURACIÓN ==========
-    const DB_KEYS = {
-        USERS: 'wedding_users_v2',
-        INVITADOS: 'wedding_invitados_v2',
-        UBICACIONES: 'wedding_ubicaciones'
-    };
-
-    // Fechas del evento
-    const FECHAS = {
-        BAUTIZO: "15 de Diciembre de 2025 - 10:00 AM",
-        BODA: "15 de Diciembre de 2025 - 12:00 PM",
-        SALON: "15 de Diciembre de 2025 - 2:00 PM"
-    };
-
-    const HORAS_MISA = {
-        BAUTIZO: "10:00 AM (Iglesia San José)",
-        BODA: "12:00 PM (Iglesia San José)"
-    };
-
-    // Itinerario general
-    const ITINERARIO_GENERAL = [
-        { hora: "9:30 AM", evento: "Llegada de invitados", lugar: "Iglesia San José" },
-        { hora: "10:00 AM", evento: "Ceremonia de Bautizo", lugar: "Iglesia San José" },
-        { hora: "12:00 PM", evento: "Ceremonia de Boda", lugar: "Iglesia San José" },
-        { hora: "1:30 PM", evento: "Coctel de bienvenida", lugar: "Salón Jardín Real" },
-        { hora: "3:00 PM", evento: "Banquete", lugar: "Salón Jardín Real" },
-        { hora: "5:00 PM", evento: "Baile y pastel", lugar: "Salón Jardín Real" },
-        { hora: "7:00 PM", evento: "Despedida", lugar: "Salón Jardín Real" }
-    ];
-
-    // Datos de la pareja
-    const PAREJA = {
-        novio: "Carlos Martínez",
-        novia: "Ana González",
-        fechaBoda: "15 de Diciembre de 2025",
-        fechaBautizo: "15 de Diciembre de 2025"
-    };
-
-    // Inicializar base de datos
-    function initDatabase() {
-        if (!localStorage.getItem(DB_KEYS.USERS)) {
-            const defaultUsers = [
-                { email: "admin@boda.com", password: "admin123", nombre: "Administrador", rol: "admin" }
-            ];
-            localStorage.setItem(DB_KEYS.USERS, JSON.stringify(defaultUsers));
-        }
-        if (!localStorage.getItem(DB_KEYS.INVITADOS)) {
-            localStorage.setItem(DB_KEYS.INVITADOS, JSON.stringify([]));
-        }
-        if (!localStorage.getItem(DB_KEYS.UBICACIONES)) {
-            localStorage.setItem(DB_KEYS.UBICACIONES, JSON.stringify({}));
-        }
-    }
-
+    // ⚠️ CONFIGURACIÓN DE SUPABASE - CAMBIA ESTOS VALORES ⚠️
+    // Ve a tu proyecto en supabase.com -> Settings -> API
+    const SUPABASE_URL = "https://TU_PROYECTO.supabase.co";  // <-- CAMBIA ESTO
+    const SUPABASE_ANON_KEY = "TU_ANON_KEY";                // <-- CAMBIA ESTO
+    
+    // Si no tienes Supabase, puedes usar localStorage como respaldo
+    const USAR_SUPABASE = false; // Cambia a true cuando tengas las credenciales
+    
+    let supabase = null;
     let currentUser = null;
-
-    // Helper functions
-    function getInvitados() {
-        return JSON.parse(localStorage.getItem(DB_KEYS.INVITADOS)) || [];
+    
+    // Inicializar Supabase si está configurado
+    if (USAR_SUPABASE && SUPABASE_URL !== "https://TU_PROYECTO.supabase.co") {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log("✅ Conectado a Supabase");
+    } else {
+        console.log("📦 Usando localStorage como base de datos");
     }
-
-    function saveInvitados(invitados) {
-        localStorage.setItem(DB_KEYS.INVITADOS, JSON.stringify(invitados));
-    }
-
-    function getUbicaciones() {
-        return JSON.parse(localStorage.getItem(DB_KEYS.UBICACIONES)) || {};
-    }
-
-    function saveUbicaciones(ubicaciones) {
-        localStorage.setItem(DB_KEYS.UBICACIONES, JSON.stringify(ubicaciones));
-    }
-
-    // Registrar nuevo invitado (desde login/registro)
-    function registrarInvitado(email, password, representante, apellido, ciudad) {
-        const users = JSON.parse(localStorage.getItem(DB_KEYS.USERS)) || [];
-        if (users.find(u => u.email === email)) {
-            return { success: false, message: "Este email ya está registrado" };
+    
+    // Funciones de base de datos (funcionan con Supabase o localStorage)
+    async function guardarUsuario(usuario) {
+        if (supabase) {
+            const { data, error } = await supabase.from('users').insert([usuario]);
+            if (error) throw error;
+            return data;
+        } else {
+            const users = JSON.parse(localStorage.getItem('users_boda') || '[]');
+            users.push(usuario);
+            localStorage.setItem('users_boda', JSON.stringify(users));
+            return usuario;
         }
-        
+    }
+    
+    async function obtenerUsuario(email, password) {
+        if (supabase) {
+            const { data, error } = await supabase
+                .from('users')
+                .select('*')
+                .eq('email', email)
+                .eq('password', password);
+            if (error) throw error;
+            return data[0];
+        } else {
+            const users = JSON.parse(localStorage.getItem('users_boda') || '[]');
+            return users.find(u => u.email === email && u.password === password);
+        }
+    }
+    
+    async function actualizarRespuesta(email, campo, valor) {
+        if (supabase) {
+            const { error } = await supabase
+                .from('users')
+                .update({ respuestas: { [campo]: valor } })
+                .eq('email', email);
+            if (error) throw error;
+        } else {
+            const users = JSON.parse(localStorage.getItem('users_boda') || '[]');
+            const index = users.findIndex(u => u.email === email);
+            if (index !== -1) {
+                if (!users[index].respuestas) users[index].respuestas = {};
+                users[index].respuestas[campo] = valor;
+                localStorage.setItem('users_boda', JSON.stringify(users));
+            }
+        }
+    }
+    
+    async function registrarInvitado(email, password, nombre, apellido, ciudad) {
         const nuevoUsuario = {
-            email: email,
-            password: password,
-            nombre: representante,
-            apellido: apellido,
-            ciudad: ciudad,
-            rol: "invitado",
-            respuestas: {
-                asisteMisa: null,
-                asisteSalon: null,
-                cantidadAcompanantes: 0,
-                ubicacionAsignada: null
-            },
-            registroCompleto: false
+            email, password, nombre, apellido, ciudad,
+            rol: 'invitado',
+            respuestas: {},
+            created_at: new Date().toISOString()
         };
         
-        users.push(nuevoUsuario);
-        localStorage.setItem(DB_KEYS.USERS, JSON.stringify(users));
-        
-        // También guardar en invitados
-        const invitados = getInvitados();
-        invitados.push({
-            id: Date.now(),
-            email: email,
-            representante: representante,
-            apellido: apellido,
-            ciudad: ciudad,
-            asisteMisa: null,
-            asisteSalon: null,
-            cantidadAcompanantes: 0,
-            ubicacionAsignada: null
-        });
-        saveInvitados(invitados);
-        
-        return { success: true, message: "Registro exitoso" };
+        try {
+            await guardarUsuario(nuevoUsuario);
+            return { success: true };
+        } catch (error) {
+            return { success: false, message: error.message };
+        }
     }
-
-    // Login
-    function login(email, password) {
-        const users = JSON.parse(localStorage.getItem(DB_KEYS.USERS)) || [];
-        const user = users.find(u => u.email === email && u.password === password);
+    
+    async function login(email, password) {
+        const user = await obtenerUsuario(email, password);
         if (user) {
             currentUser = user;
-            localStorage.setItem('wedding_current_session_v2', JSON.stringify(currentUser));
+            localStorage.setItem('current_user', JSON.stringify(currentUser));
             renderApp();
             return true;
         }
         return false;
     }
-
-    function logout() {
-        currentUser = null;
-        localStorage.removeItem('wedding_current_session_v2');
-        renderApp();
-    }
-
-    function checkSession() {
-        const stored = localStorage.getItem('wedding_current_session_v2');
-        if (stored) {
+    
+    // Datos de la boda
+    const PAREJA = {
+        novio: "Carlos Martínez",
+        novia: "Ana González",
+        fechaBoda: "15 de Diciembre de 2025"
+    };
+    
+    const ITINERARIO = [
+        { hora: "10:00 AM", evento: "Bautizo", lugar: "Iglesia San José" },
+        { hora: "12:00 PM", evento: "Boda", lugar: "Iglesia San José" },
+        { hora: "2:00 PM", evento: "Comida", lugar: "Salón Jardín Real" },
+        { hora: "5:00 PM", evento: "Baile", lugar: "Salón Jardín Real" }
+    ];
+    
+    function renderApp() {
+        const root = document.getElementById('app');
+        if (!root) return;
+        
+        // Verificar sesión guardada
+        const stored = localStorage.getItem('current_user');
+        if (stored && !currentUser) {
             currentUser = JSON.parse(stored);
         }
-        renderApp();
-    }
-
-    // Actualizar respuestas del invitado
-    function actualizarRespuesta(email, campo, valor) {
-        const users = JSON.parse(localStorage.getItem(DB_KEYS.USERS)) || [];
-        const userIndex = users.findIndex(u => u.email === email);
-        if (userIndex !== -1) {
-            if (!users[userIndex].respuestas) users[userIndex].respuestas = {};
-            users[userIndex].respuestas[campo] = valor;
-            if (campo === 'asisteMisa' || campo === 'asisteSalon' || campo === 'cantidadAcompanantes') {
-                users[userIndex].registroCompleto = true;
-            }
-            localStorage.setItem(DB_KEYS.USERS, JSON.stringify(users));
-            
-            // Actualizar también en invitados
-            const invitados = getInvitados();
-            const invIndex = invitados.findIndex(i => i.email === email);
-            if (invIndex !== -1) {
-                invitados[invIndex][campo] = valor;
-                saveInvitados(invitados);
-            }
-            
-            if (currentUser && currentUser.email === email) {
-                currentUser = users[userIndex];
-                localStorage.setItem('wedding_current_session_v2', JSON.stringify(currentUser));
-            }
-        }
-        renderApp();
-    }
-
-    // Asignar ubicación en el salón
-    function asignarUbicacion(email, ubicacion) {
-        const ubicaciones = getUbicaciones();
-        ubicaciones[email] = ubicacion;
-        saveUbicaciones(ubicaciones);
         
-        actualizarRespuesta(email, 'ubicacionAsignada', ubicacion);
-        alert(`✅ ¡Ubicación asignada: ${ubicacion}! Nos vemos en el salón.`);
-        renderApp();
-    }
-
-    // Obtener ubicación
-    function obtenerUbicacion(email) {
-        const ubicaciones = getUbicaciones();
-        return ubicaciones[email] || null;
-    }
-
-    // Administración - obtener todos los invitados
-    function getAllInvitadosConRespuestas() {
-        const users = JSON.parse(localStorage.getItem(DB_KEYS.USERS)) || [];
-        return users.filter(u => u.rol === 'invitado');
-    }
-
-    // ========== RENDER ==========
-    function renderApp() {
-        const root = document.getElementById('appRoot');
-        if (!root) return;
-
         if (!currentUser) {
             // Pantalla de login/registro
             root.innerHTML = `
-                <div class="login-box card">
-                    <div class="logo" style="justify-content:center;">
-                        <h1>💍 Bienvenidos a Nuestra Boda 💒</h1>
-                    </div>
-                    <div style="text-align:center; margin-bottom:20px;">
+                <div style="max-width:500px; margin:50px auto;">
+                    <div class="card">
+                        <h1>💍 Mi Boda</h1>
                         <p>${PAREJA.novio} 💙 ${PAREJA.novia}</p>
                         <p>📅 ${PAREJA.fechaBoda}</p>
-                    </div>
-                    
-                    <div id="loginForm">
-                        <h3>Iniciar Sesión</h3>
-                        <input type="email" id="loginEmail" placeholder="Correo electrónico">
-                        <input type="password" id="loginPassword" placeholder="Contraseña">
-                        <button id="doLoginBtn">Ingresar</button>
-                        <button id="showRegisterBtn" class="btn-warning" style="margin-top:10px;">¿No tienes cuenta? Regístrate</button>
-                    </div>
-                    
-                    <div id="registerForm" style="display:none;">
-                        <h3>Registro de Invitado</h3>
-                        <input type="text" id="regRepresentante" placeholder="Nombre del representante">
-                        <input type="text" id="regApellido" placeholder="Apellido">
-                        <input type="text" id="regCiudad" placeholder="¿De dónde nos acompañan?">
-                        <input type="email" id="regEmail" placeholder="Correo electrónico">
-                        <input type="password" id="regPassword" placeholder="Contraseña">
-                        <button id="doRegisterBtn">Registrarse</button>
-                        <button id="showLoginBtn" class="btn-warning" style="margin-top:10px;">Volver al inicio de sesión</button>
+                        
+                        ${!USAR_SUPABASE ? `
+                            <div class="config-box">
+                                ⚠️ <strong>Modo Demostración</strong><br>
+                                Los datos se guardan en tu navegador (localStorage).
+                                Para usar base de datos real, configura Supabase.
+                            </div>
+                        ` : ''}
+                        
+                        <div id="loginPanel">
+                            <h3>Iniciar Sesión</h3>
+                            <input type="email" id="loginEmail" placeholder="Correo">
+                            <input type="password" id="loginPassword" placeholder="Contraseña">
+                            <button id="loginBtn">Ingresar</button>
+                            <button id="showRegisterBtn" style="background:#6c757d;">Registrarse</button>
+                        </div>
+                        
+                        <div id="registerPanel" style="display:none;">
+                            <h3>Registro</h3>
+                            <input type="text" id="regNombre" placeholder="Nombre">
+                            <input type="text" id="regApellido" placeholder="Apellido">
+                            <input type="text" id="regCiudad" placeholder="Ciudad de origen">
+                            <input type="email" id="regEmail" placeholder="Correo">
+                            <input type="password" id="regPassword" placeholder="Contraseña">
+                            <button id="registerBtn">Registrarse</button>
+                            <button id="showLoginBtn" style="background:#6c757d;">Volver</button>
+                        </div>
                     </div>
                 </div>
             `;
             
-            document.getElementById('doLoginBtn')?.addEventListener('click', () => {
+            document.getElementById('loginBtn')?.addEventListener('click', async () => {
                 const email = document.getElementById('loginEmail').value;
                 const pwd = document.getElementById('loginPassword').value;
-                if (!login(email, pwd)) {
-                    alert("❌ Credenciales incorrectas.\nAdmin: admin@boda.com / admin123\nInvitados: regístrate primero");
-                }
+                const success = await login(email, pwd);
+                if (!success) alert("❌ Credenciales incorrectas");
             });
             
             document.getElementById('showRegisterBtn')?.addEventListener('click', () => {
-                document.getElementById('loginForm').style.display = 'none';
-                document.getElementById('registerForm').style.display = 'block';
+                document.getElementById('loginPanel').style.display = 'none';
+                document.getElementById('registerPanel').style.display = 'block';
             });
             
             document.getElementById('showLoginBtn')?.addEventListener('click', () => {
-                document.getElementById('registerForm').style.display = 'none';
-                document.getElementById('loginForm').style.display = 'block';
+                document.getElementById('registerPanel').style.display = 'none';
+                document.getElementById('loginPanel').style.display = 'block';
             });
             
-            document.getElementById('doRegisterBtn')?.addEventListener('click', () => {
-                const representante = document.getElementById('regRepresentante').value;
+            document.getElementById('registerBtn')?.addEventListener('click', async () => {
+                const nombre = document.getElementById('regNombre').value;
                 const apellido = document.getElementById('regApellido').value;
                 const ciudad = document.getElementById('regCiudad').value;
                 const email = document.getElementById('regEmail').value;
                 const password = document.getElementById('regPassword').value;
                 
-                if (!representante || !apellido || !ciudad || !email || !password) {
-                    alert("Por favor completa todos los campos");
+                if (!nombre || !apellido || !ciudad || !email || !password) {
+                    alert("Completa todos los campos");
                     return;
                 }
                 
-                const result = registrarInvitado(email, password, representante, apellido, ciudad);
+                const result = await registrarInvitado(email, password, nombre, apellido, ciudad);
                 if (result.success) {
                     alert("✅ Registro exitoso. Ahora inicia sesión.");
-                    document.getElementById('registerForm').style.display = 'none';
-                    document.getElementById('loginForm').style.display = 'block';
+                    document.getElementById('registerPanel').style.display = 'none';
+                    document.getElementById('loginPanel').style.display = 'block';
                 } else {
-                    alert(result.message);
+                    alert("❌ Error: " + result.message);
                 }
             });
             return;
         }
-
-        // ========== PANEL DE ADMINISTRADOR ==========
-        if (currentUser.rol === 'admin') {
-            const invitados = getAllInvitadosConRespuestas();
-            const estadisticas = {
-                total: invitados.length,
-                misaSi: invitados.filter(i => i.respuestas?.asisteMisa === true).length,
-                salonSi: invitados.filter(i => i.respuestas?.asisteSalon === true).length,
-                totalAcompanantes: invitados.reduce((sum, i) => sum + (i.respuestas?.cantidadAcompanantes || 0), 0)
-            };
-            
-            root.innerHTML = `
-                <div class="app-container">
-                    <div class="logo">
-                        <h1>👑 Panel de Administración - Mi Boda</h1>
-                        <div>
-                            <span class="badge">Admin: ${currentUser.nombre}</span>
-                            <button id="logoutBtn" class="btn-danger">Cerrar sesión</button>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <h2>📊 Estadísticas</h2>
-                        <div class="grid-3">
-                            <div><strong>Total invitados:</strong> ${estadisticas.total}</div>
-                            <div><strong>Asistirán a Misa:</strong> ${estadisticas.misaSi}</div>
-                            <div><strong>Asistirán al Salón:</strong> ${estadisticas.salonSi}</div>
-                            <div><strong>Acompañantes totales:</strong> ${estadisticas.totalAcompanantes}</div>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <h2>📋 Lista de Invitados Registrados</h2>
-                        <div class="admin-table">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Representante</th><th>Apellido</th><th>Ciudad</th>
-                                        <th>Asiste Misa</th><th>Asiste Salón</th><th>Acompañantes</th><th>Ubicación</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${invitados.map(inv => `
-                                        <tr>
-                                            <td>${escapeHtml(inv.nombre || '')}</td>
-                                            <td>${escapeHtml(inv.apellido || '')}</td>
-                                            <td>${escapeHtml(inv.ciudad || '')}</td>
-                                            <td>${inv.respuestas?.asisteMisa === true ? '✅ Sí' : inv.respuestas?.asisteMisa === false ? '❌ No' : '⏳ Pendiente'}</td>
-                                            <td>${inv.respuestas?.asisteSalon === true ? '✅ Sí' : inv.respuestas?.asisteSalon === false ? '❌ No' : '⏳ Pendiente'}</td>
-                                            <td>${inv.respuestas?.cantidadAcompanantes || 0}</td>
-                                            <td>${inv.respuestas?.ubicacionAsignada || 'Sin asignar'}</td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            `;
-            document.getElementById('logoutBtn')?.addEventListener('click', logout);
-            return;
-        }
-
-        // ========== PERFIL DEL INVITADO ==========
+        
+        // Panel del invitado
         const respuestas = currentUser.respuestas || {};
-        const ubicacion = obtenerUbicacion(currentUser.email);
         
         root.innerHTML = `
-            <div class="app-container">
-                <div class="logo">
-                    <h1>💙 Mi Boda - Portal de Invitados 🤍</h1>
-                    <button id="logoutBtn" class="btn-danger">Salir</button>
-                </div>
-                
-                <!-- Perfil del invitado -->
-                <div class="perfil-header">
-                    <h2>👋 ¡Hola, ${escapeHtml(currentUser.nombre)} ${escapeHtml(currentUser.apellido || '')}!</h2>
-                    <p>📍 Nos acompañas desde: ${escapeHtml(currentUser.ciudad || 'No especificado')}</p>
-                    <p>📧 ${currentUser.email}</p>
-                </div>
-                
-                <!-- Pregunta 1 ya está respondida en registro -->
-                
-                <!-- PREGUNTA 2: Asistirán a misa (bautizo y boda) -->
+            <div style="max-width:1200px; margin:0 auto;">
                 <div class="card">
-                    <h3>⛪ Pregunta 2: ¿Asistirán a las ceremonias religiosas?</h3>
-                    <p><strong>Bautizo:</strong> ${FECHAS.BAUTIZO} | <strong>Boda:</strong> ${FECHAS.BODA}</p>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h1>💙 ¡Hola ${currentUser.nombre}! 🤍</h1>
+                        <button id="logoutBtn" style="background:#dc3545;">Cerrar Sesión</button>
+                    </div>
+                    <p>📍 Nos acompañas desde: ${currentUser.ciudad}</p>
+                </div>
+                
+                <!-- Pregunta 2: Misa -->
+                <div class="card">
+                    <h3>⛪ ¿Asistirán a las ceremonias?</h3>
                     ${respuestas.asisteMisa === undefined ? `
-                        <div style="display:flex; gap:10px; margin-top:15px;">
-                            <button id="misaSiBtn" class="btn-success">✅ Sí, asistiremos</button>
-                            <button id="misaNoBtn" class="btn-danger">❌ No podremos asistir</button>
-                        </div>
+                        <button id="misaSiBtn" style="background:#28a745;">✅ Sí</button>
+                        <button id="misaNoBtn" style="background:#dc3545;">❌ No</button>
                     ` : `
-                        <div class="${respuestas.asisteMisa ? 'puntualidad' : ''}">
-                            <strong>${respuestas.asisteMisa ? '✅ Confirmaste asistencia a las ceremonias' : '❌ No asistirás a las ceremonias'}</strong>
-                            ${respuestas.asisteMisa ? `
-                                <div class="puntualidad">
-                                    🕐 <strong>Horario:</strong> ${HORAS_MISA.BAUTIZO} (Bautizo) y ${HORAS_MISA.BODA} (Boda)<br>
-                                    💫 <strong>Frase motivacional:</strong> "La puntualidad es el alma de los negocios y el respeto por los demás. ¡Te esperamos con alegría!"
-                                </div>
-                            ` : ''}
-                        </div>
+                        <p>${respuestas.asisteMisa ? '✅ Asistirán a las ceremonias' : '❌ No asistirán'}</p>
+                        ${respuestas.asisteMisa ? `
+                            <div style="background:#fff3cd; padding:12px; border-radius:10px; margin-top:10px;">
+                                🕐 Horario: Bautizo 10:00 AM | Boda 12:00 PM<br>
+                                💫 ¡La puntualidad es importante! Te esperamos con mucho cariño.
+                            </div>
+                        ` : ''}
                     `}
                 </div>
                 
-                <!-- PREGUNTA 3: Asistirán al salón + botón ubicación -->
+                <!-- Pregunta 3: Salón -->
                 <div class="card">
-                    <h3>🍽️ Pregunta 3: ¿Nos acompañarán a la comida en el salón?</h3>
-                    <p><strong>Horario:</strong> ${FECHAS.SALON}</p>
+                    <h3>🍽️ ¿Nos acompañarán al salón?</h3>
                     ${respuestas.asisteSalon === undefined ? `
-                        <div style="display:flex; gap:10px; margin-top:15px;">
-                            <button id="salonSiBtn" class="btn-success">✅ Sí, iremos al salón</button>
-                            <button id="salonNoBtn" class="btn-danger">❌ No iremos al salón</button>
-                        </div>
+                        <button id="salonSiBtn" style="background:#28a745;">✅ Sí</button>
+                        <button id="salonNoBtn" style="background:#dc3545;">❌ No</button>
                     ` : `
-                        <div>
-                            <strong>${respuestas.asisteSalon ? '✅ Confirmaste asistencia al salón' : '❌ No asistirás al salón'}</strong>
-                            ${respuestas.asisteSalon && !respuestas.ubicacionAsignada ? `
-                                <button id="asignarUbicacionBtn" class="ubicacion-btn">📍 Asignar mi ubicación en el salón</button>
-                            ` : ''}
-                            ${respuestas.ubicacionAsignada ? `
-                                <div class="mesa-info">
-                                    🪑 <strong>Tu ubicación asignada:</strong> ${respuestas.ubicacionAsignada}<br>
-                                    ¡Te esperamos en tu mesa especial!
-                                </div>
-                            ` : ''}
-                        </div>
+                        <p>${respuestas.asisteSalon ? '✅ Asistirán al salón' : '❌ No asistirán'}</p>
+                        ${respuestas.asisteSalon && !respuestas.ubicacion ? `
+                            <button id="ubicacionBtn" style="background:#17a2b8;">📍 Asignar mi ubicación</button>
+                        ` : ''}
+                        ${respuestas.ubicacion ? `<p>🪑 Tu mesa: ${respuestas.ubicacion}</p>` : ''}
                     `}
                 </div>
                 
-                <!-- PREGUNTA 4: Cuántas personas los acompañan -->
+                <!-- Pregunta 4: Acompañantes -->
                 <div class="card">
-                    <h3>👥 Pregunta 4: ¿Cuántas personas los acompañan?</h3>
-                    ${respuestas.cantidadAcompanantes === undefined ? `
-                        <input type="number" id="cantidadAcompanantes" min="0" max="20" placeholder="Número de acompañantes (incluyéndolos a ustedes)">
-                        <button id="guardarAcompanantesBtn">Guardar</button>
+                    <h3>👥 ¿Cuántas personas los acompañan?</h3>
+                    ${respuestas.cantidad === undefined ? `
+                        <input type="number" id="cantidadInput" min="0" max="20" placeholder="Número de acompañantes">
+                        <button id="guardarCantidadBtn">Guardar</button>
                     ` : `
-                        <p><strong>📊 Acompañantes totales:</strong> ${respuestas.cantidadAcompanantes} personas</p>
-                        <button id="editarAcompanantesBtn" class="btn-warning">✏️ Editar número</button>
+                        <p>📊 Acompañantes: ${respuestas.cantidad} personas</p>
+                        <button id="editarCantidadBtn">✏️ Editar</button>
                     `}
                 </div>
                 
-                <!-- SECCIÓN DE ITINERARIO, NUESTROS NOMBRES Y FECHAS -->
+                <!-- Información del día -->
                 <div class="card">
-                    <h2>📅 Información del Gran Día</h2>
+                    <h2>📅 El Gran Día</h2>
                     <div class="grid-2">
                         <div>
-                            <h3>💑 Los Novios</h3>
-                            <p><strong>Novio:</strong> ${PAREJA.novio}</p>
-                            <p><strong>Novia:</strong> ${PAREJA.novia}</p>
-                            <p><strong>Fecha de Boda:</strong> ${PAREJA.fechaBoda}</p>
-                            <p><strong>Fecha de Bautizo:</strong> ${PAREJA.fechaBautizo}</p>
-                            <p><strong>👥 Acompañantes registrados:</strong> ${respuestas.cantidadAcompanantes || 0} personas</p>
+                            <p><strong>💑 Novios:</strong> ${PAREJA.novio} y ${PAREJA.novia}</p>
+                            <p><strong>📅 Fecha:</strong> ${PAREJA.fechaBoda}</p>
+                            <p><strong>👥 Tus acompañantes:</strong> ${respuestas.cantidad || 0}</p>
                         </div>
                         <div>
-                            <h3>⏰ Itinerario del Día</h3>
-                            ${ITINERARIO_GENERAL.map(item => `
-                                <div class="itinerario-item">
-                                    <strong>🕐 ${item.hora}</strong><br>
-                                    ${item.evento}<br>
-                                    <small>📍 ${item.lugar}</small>
+                            <h3>⏰ Itinerario</h3>
+                            ${ITINERARIO.map(i => `
+                                <div style="margin:8px 0;">
+                                    <strong>🕐 ${i.hora}</strong> - ${i.evento}<br>
+                                    <small>📍 ${i.lugar}</small>
                                 </div>
                             `).join('')}
                         </div>
                     </div>
                 </div>
                 
-                <footer style="text-align:center; padding:20px; color:var(--navy);">
-                    💙 ¡Gracias por ser parte de nuestro día especial! 🤍
+                <footer style="text-align:center; padding:20px;">
+                    💙 ¡Gracias por compartir este día especial! 🤍
                 </footer>
             </div>
         `;
         
         // Event listeners
-        document.getElementById('logoutBtn')?.addEventListener('click', logout);
+        document.getElementById('logoutBtn')?.addEventListener('click', () => {
+            currentUser = null;
+            localStorage.removeItem('current_user');
+            renderApp();
+        });
         
-        // Pregunta 2 - Misa
         if (respuestas.asisteMisa === undefined) {
             document.getElementById('misaSiBtn')?.addEventListener('click', () => {
                 actualizarRespuesta(currentUser.email, 'asisteMisa', true);
+                currentUser.respuestas.asisteMisa = true;
+                renderApp();
             });
             document.getElementById('misaNoBtn')?.addEventListener('click', () => {
                 actualizarRespuesta(currentUser.email, 'asisteMisa', false);
+                currentUser.respuestas.asisteMisa = false;
+                renderApp();
             });
         }
         
-        // Pregunta 3 - Salón
         if (respuestas.asisteSalon === undefined) {
             document.getElementById('salonSiBtn')?.addEventListener('click', () => {
                 actualizarRespuesta(currentUser.email, 'asisteSalon', true);
+                currentUser.respuestas.asisteSalon = true;
+                renderApp();
             });
             document.getElementById('salonNoBtn')?.addEventListener('click', () => {
                 actualizarRespuesta(currentUser.email, 'asisteSalon', false);
+                currentUser.respuestas.asisteSalon = false;
+                renderApp();
             });
         }
         
-        // Botón asignar ubicación
-        document.getElementById('asignarUbicacionBtn')?.addEventListener('click', () => {
-            const mesasDisponibles = ["Mesa 1 - Familia", "Mesa 2 - Amigos", "Mesa 3 - Compañeros", "Mesa 4 - VIP", "Mesa 5 - Especial"];
-            const seleccion = prompt("Elige tu ubicación:\n" + mesasDisponibles.join("\n"), mesasDisponibles[0]);
-            if (seleccion && mesasDisponibles.includes(seleccion)) {
-                asignarUbicacion(currentUser.email, seleccion);
-            } else if (seleccion) {
-                alert("Por favor elige una de las opciones disponibles");
+        document.getElementById('ubicacionBtn')?.addEventListener('click', () => {
+            const mesas = ["Mesa 1 - Familia", "Mesa 2 - Amigos", "Mesa 3 - Compañeros", "Mesa 4 - VIP"];
+            const seleccion = prompt("Elige tu mesa:\n" + mesas.join("\n"), mesas[0]);
+            if (seleccion && mesas.includes(seleccion)) {
+                actualizarRespuesta(currentUser.email, 'ubicacion', seleccion);
+                currentUser.respuestas.ubicacion = seleccion;
+                renderApp();
+                alert(`✅ Ubicación asignada: ${seleccion}`);
             }
         });
         
-        // Pregunta 4 - Cantidad de acompañantes
-        if (respuestas.cantidadAcompanantes === undefined) {
-            document.getElementById('guardarAcompanantesBtn')?.addEventListener('click', () => {
-                const cantidad = parseInt(document.getElementById('cantidadAcompanantes').value);
-                if (isNaN(cantidad) || cantidad < 0) {
-                    alert("Por ingresa un número válido");
-                    return;
+        if (respuestas.cantidad === undefined) {
+            document.getElementById('guardarCantidadBtn')?.addEventListener('click', () => {
+                const cantidad = parseInt(document.getElementById('cantidadInput').value);
+                if (!isNaN(cantidad) && cantidad >= 0) {
+                    actualizarRespuesta(currentUser.email, 'cantidad', cantidad);
+                    currentUser.respuestas.cantidad = cantidad;
+                    renderApp();
+                } else {
+                    alert("Ingresa un número válido");
                 }
-                actualizarRespuesta(currentUser.email, 'cantidadAcompanantes', cantidad);
             });
         } else {
-            document.getElementById('editarAcompanantesBtn')?.addEventListener('click', () => {
-                const nuevaCantidad = prompt("Editar número de acompañantes:", respuestas.cantidadAcompanantes);
-                if (nuevaCantidad !== null) {
-                    const cantidad = parseInt(nuevaCantidad);
+            document.getElementById('editarCantidadBtn')?.addEventListener('click', () => {
+                const nueva = prompt("Número de acompañantes:", respuestas.cantidad);
+                if (nueva !== null) {
+                    const cantidad = parseInt(nueva);
                     if (!isNaN(cantidad) && cantidad >= 0) {
-                        actualizarRespuesta(currentUser.email, 'cantidadAcompanantes', cantidad);
-                    } else {
-                        alert("Número inválido");
+                        actualizarRespuesta(currentUser.email, 'cantidad', cantidad);
+                        currentUser.respuestas.cantidad = cantidad;
+                        renderApp();
                     }
                 }
             });
         }
     }
     
-    function escapeHtml(str) {
-        if (!str) return '';
-        return String(str).replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-    
-    // Inicializar
-    initDatabase();
-    checkSession();
+    renderApp();
 </script>
 </body>
 </html>
