@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Administración de Boda - Planifica tu Gran Día</title>
+    <title>Administración de Boda - Azul Marino y Blanco</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,40 +13,46 @@
 
         body {
             font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: linear-gradient(135deg, #fef9e8 0%, #f7e9d7 100%);
+            background: #f0f4f8;
             min-height: 100vh;
-            color: #3a2c29;
+            color: #1e2a3e;
             padding: 20px;
         }
 
-        /* Contenedor principal */
+        /* Paleta azul marino y blanco */
+        :root {
+            --navy: #1e3a5f;
+            --navy-light: #2c4e7a;
+            --white: #ffffff;
+            --gold: #c9a03d;
+            --gray-light: #e9ecef;
+        }
+
         .app-container {
-            max-width: 1300px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
         /* Tarjetas */
         .card {
-            background: white;
-            border-radius: 28px;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.02);
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
             padding: 24px 28px;
             margin-bottom: 28px;
             transition: all 0.2s;
+            border: 1px solid rgba(30,58,95,0.1);
         }
 
         h1, h2, h3 {
             font-weight: 600;
             letter-spacing: -0.3px;
+            color: var(--navy);
         }
 
         h1 {
             font-size: 2rem;
-            background: linear-gradient(135deg, #b9573a, #d48d6b);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: inline-block;
+            color: var(--navy);
         }
 
         .logo {
@@ -59,38 +65,49 @@
         }
 
         button {
-            background: #d48d6b;
+            background: var(--navy);
             border: none;
-            padding: 10px 20px;
-            border-radius: 60px;
+            padding: 12px 24px;
+            border-radius: 50px;
             font-weight: 600;
             color: white;
             cursor: pointer;
             transition: 0.2s;
-            font-size: 0.9rem;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            font-size: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         button:hover {
-            background: #b9573a;
-            transform: scale(0.97);
+            background: var(--navy-light);
+            transform: scale(1.02);
         }
 
         .btn-outline {
             background: transparent;
-            border: 1.5px solid #d48d6b;
-            color: #b9573a;
+            border: 2px solid var(--navy);
+            color: var(--navy);
         }
 
         .btn-outline:hover {
-            background: #fef3e9;
+            background: var(--navy);
+            color: white;
+        }
+
+        .btn-easy {
+            background: #28a745;
+            font-size: 1.1rem;
+            padding: 15px 30px;
+        }
+
+        .btn-easy:hover {
+            background: #218838;
         }
 
         .btn-danger {
-            background: #c95a5a;
+            background: #dc3545;
         }
         .btn-danger:hover {
-            background: #a13e3e;
+            background: #c82333;
         }
 
         input, select, textarea {
@@ -98,17 +115,17 @@
             padding: 12px 16px;
             margin-top: 6px;
             margin-bottom: 14px;
-            border: 1.5px solid #f0dfcf;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            background: #fefaf5;
+            border: 2px solid #d1d9e6;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
             transition: 0.2s;
         }
 
         input:focus, select:focus {
             outline: none;
-            border-color: #d48d6b;
-            box-shadow: 0 0 0 3px rgba(212,141,107,0.2);
+            border-color: var(--navy);
+            box-shadow: 0 0 0 3px rgba(30,58,95,0.2);
         }
 
         table {
@@ -122,21 +139,22 @@
         th, td {
             text-align: left;
             padding: 12px 8px;
-            border-bottom: 1px solid #f0e2d6;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         th {
-            color: #8b5a42;
+            color: var(--navy);
             font-weight: 600;
+            background: #f8fafc;
         }
 
         .badge {
-            background: #f3e1d4;
-            padding: 4px 12px;
-            border-radius: 40px;
-            font-size: 0.75rem;
+            background: #e2e8f0;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.85rem;
             font-weight: 600;
-            color: #b9573a;
+            color: var(--navy);
         }
 
         .grid-2 {
@@ -152,53 +170,194 @@
             .card {
                 padding: 18px;
             }
+            button {
+                padding: 10px 18px;
+                font-size: 0.9rem;
+            }
         }
 
         .login-box {
-            max-width: 450px;
+            max-width: 500px;
             margin: 80px auto;
             text-align: center;
         }
 
         .itinerary-item {
-            background: #fef7f0;
-            border-radius: 20px;
-            padding: 12px 16px;
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 15px 18px;
             margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            border-left: 5px solid var(--navy);
         }
 
         .time {
             font-weight: 700;
-            color: #b9573a;
-            min-width: 80px;
+            color: var(--navy);
+            min-width: 100px;
+            font-size: 1rem;
         }
 
         .action-buttons {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             flex-wrap: wrap;
-            margin-top: 12px;
+            margin-top: 10px;
         }
 
         .stats {
-            background: #f9ede3;
-            border-radius: 32px;
-            padding: 15px;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+            border-radius: 20px;
+            padding: 20px;
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
             margin-bottom: 20px;
+            color: white;
+        }
+
+        .stats div {
+            color: white;
+        }
+
+        .stats strong {
+            color: #ffd966;
         }
 
         footer {
             text-align: center;
             margin-top: 30px;
-            font-size: 0.8rem;
-            color: #b48c72;
+            font-size: 0.85rem;
+            color: var(--navy);
+        }
+
+        /* CARRUSEL */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+            border-radius: 20px;
+            background: var(--navy);
+            margin-bottom: 20px;
+        }
+
+        .carousel-slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            position: relative;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(30,58,95,0.7);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 24px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .carousel-btn:hover {
+            background: rgba(30,58,95,0.9);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev {
+            left: 20px;
+        }
+
+        .next {
+            right: 20px;
+        }
+
+        .carousel-dots {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0,0,0,0.5);
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            margin: 0 5px;
+            background: #bbb;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background: var(--gold);
+        }
+
+        @media (max-width: 768px) {
+            .carousel-slide img {
+                height: 250px;
+            }
+            .carousel-btn {
+                padding: 10px 12px;
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+        }
+
+        /* Modo fácil - letras grandes */
+        .easy-mode .card {
+            font-size: 1.2rem;
+        }
+        .easy-mode button {
+            font-size: 1.2rem;
+            padding: 14px 28px;
+        }
+        .easy-mode input, .easy-mode select, .easy-mode textarea {
+            font-size: 1.2rem;
+            padding: 14px;
+        }
+        .easy-mode th, .easy-mode td {
+            font-size: 1.1rem;
+        }
+        .easy-mode .itinerary-item {
+            font-size: 1.1rem;
+        }
+
+        .mode-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--navy);
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
     </style>
 </head>
@@ -209,19 +368,19 @@
 
 <script>
     // ---------- CONFIGURACIÓN ----------
-    // Usamos localStorage como base de datos (simula "gipgup")
     const DB_KEYS = {
         USERS: 'wedding_users',
         GUESTS: 'wedding_guests',
         ITINERARY: 'wedding_itinerary'
     };
 
-    // Credenciales demo (solo para inicio rápido)
-    // usuario: admin@boda.com / contraseña: boda2025
+    // Usuario admin predefinido (fácil para personas mayores)
+    // Email: admin@boda.com / Contraseña: 1234 (sencilla)
     function initDatabase() {
         if (!localStorage.getItem(DB_KEYS.USERS)) {
             const defaultUsers = [
-                { email: "admin@boda.com", password: "boda2025", name: "Administrador" }
+                { email: "admin@boda.com", password: "1234", name: "Administrador" },
+                { email: "familia@boda.com", password: "boda", name: "Familia" }
             ];
             localStorage.setItem(DB_KEYS.USERS, JSON.stringify(defaultUsers));
         }
@@ -239,8 +398,8 @@
         }
     }
 
-    // Estado global
     let currentUser = null;
+    let easyMode = localStorage.getItem('easyMode') === 'true';
 
     // Helper: leer/guardar invitados
     function getGuests() {
@@ -256,34 +415,6 @@
         localStorage.setItem(DB_KEYS.ITINERARY, JSON.stringify(itinerary));
     }
 
-    // ---------- TRES PREGUNTAS (simulacro de configuración) ----------
-    // Se mostrarán al iniciar sesión por primera vez o cuando se llame a "mostrarPreguntas"
-    // Las respuestas se guardan en localStorage para no repetir, pero las preguntas son parte del flujo.
-    function hacerTresPreguntas() {
-        const yaRespondio = localStorage.getItem('wedding_questions_answered');
-        if (yaRespondio === 'true') return Promise.resolve(true);
-
-        return new Promise((resolve) => {
-            // Preguntas con respuestas estilo alert, pero mejor usamos modal con prompt custom
-            // Se puede hacer con confirm moderno pero usaremos prompts secuenciales para simplicidad y funcionalidad.
-            const pregunta1 = prompt("❓ PREGUNTA 1/3 - Organización:\n¿Cuál es el color principal de la decoración de tu boda? (ejemplo: 'Rosa pastel', 'Verde esmeralda')");
-            const pregunta2 = prompt("❓ PREGUNTA 2/3 - Invitados:\n¿Cuántas mesas aproximadas tendrá el salón? (número)");
-            const pregunta3 = prompt("❓ PREGUNTA 3/3 - Música:\n¿Canción favorita para el primer baile?");
-            
-            // Guardamos respuestas en 'db' como dato curioso
-            const respuestas = {
-                fecha: new Date().toISOString(),
-                colorDecoracion: pregunta1 || "No especificado",
-                numeroMesas: pregunta2 || "No especificado",
-                cancionPrimerBaile: pregunta3 || "No especificado"
-            };
-            localStorage.setItem('wedding_answers', JSON.stringify(respuestas));
-            localStorage.setItem('wedding_questions_answered', 'true');
-            alert("¡Gracias! Tus respuestas han sido guardadas. Puedes verlas más tarde en la consola o sección de info.");
-            resolve(true);
-        });
-    }
-
     // ----- AUTENTICACIÓN -----
     function login(email, password) {
         const users = JSON.parse(localStorage.getItem(DB_KEYS.USERS)) || [];
@@ -292,13 +423,6 @@
             currentUser = { email: user.email, name: user.name };
             localStorage.setItem('wedding_current_session', JSON.stringify(currentUser));
             renderApp();
-            // Al hacer login por primera vez (si no ha respondido) lanzamos preguntas
-            const yaPreguntas = localStorage.getItem('wedding_questions_answered');
-            if (!yaPreguntas) {
-                hacerTresPreguntas().then(() => renderApp());
-            } else {
-                renderApp();
-            }
             return true;
         }
         return false;
@@ -310,7 +434,6 @@
         renderApp();
     }
 
-    // Verificar sesión existente
     function checkSession() {
         const stored = localStorage.getItem('wedding_current_session');
         if (stored) {
@@ -321,16 +444,15 @@
         renderApp();
     }
 
-    // ---- CRUD INVITADOS (iglesia / salon) ----
+    // ---- CRUD INVITADOS ----
     function agregarInvitado(nombre, tipo, asistenciaConfirmada = false) {
-        // tipo: 'iglesia' o 'salon'
         if (!nombre.trim()) return false;
         const guests = getGuests();
         const newId = Date.now().toString();
         guests.push({
             id: newId,
             nombre: nombre.trim(),
-            tipo: tipo,      // 'iglesia' o 'salon'
+            tipo: tipo,
             confirmado: asistenciaConfirmada,
             createdAt: new Date().toISOString()
         });
@@ -355,7 +477,7 @@
         renderApp();
     }
 
-    // ---- ITINERARIO (nuevo, editar, eliminar) ----
+    // ---- ITINERARIO ----
     function agregarEventoItinerario(time, title, location, description) {
         if (!time.trim() || !title.trim()) return false;
         const itinerary = getItinerary();
@@ -383,40 +505,106 @@
         }
     }
 
-    // ---- UI RENDER (enfoque total) ----
+    // Alternar modo fácil
+    function toggleEasyMode() {
+        easyMode = !easyMode;
+        localStorage.setItem('easyMode', easyMode);
+        renderApp();
+    }
+
+    // ---- CARRUSEL ----
+    let currentSlide = 0;
+    let carouselInterval;
+
+    function initCarousel() {
+        const slides = document.querySelectorAll('.carousel-slide');
+        if (slides.length === 0) return;
+        
+        const totalSlides = slides.length;
+        const carouselSlides = document.querySelector('.carousel-slides');
+        
+        if (carouselInterval) clearInterval(carouselInterval);
+        
+        function updateCarousel() {
+            if (carouselSlides) {
+                carouselSlides.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }
+            // Actualizar dots
+            document.querySelectorAll('.dot').forEach((dot, idx) => {
+                if (idx === currentSlide) dot.classList.add('active');
+                else dot.classList.remove('active');
+            });
+        }
+        
+        window.goToSlide = function(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+        
+        window.nextSlide = function() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+        
+        window.prevSlide = function() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+        
+        // Auto slide cada 5 segundos
+        carouselInterval = setInterval(() => {
+            nextSlide();
+        }, 5000);
+        
+        updateCarousel();
+    }
+
+    // ---- UI RENDER ----
     function renderApp() {
         const root = document.getElementById('appRoot');
         if (!root) return;
 
+        // Aplicar modo fácil al body
+        if (easyMode) {
+            document.body.classList.add('easy-mode');
+        } else {
+            document.body.classList.remove('easy-mode');
+        }
+
         if (!currentUser) {
-            // Pantalla login
+            // Pantalla login con instrucciones claras
             root.innerHTML = `
                 <div class="login-box card">
                     <div class="logo" style="justify-content:center;">
-                        <h1>💍 Planifica tu Boda</h1>
+                        <h1>💍 Mi Boda</h1>
                     </div>
-                    <p style="margin-bottom: 20px;">Accede al panel de administración de invitados e itinerarios.</p>
-                    <input type="email" id="loginEmail" placeholder="Email" value="admin@boda.com">
-                    <input type="password" id="loginPassword" placeholder="Contraseña" value="boda2025">
-                    <button id="doLoginBtn" style="width:100%;">Iniciar Sesión</button>
-                    <p style="margin-top: 20px; font-size:0.8rem;">Demo: admin@boda.com / boda2025</p>
+                    <p style="margin-bottom: 20px; font-size: 1.1rem;">Accede al panel de administración</p>
+                    <p style="background: #e8f0fe; padding: 10px; border-radius: 12px; margin-bottom: 15px;">
+                        <strong>🔐 Usuario:</strong> admin@boda.com<br>
+                        <strong>🔑 Contraseña:</strong> 1234
+                    </p>
+                    <input type="email" id="loginEmail" placeholder="Correo electrónico" value="admin@boda.com" style="font-size:1rem;">
+                    <input type="password" id="loginPassword" placeholder="Contraseña" value="1234" style="font-size:1rem;">
+                    <button id="doLoginBtn" style="width:100%; font-size:1.1rem;">👉 Iniciar Sesión 👈</button>
+                    <p style="margin-top: 20px; font-size:0.9rem; color:#666;">💡 Para personas mayores: use el botón "Modo Fácil" abajo para agrandar todo</p>
                 </div>
+                <button id="easyModeLoginBtn" class="mode-toggle" style="background: #28a745;">👁️ Modo Fácil</button>
             `;
             document.getElementById('doLoginBtn')?.addEventListener('click', () => {
                 const email = document.getElementById('loginEmail').value;
                 const pwd = document.getElementById('loginPassword').value;
                 if (!login(email, pwd)) {
-                    alert("Credenciales incorrectas. Usa admin@boda.com / boda2025");
+                    alert("❌ Credenciales incorrectas.\nUse: admin@boda.com / 1234");
                 }
             });
+            document.getElementById('easyModeLoginBtn')?.addEventListener('click', toggleEasyMode);
             return;
         }
 
-        // ======= PANEL PRINCIPAL ========
+        // ======= PANEL PRINCIPAL CON CARRUSEL ========
         const guests = getGuests();
         const itinerarios = getItinerary();
         
-        // Filtrar invitados por tipo
         const invitadosIglesia = guests.filter(g => g.tipo === 'iglesia');
         const invitadosSalon = guests.filter(g => g.tipo === 'salon');
         
@@ -425,38 +613,59 @@
         const totalSalon = invitadosSalon.length;
         const confirmadosSalon = invitadosSalon.filter(g => g.confirmado).length;
 
-        // Obtener respuestas curiosas si existen
-        const respuestas = JSON.parse(localStorage.getItem('wedding_answers') || '{}');
-        const muestraPregunta = respuestas.colorDecoracion ? `🎨 Decoración: ${respuestas.colorDecoracion} | 🕺 Canción: ${respuestas.cancionPrimerBaile || '—'}` : 'Responde las 3 preguntas para personalizar';
+        // Array de 5 imágenes placeholder (reemplazar con URLs reales)
+        const imagenesCarousel = [
+            "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=500&fit=crop",
+            "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=500&fit=crop",
+            "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&h=500&fit=crop",
+            "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&h=500&fit=crop",
+            "https://images.unsplash.com/photo-1532712933275-7f2887f5c34a?w=800&h=500&fit=crop"
+        ];
 
         root.innerHTML = `
             <div class="app-container">
                 <div class="logo">
-                    <h1>✨ Mi Boda - Panel Administrador ✨</h1>
+                    <h1>💙 Mi Boda - Panel Administrador 🤍</h1>
                     <div>
-                        <span class="badge">${currentUser.email}</span>
-                        <button id="logoutBtn" class="btn-outline" style="margin-left:12px;">Cerrar sesión</button>
+                        <span class="badge">👤 ${currentUser.email}</span>
+                        <button id="logoutBtn" class="btn-outline" style="margin-left:12px;">🚪 Cerrar sesión</button>
                     </div>
                 </div>
                 
-                <div class="stats card">
+                <!-- CARRUSEL DE 5 FOTOS -->
+                <div class="carousel-container">
+                    <div class="carousel-slides">
+                        ${imagenesCarousel.map((img, idx) => `
+                            <div class="carousel-slide">
+                                <img src="${img}" alt="Foto Boda ${idx+1}" onerror="this.src='https://via.placeholder.com/800x500?text=Foto+${idx+1}'">
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="carousel-btn prev" onclick="prevSlide()">❮</button>
+                    <button class="carousel-btn next" onclick="nextSlide()">❯</button>
+                    <div class="carousel-dots">
+                        ${imagenesCarousel.map((_, idx) => `<span class="dot" onclick="goToSlide(${idx})"></span>`).join('')}
+                    </div>
+                </div>
+
+                <div class="stats">
                     <div><strong>💒 Iglesia</strong><br>${totalIglesia} invitados · ${confirmadosIglesia} confirmados</div>
                     <div><strong>🍾 Salón/Fiesta</strong><br>${totalSalon} invitados · ${confirmadosSalon} confirmados</div>
                     <div><strong>📋 Itinerario</strong><br>${itinerarios.length} actividades</div>
-                    <div><small>${muestraPregunta}</small></div>
+                    <div><strong>👴 Modo Fácil</strong><br>${easyMode ? "✅ Activado" : "❌ Desactivado"}</div>
                 </div>
 
                 <div class="grid-2">
-                    <!-- COLUMNA IZQUIERDA: Gestión invitados -->
+                    <!-- GESTIÓN INVITADOS -->
                     <div class="card">
-                        <h2>📝 Gestión de Invitados</h2>
+                        <h2>📝 Lista de Invitados</h2>
                         <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
                             <input type="text" id="newGuestName" placeholder="Nombre completo" style="flex:2;">
                             <select id="newGuestType" style="flex:1;">
-                                <option value="iglesia">Iglesia</option>
-                                <option value="salon">Salón / Fiesta</option>
+                                <option value="iglesia">⛪ Iglesia</option>
+                                <option value="salon">🎉 Salón / Fiesta</option>
                             </select>
-                            <button id="addGuestBtn">➕ Añadir</button>
+                            <button id="addGuestBtn" style="background:#1e3a5f;">➕ Añadir</button>
                         </div>
                         <div style="overflow-x:auto;">
                             <table>
@@ -470,36 +679,36 @@
                                             <td>${guest.tipo === 'iglesia' ? '⛪ Iglesia' : '🎉 Salón'}</td>
                                             <td>${guest.confirmado ? '✅ Sí Asiste' : '⏳ Pendiente'}</td>
                                             <td>
-                                                <button class="toggle-confirm" data-id="${guest.id}" style="background:#6c8b6e; padding:5px 12px;">✉️ Confirmar</button>
-                                                <button class="delete-guest" data-id="${guest.id}" style="background:#c95a5a; padding:5px 12px;">🗑️</button>
+                                                <button class="toggle-confirm" data-id="${guest.id}" style="background:#28a745; padding:8px 16px;">✓ Confirmar</button>
+                                                <button class="delete-guest" data-id="${guest.id}" style="background:#dc3545; padding:8px 16px;">🗑️ Eliminar</button>
                                             </td>
                                         </tr>
                                     `).join('')}
-                                    ${guests.length === 0 ? '<tr><td colspan="4">Sin invitados aún. ¡Agrega el primero!</td></tr>' : ''}
+                                    ${guests.length === 0 ? '<tr><td colspan="4">✨ Sin invitados aún. ¡Agrega el primero!</td></tr>' : ''}
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    <!-- COLUMNA DERECHA: Itinerarios + preguntas dinámicas -->
+                    <!-- ITINERARIO -->
                     <div class="card">
                         <h2>⏰ Itinerario del día</h2>
                         <div id="itineraryList">
                             ${itinerarios.map(ev => `
                                 <div class="itinerary-item" data-id="${ev.id}">
                                     <div style="flex:3;">
-                                        <span class="time">${escapeHtml(ev.time)}</span>
+                                        <span class="time">🕐 ${escapeHtml(ev.time)}</span>
                                         <strong>${escapeHtml(ev.title)}</strong><br>
                                         <small>📍 ${escapeHtml(ev.location)}</small>
-                                        <p style="font-size:0.8rem;">${escapeHtml(ev.description)}</p>
+                                        <p style="font-size:0.9rem;">📌 ${escapeHtml(ev.description)}</p>
                                     </div>
                                     <div class="action-buttons">
-                                        <button class="edit-itinerary" data-id="${ev.id}">✏️ Editar</button>
-                                        <button class="delete-itinerary" data-id="${ev.id}" style="background:#c95a5a;">🗑️</button>
+                                        <button class="edit-itinerary" data-id="${ev.id}" style="background:#ffc107; color:#1e3a5f;">✏️ Editar</button>
+                                        <button class="delete-itinerary" data-id="${ev.id}" style="background:#dc3545;">🗑️</button>
                                     </div>
                                 </div>
                             `).join('')}
-                            ${itinerarios.length === 0 ? '<p>No hay eventos, crea uno nuevo.</p>' : ''}
+                            ${itinerarios.length === 0 ? '<p>📅 No hay eventos, crea uno nuevo.</p>' : ''}
                         </div>
                         <hr style="margin: 20px 0;">
                         <h3>➕ Nuevo evento</h3>
@@ -512,46 +721,49 @@
                 </div>
 
                 <div class="card">
-                    <h3>📊 Reporte rápido</h3>
-                    <button id="exportDataBtn" class="btn-outline">📎 Exportar datos (JSON) - gipgup compatible</button>
+                    <h3>💾 Respaldo de datos</h3>
+                    <button id="exportDataBtn" class="btn-outline">📎 Exportar todo (JSON)</button>
                     <button id="importDataBtn" class="btn-outline" style="margin-left:12px;">📂 Importar respaldo</button>
                     <input type="file" id="importFileInput" accept=".json" style="display:none;">
-                    <p style="margin-top:12px; font-size:0.75rem;">* La base de datos se guarda en localStorage (simula gipgup) - exporta para respaldo físico.</p>
+                    <p style="margin-top:12px; font-size:0.85rem;">💡 Los datos se guardan automáticamente en tu navegador.</p>
                 </div>
-                <footer>💖 Administrador de Boda - Organiza invitados, iglesia, salón e itinerarios con estilo</footer>
+                
+                <footer>💙🤍 Administrador de Boda - Azul Marino & Blanco - Diseñado para todas las edades</footer>
+                <button id="easyModeBtn" class="mode-toggle">${easyMode ? '🔍 Modo Normal' : '👴 Modo Fácil (Letras grandes)'}</button>
             </div>
         `;
 
         // Eventos
         document.getElementById('logoutBtn')?.addEventListener('click', logout);
+        document.getElementById('easyModeBtn')?.addEventListener('click', toggleEasyMode);
+        
         document.getElementById('addGuestBtn')?.addEventListener('click', () => {
             const nombre = document.getElementById('newGuestName').value;
             const tipo = document.getElementById('newGuestType').value;
-            if (!nombre.trim()) return alert("Escribe un nombre");
+            if (!nombre.trim()) return alert("✏️ Escribe el nombre del invitado");
             agregarInvitado(nombre, tipo);
             document.getElementById('newGuestName').value = '';
         });
 
-        // botones dinámicos confirmar/eliminar invitados
         document.querySelectorAll('.toggle-confirm').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const id = btn.getAttribute('data-id');
                 toggleConfirmacion(id);
             });
         });
+        
         document.querySelectorAll('.delete-guest').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 if(confirm("¿Eliminar este invitado?")) eliminarInvitado(btn.getAttribute('data-id'));
             });
         });
 
-        // Itinerario: eliminar
         document.querySelectorAll('.delete-itinerary').forEach(btn => {
             btn.addEventListener('click', () => {
-                if(confirm("Eliminar evento del itinerario")) eliminarEventoItinerario(btn.getAttribute('data-id'));
+                if(confirm("¿Eliminar evento del itinerario?")) eliminarEventoItinerario(btn.getAttribute('data-id'));
             });
         });
-        // Editar itinerario (simple prompt mejorable)
+        
         document.querySelectorAll('.edit-itinerary').forEach(btn => {
             btn.addEventListener('click', () => {
                 const id = btn.getAttribute('data-id');
@@ -571,7 +783,7 @@
             const title = document.getElementById('newEventTitle').value;
             const loc = document.getElementById('newEventLocation').value;
             const desc = document.getElementById('newEventDesc').value;
-            if(!time || !title) return alert("Hora y título requeridos");
+            if(!time || !title) return alert("⏰ Hora y título son obligatorios");
             agregarEventoItinerario(time, title, loc, desc);
             document.getElementById('newEventTime').value = '';
             document.getElementById('newEventTitle').value = '';
@@ -579,12 +791,11 @@
             document.getElementById('newEventDesc').value = '';
         });
 
-        // Exportar completo (invitados + itinerario + respuestas)
+        // Exportar
         document.getElementById('exportDataBtn')?.addEventListener('click', () => {
             const exportData = {
                 guests: getGuests(),
                 itinerary: getItinerary(),
-                weddingAnswers: JSON.parse(localStorage.getItem('wedding_answers') || '{}'),
                 exportDate: new Date().toISOString()
             };
             const dataStr = JSON.stringify(exportData, null, 2);
@@ -597,7 +808,7 @@
             URL.revokeObjectURL(url);
         });
 
-        // Importar backup
+        // Importar
         const importBtn = document.getElementById('importDataBtn');
         const fileInput = document.getElementById('importFileInput');
         importBtn?.addEventListener('click', () => fileInput.click());
@@ -610,14 +821,18 @@
                     const data = JSON.parse(ev.target.result);
                     if(data.guests) saveGuests(data.guests);
                     if(data.itinerary) saveItinerary(data.itinerary);
-                    if(data.weddingAnswers) localStorage.setItem('wedding_answers', JSON.stringify(data.weddingAnswers));
-                    alert("Restauración exitosa. Recarga la vista.");
+                    alert("✅ Restauración exitosa");
                     renderApp();
-                } catch(e) { alert("Archivo inválido"); }
+                } catch(e) { alert("❌ Archivo inválido"); }
             };
             reader.readAsText(file);
             fileInput.value = '';
         });
+
+        // Inicializar carrusel después de renderizar
+        setTimeout(() => {
+            initCarousel();
+        }, 100);
     }
 
     function escapeHtml(str) {
