@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Administración de Boda - Azul Marino y Blanco</title>
+    <title>Mi Boda - Portal de Invitados</title>
     <style>
         * {
             box-sizing: border-box;
@@ -15,17 +15,18 @@
             font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
             background: #f0f4f8;
             min-height: 100vh;
-            color: #1e2a3e;
+            color: #1e3a5f;
             padding: 20px;
         }
 
-        /* Paleta azul marino y blanco */
         :root {
             --navy: #1e3a5f;
             --navy-light: #2c4e7a;
             --white: #ffffff;
             --gold: #c9a03d;
-            --gray-light: #e9ecef;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
         }
 
         .app-container {
@@ -33,35 +34,29 @@
             margin: 0 auto;
         }
 
-        /* Tarjetas */
         .card {
             background: var(--white);
             border-radius: 20px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.08);
             padding: 24px 28px;
             margin-bottom: 28px;
-            transition: all 0.2s;
             border: 1px solid rgba(30,58,95,0.1);
         }
 
         h1, h2, h3 {
-            font-weight: 600;
-            letter-spacing: -0.3px;
             color: var(--navy);
         }
 
         h1 {
             font-size: 2rem;
-            color: var(--navy);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
             justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
         button {
@@ -74,7 +69,6 @@
             cursor: pointer;
             transition: 0.2s;
             font-size: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         button:hover {
@@ -82,32 +76,17 @@
             transform: scale(1.02);
         }
 
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--navy);
-            color: var(--navy);
+        .btn-success {
+            background: var(--success);
         }
 
-        .btn-outline:hover {
-            background: var(--navy);
-            color: white;
-        }
-
-        .btn-easy {
-            background: #28a745;
-            font-size: 1.1rem;
-            padding: 15px 30px;
-        }
-
-        .btn-easy:hover {
-            background: #218838;
+        .btn-warning {
+            background: var(--warning);
+            color: #1e3a5f;
         }
 
         .btn-danger {
-            background: #dc3545;
-        }
-        .btn-danger:hover {
-            background: #c82333;
+            background: var(--danger);
         }
 
         input, select, textarea {
@@ -118,43 +97,11 @@
             border: 2px solid #d1d9e6;
             border-radius: 12px;
             font-size: 1rem;
-            background: white;
-            transition: 0.2s;
         }
 
         input:focus, select:focus {
             outline: none;
             border-color: var(--navy);
-            box-shadow: 0 0 0 3px rgba(30,58,95,0.2);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            overflow-x: auto;
-            display: block;
-        }
-
-        th, td {
-            text-align: left;
-            padding: 12px 8px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        th {
-            color: var(--navy);
-            font-weight: 600;
-            background: #f8fafc;
-        }
-
-        .badge {
-            background: #e2e8f0;
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--navy);
         }
 
         .grid-2 {
@@ -163,265 +110,223 @@
             gap: 28px;
         }
 
-        @media (max-width: 780px) {
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
             .grid-2 {
                 grid-template-columns: 1fr;
             }
             .card {
                 padding: 18px;
             }
-            button {
-                padding: 10px 18px;
-                font-size: 0.9rem;
-            }
         }
 
         .login-box {
             max-width: 500px;
             margin: 80px auto;
-            text-align: center;
         }
 
-        .itinerary-item {
-            background: #f8fafc;
-            border-radius: 16px;
-            padding: 15px 18px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            border-left: 5px solid var(--navy);
+        .perfil-header {
+            background: linear-gradient(135deg, var(--navy), var(--navy-light));
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
         }
 
-        .time {
-            font-weight: 700;
-            color: var(--navy);
-            min-width: 100px;
-            font-size: 1rem;
+        .perfil-header h2, .perfil-header p {
+            color: white;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+        .ubicacion-btn {
+            background: var(--success);
+            width: 100%;
             margin-top: 10px;
         }
 
-        .stats {
-            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-            border-radius: 20px;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-            color: white;
-        }
-
-        .stats div {
-            color: white;
-        }
-
-        .stats strong {
-            color: #ffd966;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 0.85rem;
-            color: var(--navy);
-        }
-
-        /* CARRUSEL */
-        .carousel-container {
-            position: relative;
-            width: 100%;
-            max-width: 100%;
-            overflow: hidden;
-            border-radius: 20px;
-            background: var(--navy);
-            margin-bottom: 20px;
-        }
-
-        .carousel-slides {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-        }
-
-        .carousel-slide {
-            min-width: 100%;
-            position: relative;
-        }
-
-        .carousel-slide img {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(30,58,95,0.7);
-            color: white;
-            border: none;
-            padding: 15px 20px;
-            cursor: pointer;
-            font-size: 24px;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
-        }
-
-        .carousel-btn:hover {
-            background: rgba(30,58,95,0.9);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .prev {
-            left: 20px;
-        }
-
-        .next {
-            right: 20px;
-        }
-
-        .carousel-dots {
-            text-align: center;
+        .mesa-info {
+            background: #e8f0fe;
             padding: 15px;
-            background: rgba(0,0,0,0.5);
-            position: absolute;
-            bottom: 0;
-            width: 100%;
+            border-radius: 12px;
+            margin-top: 10px;
         }
 
-        .dot {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            margin: 0 5px;
-            background: #bbb;
-            border-radius: 50%;
-            cursor: pointer;
+        .itinerario-item {
+            background: #f8fafc;
+            border-left: 4px solid var(--navy);
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
         }
 
-        .dot.active {
+        .badge {
             background: var(--gold);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
         }
 
-        @media (max-width: 768px) {
-            .carousel-slide img {
-                height: 250px;
-            }
-            .carousel-btn {
-                padding: 10px 12px;
-                width: 40px;
-                height: 40px;
-                font-size: 18px;
-            }
+        .puntualidad {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 8px;
         }
 
-        /* Modo fácil - letras grandes */
-        .easy-mode .card {
-            font-size: 1.2rem;
-        }
-        .easy-mode button {
-            font-size: 1.2rem;
-            padding: 14px 28px;
-        }
-        .easy-mode input, .easy-mode select, .easy-mode textarea {
-            font-size: 1.2rem;
-            padding: 14px;
-        }
-        .easy-mode th, .easy-mode td {
-            font-size: 1.1rem;
-        }
-        .easy-mode .itinerary-item {
-            font-size: 1.1rem;
+        .admin-table {
+            overflow-x: auto;
         }
 
-        .mode-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: var(--navy);
-            border-radius: 50px;
-            padding: 12px 20px;
-            font-weight: bold;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f8fafc;
+            color: var(--navy);
         }
     </style>
 </head>
 <body>
-<div class="app-container" id="appRoot">
-    <!-- Pantalla de login dinámica -->
-</div>
+<div id="appRoot"></div>
 
 <script>
-    // ---------- CONFIGURACIÓN ----------
+    // ========== CONFIGURACIÓN ==========
     const DB_KEYS = {
-        USERS: 'wedding_users',
-        GUESTS: 'wedding_guests',
-        ITINERARY: 'wedding_itinerary'
+        USERS: 'wedding_users_v2',
+        INVITADOS: 'wedding_invitados_v2',
+        UBICACIONES: 'wedding_ubicaciones'
     };
 
-    // Usuario admin predefinido (fácil para personas mayores)
-    // Email: admin@boda.com / Contraseña: 1234 (sencilla)
+    // Fechas del evento
+    const FECHAS = {
+        BAUTIZO: "15 de Diciembre de 2025 - 10:00 AM",
+        BODA: "15 de Diciembre de 2025 - 12:00 PM",
+        SALON: "15 de Diciembre de 2025 - 2:00 PM"
+    };
+
+    const HORAS_MISA = {
+        BAUTIZO: "10:00 AM (Iglesia San José)",
+        BODA: "12:00 PM (Iglesia San José)"
+    };
+
+    // Itinerario general
+    const ITINERARIO_GENERAL = [
+        { hora: "9:30 AM", evento: "Llegada de invitados", lugar: "Iglesia San José" },
+        { hora: "10:00 AM", evento: "Ceremonia de Bautizo", lugar: "Iglesia San José" },
+        { hora: "12:00 PM", evento: "Ceremonia de Boda", lugar: "Iglesia San José" },
+        { hora: "1:30 PM", evento: "Coctel de bienvenida", lugar: "Salón Jardín Real" },
+        { hora: "3:00 PM", evento: "Banquete", lugar: "Salón Jardín Real" },
+        { hora: "5:00 PM", evento: "Baile y pastel", lugar: "Salón Jardín Real" },
+        { hora: "7:00 PM", evento: "Despedida", lugar: "Salón Jardín Real" }
+    ];
+
+    // Datos de la pareja
+    const PAREJA = {
+        novio: "Carlos Martínez",
+        novia: "Ana González",
+        fechaBoda: "15 de Diciembre de 2025",
+        fechaBautizo: "15 de Diciembre de 2025"
+    };
+
+    // Inicializar base de datos
     function initDatabase() {
         if (!localStorage.getItem(DB_KEYS.USERS)) {
             const defaultUsers = [
-                { email: "admin@boda.com", password: "1234", name: "Administrador" },
-                { email: "familia@boda.com", password: "boda", name: "Familia" }
+                { email: "admin@boda.com", password: "admin123", nombre: "Administrador", rol: "admin" }
             ];
             localStorage.setItem(DB_KEYS.USERS, JSON.stringify(defaultUsers));
         }
-        if (!localStorage.getItem(DB_KEYS.GUESTS)) {
-            localStorage.setItem(DB_KEYS.GUESTS, JSON.stringify([]));
+        if (!localStorage.getItem(DB_KEYS.INVITADOS)) {
+            localStorage.setItem(DB_KEYS.INVITADOS, JSON.stringify([]));
         }
-        if (!localStorage.getItem(DB_KEYS.ITINERARY)) {
-            const defaultItinerary = [
-                { id: "1", time: "11:00 AM", title: "Ceremonia Religiosa", location: "Iglesia del Pueblo", description: "Llegar con 15 min de anticipación" },
-                { id: "2", time: "1:00 PM", title: "Coctel de Bienvenida", location: "Jardín del Salón", description: "Brindis y música ambiental" },
-                { id: "3", time: "3:00 PM", title: "Banquete", location: "Salón Principal", description: "Comida de 3 tiempos" },
-                { id: "4", time: "5:00 PM", title: "Baile y Pastel", location: "Pista de baile", description: "Tradicional vals y sorpresas" }
-            ];
-            localStorage.setItem(DB_KEYS.ITINERARY, JSON.stringify(defaultItinerary));
+        if (!localStorage.getItem(DB_KEYS.UBICACIONES)) {
+            localStorage.setItem(DB_KEYS.UBICACIONES, JSON.stringify({}));
         }
     }
 
     let currentUser = null;
-    let easyMode = localStorage.getItem('easyMode') === 'true';
 
-    // Helper: leer/guardar invitados
-    function getGuests() {
-        return JSON.parse(localStorage.getItem(DB_KEYS.GUESTS)) || [];
-    }
-    function saveGuests(guests) {
-        localStorage.setItem(DB_KEYS.GUESTS, JSON.stringify(guests));
-    }
-    function getItinerary() {
-        return JSON.parse(localStorage.getItem(DB_KEYS.ITINERARY)) || [];
-    }
-    function saveItinerary(itinerary) {
-        localStorage.setItem(DB_KEYS.ITINERARY, JSON.stringify(itinerary));
+    // Helper functions
+    function getInvitados() {
+        return JSON.parse(localStorage.getItem(DB_KEYS.INVITADOS)) || [];
     }
 
-    // ----- AUTENTICACIÓN -----
+    function saveInvitados(invitados) {
+        localStorage.setItem(DB_KEYS.INVITADOS, JSON.stringify(invitados));
+    }
+
+    function getUbicaciones() {
+        return JSON.parse(localStorage.getItem(DB_KEYS.UBICACIONES)) || {};
+    }
+
+    function saveUbicaciones(ubicaciones) {
+        localStorage.setItem(DB_KEYS.UBICACIONES, JSON.stringify(ubicaciones));
+    }
+
+    // Registrar nuevo invitado (desde login/registro)
+    function registrarInvitado(email, password, representante, apellido, ciudad) {
+        const users = JSON.parse(localStorage.getItem(DB_KEYS.USERS)) || [];
+        if (users.find(u => u.email === email)) {
+            return { success: false, message: "Este email ya está registrado" };
+        }
+        
+        const nuevoUsuario = {
+            email: email,
+            password: password,
+            nombre: representante,
+            apellido: apellido,
+            ciudad: ciudad,
+            rol: "invitado",
+            respuestas: {
+                asisteMisa: null,
+                asisteSalon: null,
+                cantidadAcompanantes: 0,
+                ubicacionAsignada: null
+            },
+            registroCompleto: false
+        };
+        
+        users.push(nuevoUsuario);
+        localStorage.setItem(DB_KEYS.USERS, JSON.stringify(users));
+        
+        // También guardar en invitados
+        const invitados = getInvitados();
+        invitados.push({
+            id: Date.now(),
+            email: email,
+            representante: representante,
+            apellido: apellido,
+            ciudad: ciudad,
+            asisteMisa: null,
+            asisteSalon: null,
+            cantidadAcompanantes: 0,
+            ubicacionAsignada: null
+        });
+        saveInvitados(invitados);
+        
+        return { success: true, message: "Registro exitoso" };
+    }
+
+    // Login
     function login(email, password) {
         const users = JSON.parse(localStorage.getItem(DB_KEYS.USERS)) || [];
         const user = users.find(u => u.email === email && u.password === password);
         if (user) {
-            currentUser = { email: user.email, name: user.name };
-            localStorage.setItem('wedding_current_session', JSON.stringify(currentUser));
+            currentUser = user;
+            localStorage.setItem('wedding_current_session_v2', JSON.stringify(currentUser));
             renderApp();
             return true;
         }
@@ -430,422 +335,391 @@
 
     function logout() {
         currentUser = null;
-        localStorage.removeItem('wedding_current_session');
+        localStorage.removeItem('wedding_current_session_v2');
         renderApp();
     }
 
     function checkSession() {
-        const stored = localStorage.getItem('wedding_current_session');
+        const stored = localStorage.getItem('wedding_current_session_v2');
         if (stored) {
             currentUser = JSON.parse(stored);
-        } else {
-            currentUser = null;
         }
         renderApp();
     }
 
-    // ---- CRUD INVITADOS ----
-    function agregarInvitado(nombre, tipo, asistenciaConfirmada = false) {
-        if (!nombre.trim()) return false;
-        const guests = getGuests();
-        const newId = Date.now().toString();
-        guests.push({
-            id: newId,
-            nombre: nombre.trim(),
-            tipo: tipo,
-            confirmado: asistenciaConfirmada,
-            createdAt: new Date().toISOString()
-        });
-        saveGuests(guests);
-        return true;
-    }
-
-    function toggleConfirmacion(id) {
-        const guests = getGuests();
-        const guest = guests.find(g => g.id === id);
-        if (guest) {
-            guest.confirmado = !guest.confirmado;
-            saveGuests(guests);
-        }
-        renderApp();
-    }
-
-    function eliminarInvitado(id) {
-        let guests = getGuests();
-        guests = guests.filter(g => g.id !== id);
-        saveGuests(guests);
-        renderApp();
-    }
-
-    // ---- ITINERARIO ----
-    function agregarEventoItinerario(time, title, location, description) {
-        if (!time.trim() || !title.trim()) return false;
-        const itinerary = getItinerary();
-        const newId = Date.now().toString();
-        itinerary.push({ id: newId, time, title, location, description });
-        saveItinerary(itinerary);
-        renderApp();
-        return true;
-    }
-
-    function eliminarEventoItinerario(id) {
-        let itinerary = getItinerary();
-        itinerary = itinerary.filter(ev => ev.id !== id);
-        saveItinerary(itinerary);
-        renderApp();
-    }
-
-    function actualizarEventoItinerario(id, time, title, location, description) {
-        const itinerary = getItinerary();
-        const index = itinerary.findIndex(ev => ev.id === id);
-        if (index !== -1) {
-            itinerary[index] = { ...itinerary[index], time, title, location, description };
-            saveItinerary(itinerary);
-            renderApp();
-        }
-    }
-
-    // Alternar modo fácil
-    function toggleEasyMode() {
-        easyMode = !easyMode;
-        localStorage.setItem('easyMode', easyMode);
-        renderApp();
-    }
-
-    // ---- CARRUSEL ----
-    let currentSlide = 0;
-    let carouselInterval;
-
-    function initCarousel() {
-        const slides = document.querySelectorAll('.carousel-slide');
-        if (slides.length === 0) return;
-        
-        const totalSlides = slides.length;
-        const carouselSlides = document.querySelector('.carousel-slides');
-        
-        if (carouselInterval) clearInterval(carouselInterval);
-        
-        function updateCarousel() {
-            if (carouselSlides) {
-                carouselSlides.style.transform = `translateX(-${currentSlide * 100}%)`;
+    // Actualizar respuestas del invitado
+    function actualizarRespuesta(email, campo, valor) {
+        const users = JSON.parse(localStorage.getItem(DB_KEYS.USERS)) || [];
+        const userIndex = users.findIndex(u => u.email === email);
+        if (userIndex !== -1) {
+            if (!users[userIndex].respuestas) users[userIndex].respuestas = {};
+            users[userIndex].respuestas[campo] = valor;
+            if (campo === 'asisteMisa' || campo === 'asisteSalon' || campo === 'cantidadAcompanantes') {
+                users[userIndex].registroCompleto = true;
             }
-            // Actualizar dots
-            document.querySelectorAll('.dot').forEach((dot, idx) => {
-                if (idx === currentSlide) dot.classList.add('active');
-                else dot.classList.remove('active');
-            });
+            localStorage.setItem(DB_KEYS.USERS, JSON.stringify(users));
+            
+            // Actualizar también en invitados
+            const invitados = getInvitados();
+            const invIndex = invitados.findIndex(i => i.email === email);
+            if (invIndex !== -1) {
+                invitados[invIndex][campo] = valor;
+                saveInvitados(invitados);
+            }
+            
+            if (currentUser && currentUser.email === email) {
+                currentUser = users[userIndex];
+                localStorage.setItem('wedding_current_session_v2', JSON.stringify(currentUser));
+            }
         }
-        
-        window.goToSlide = function(index) {
-            currentSlide = index;
-            updateCarousel();
-        }
-        
-        window.nextSlide = function() {
-            currentSlide = (currentSlide + 1) % totalSlides;
-            updateCarousel();
-        }
-        
-        window.prevSlide = function() {
-            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-            updateCarousel();
-        }
-        
-        // Auto slide cada 5 segundos
-        carouselInterval = setInterval(() => {
-            nextSlide();
-        }, 5000);
-        
-        updateCarousel();
+        renderApp();
     }
 
-    // ---- UI RENDER ----
+    // Asignar ubicación en el salón
+    function asignarUbicacion(email, ubicacion) {
+        const ubicaciones = getUbicaciones();
+        ubicaciones[email] = ubicacion;
+        saveUbicaciones(ubicaciones);
+        
+        actualizarRespuesta(email, 'ubicacionAsignada', ubicacion);
+        alert(`✅ ¡Ubicación asignada: ${ubicacion}! Nos vemos en el salón.`);
+        renderApp();
+    }
+
+    // Obtener ubicación
+    function obtenerUbicacion(email) {
+        const ubicaciones = getUbicaciones();
+        return ubicaciones[email] || null;
+    }
+
+    // Administración - obtener todos los invitados
+    function getAllInvitadosConRespuestas() {
+        const users = JSON.parse(localStorage.getItem(DB_KEYS.USERS)) || [];
+        return users.filter(u => u.rol === 'invitado');
+    }
+
+    // ========== RENDER ==========
     function renderApp() {
         const root = document.getElementById('appRoot');
         if (!root) return;
 
-        // Aplicar modo fácil al body
-        if (easyMode) {
-            document.body.classList.add('easy-mode');
-        } else {
-            document.body.classList.remove('easy-mode');
-        }
-
         if (!currentUser) {
-            // Pantalla login con instrucciones claras
+            // Pantalla de login/registro
             root.innerHTML = `
                 <div class="login-box card">
                     <div class="logo" style="justify-content:center;">
-                        <h1>💍 Mi Boda</h1>
+                        <h1>💍 Bienvenidos a Nuestra Boda 💒</h1>
                     </div>
-                    <p style="margin-bottom: 20px; font-size: 1.1rem;">Accede al panel de administración</p>
-                    <p style="background: #e8f0fe; padding: 10px; border-radius: 12px; margin-bottom: 15px;">
-                        <strong>🔐 Usuario:</strong> admin@boda.com<br>
-                        <strong>🔑 Contraseña:</strong> 1234
-                    </p>
-                    <input type="email" id="loginEmail" placeholder="Correo electrónico" value="admin@boda.com" style="font-size:1rem;">
-                    <input type="password" id="loginPassword" placeholder="Contraseña" value="1234" style="font-size:1rem;">
-                    <button id="doLoginBtn" style="width:100%; font-size:1.1rem;">👉 Iniciar Sesión 👈</button>
-                    <p style="margin-top: 20px; font-size:0.9rem; color:#666;">💡 Para personas mayores: use el botón "Modo Fácil" abajo para agrandar todo</p>
+                    <div style="text-align:center; margin-bottom:20px;">
+                        <p>${PAREJA.novio} 💙 ${PAREJA.novia}</p>
+                        <p>📅 ${PAREJA.fechaBoda}</p>
+                    </div>
+                    
+                    <div id="loginForm">
+                        <h3>Iniciar Sesión</h3>
+                        <input type="email" id="loginEmail" placeholder="Correo electrónico">
+                        <input type="password" id="loginPassword" placeholder="Contraseña">
+                        <button id="doLoginBtn">Ingresar</button>
+                        <button id="showRegisterBtn" class="btn-warning" style="margin-top:10px;">¿No tienes cuenta? Regístrate</button>
+                    </div>
+                    
+                    <div id="registerForm" style="display:none;">
+                        <h3>Registro de Invitado</h3>
+                        <input type="text" id="regRepresentante" placeholder="Nombre del representante">
+                        <input type="text" id="regApellido" placeholder="Apellido">
+                        <input type="text" id="regCiudad" placeholder="¿De dónde nos acompañan?">
+                        <input type="email" id="regEmail" placeholder="Correo electrónico">
+                        <input type="password" id="regPassword" placeholder="Contraseña">
+                        <button id="doRegisterBtn">Registrarse</button>
+                        <button id="showLoginBtn" class="btn-warning" style="margin-top:10px;">Volver al inicio de sesión</button>
+                    </div>
                 </div>
-                <button id="easyModeLoginBtn" class="mode-toggle" style="background: #28a745;">👁️ Modo Fácil</button>
             `;
+            
             document.getElementById('doLoginBtn')?.addEventListener('click', () => {
                 const email = document.getElementById('loginEmail').value;
                 const pwd = document.getElementById('loginPassword').value;
                 if (!login(email, pwd)) {
-                    alert("❌ Credenciales incorrectas.\nUse: admin@boda.com / 1234");
+                    alert("❌ Credenciales incorrectas.\nAdmin: admin@boda.com / admin123\nInvitados: regístrate primero");
                 }
             });
-            document.getElementById('easyModeLoginBtn')?.addEventListener('click', toggleEasyMode);
+            
+            document.getElementById('showRegisterBtn')?.addEventListener('click', () => {
+                document.getElementById('loginForm').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+            });
+            
+            document.getElementById('showLoginBtn')?.addEventListener('click', () => {
+                document.getElementById('registerForm').style.display = 'none';
+                document.getElementById('loginForm').style.display = 'block';
+            });
+            
+            document.getElementById('doRegisterBtn')?.addEventListener('click', () => {
+                const representante = document.getElementById('regRepresentante').value;
+                const apellido = document.getElementById('regApellido').value;
+                const ciudad = document.getElementById('regCiudad').value;
+                const email = document.getElementById('regEmail').value;
+                const password = document.getElementById('regPassword').value;
+                
+                if (!representante || !apellido || !ciudad || !email || !password) {
+                    alert("Por favor completa todos los campos");
+                    return;
+                }
+                
+                const result = registrarInvitado(email, password, representante, apellido, ciudad);
+                if (result.success) {
+                    alert("✅ Registro exitoso. Ahora inicia sesión.");
+                    document.getElementById('registerForm').style.display = 'none';
+                    document.getElementById('loginForm').style.display = 'block';
+                } else {
+                    alert(result.message);
+                }
+            });
             return;
         }
 
-        // ======= PANEL PRINCIPAL CON CARRUSEL ========
-        const guests = getGuests();
-        const itinerarios = getItinerary();
-        
-        const invitadosIglesia = guests.filter(g => g.tipo === 'iglesia');
-        const invitadosSalon = guests.filter(g => g.tipo === 'salon');
-        
-        const totalIglesia = invitadosIglesia.length;
-        const confirmadosIglesia = invitadosIglesia.filter(g => g.confirmado).length;
-        const totalSalon = invitadosSalon.length;
-        const confirmadosSalon = invitadosSalon.filter(g => g.confirmado).length;
-
-        // Array de 5 imágenes placeholder (reemplazar con URLs reales)
-        const imagenesCarousel = [
-            "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=500&fit=crop",
-            "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=500&fit=crop",
-            "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&h=500&fit=crop",
-            "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&h=500&fit=crop",
-            "https://images.unsplash.com/photo-1532712933275-7f2887f5c34a?w=800&h=500&fit=crop"
-        ];
-
-        root.innerHTML = `
-            <div class="app-container">
-                <div class="logo">
-                    <h1>💙 Mi Boda - Panel Administrador 🤍</h1>
-                    <div>
-                        <span class="badge">👤 ${currentUser.email}</span>
-                        <button id="logoutBtn" class="btn-outline" style="margin-left:12px;">🚪 Cerrar sesión</button>
-                    </div>
-                </div>
-                
-                <!-- CARRUSEL DE 5 FOTOS -->
-                <div class="carousel-container">
-                    <div class="carousel-slides">
-                        ${imagenesCarousel.map((img, idx) => `
-                            <div class="carousel-slide">
-                                <img src="${img}" alt="Foto Boda ${idx+1}" onerror="this.src='https://via.placeholder.com/800x500?text=Foto+${idx+1}'">
-                            </div>
-                        `).join('')}
-                    </div>
-                    <button class="carousel-btn prev" onclick="prevSlide()">❮</button>
-                    <button class="carousel-btn next" onclick="nextSlide()">❯</button>
-                    <div class="carousel-dots">
-                        ${imagenesCarousel.map((_, idx) => `<span class="dot" onclick="goToSlide(${idx})"></span>`).join('')}
-                    </div>
-                </div>
-
-                <div class="stats">
-                    <div><strong>💒 Iglesia</strong><br>${totalIglesia} invitados · ${confirmadosIglesia} confirmados</div>
-                    <div><strong>🍾 Salón/Fiesta</strong><br>${totalSalon} invitados · ${confirmadosSalon} confirmados</div>
-                    <div><strong>📋 Itinerario</strong><br>${itinerarios.length} actividades</div>
-                    <div><strong>👴 Modo Fácil</strong><br>${easyMode ? "✅ Activado" : "❌ Desactivado"}</div>
-                </div>
-
-                <div class="grid-2">
-                    <!-- GESTIÓN INVITADOS -->
-                    <div class="card">
-                        <h2>📝 Lista de Invitados</h2>
-                        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;">
-                            <input type="text" id="newGuestName" placeholder="Nombre completo" style="flex:2;">
-                            <select id="newGuestType" style="flex:1;">
-                                <option value="iglesia">⛪ Iglesia</option>
-                                <option value="salon">🎉 Salón / Fiesta</option>
-                            </select>
-                            <button id="addGuestBtn" style="background:#1e3a5f;">➕ Añadir</button>
+        // ========== PANEL DE ADMINISTRADOR ==========
+        if (currentUser.rol === 'admin') {
+            const invitados = getAllInvitadosConRespuestas();
+            const estadisticas = {
+                total: invitados.length,
+                misaSi: invitados.filter(i => i.respuestas?.asisteMisa === true).length,
+                salonSi: invitados.filter(i => i.respuestas?.asisteSalon === true).length,
+                totalAcompanantes: invitados.reduce((sum, i) => sum + (i.respuestas?.cantidadAcompanantes || 0), 0)
+            };
+            
+            root.innerHTML = `
+                <div class="app-container">
+                    <div class="logo">
+                        <h1>👑 Panel de Administración - Mi Boda</h1>
+                        <div>
+                            <span class="badge">Admin: ${currentUser.nombre}</span>
+                            <button id="logoutBtn" class="btn-danger">Cerrar sesión</button>
                         </div>
-                        <div style="overflow-x:auto;">
+                    </div>
+                    
+                    <div class="card">
+                        <h2>📊 Estadísticas</h2>
+                        <div class="grid-3">
+                            <div><strong>Total invitados:</strong> ${estadisticas.total}</div>
+                            <div><strong>Asistirán a Misa:</strong> ${estadisticas.misaSi}</div>
+                            <div><strong>Asistirán al Salón:</strong> ${estadisticas.salonSi}</div>
+                            <div><strong>Acompañantes totales:</strong> ${estadisticas.totalAcompanantes}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h2>📋 Lista de Invitados Registrados</h2>
+                        <div class="admin-table">
                             <table>
                                 <thead>
-                                    <tr><th>Nombre</th><th>Tipo</th><th>Confirmado</th><th>Acciones</th></tr>
+                                    <tr>
+                                        <th>Representante</th><th>Apellido</th><th>Ciudad</th>
+                                        <th>Asiste Misa</th><th>Asiste Salón</th><th>Acompañantes</th><th>Ubicación</th>
+                                    </tr>
                                 </thead>
-                                <tbody id="guestsTableBody">
-                                    ${guests.map(guest => `
+                                <tbody>
+                                    ${invitados.map(inv => `
                                         <tr>
-                                            <td>${escapeHtml(guest.nombre)}</td>
-                                            <td>${guest.tipo === 'iglesia' ? '⛪ Iglesia' : '🎉 Salón'}</td>
-                                            <td>${guest.confirmado ? '✅ Sí Asiste' : '⏳ Pendiente'}</td>
-                                            <td>
-                                                <button class="toggle-confirm" data-id="${guest.id}" style="background:#28a745; padding:8px 16px;">✓ Confirmar</button>
-                                                <button class="delete-guest" data-id="${guest.id}" style="background:#dc3545; padding:8px 16px;">🗑️ Eliminar</button>
-                                            </td>
+                                            <td>${escapeHtml(inv.nombre || '')}</td>
+                                            <td>${escapeHtml(inv.apellido || '')}</td>
+                                            <td>${escapeHtml(inv.ciudad || '')}</td>
+                                            <td>${inv.respuestas?.asisteMisa === true ? '✅ Sí' : inv.respuestas?.asisteMisa === false ? '❌ No' : '⏳ Pendiente'}</td>
+                                            <td>${inv.respuestas?.asisteSalon === true ? '✅ Sí' : inv.respuestas?.asisteSalon === false ? '❌ No' : '⏳ Pendiente'}</td>
+                                            <td>${inv.respuestas?.cantidadAcompanantes || 0}</td>
+                                            <td>${inv.respuestas?.ubicacionAsignada || 'Sin asignar'}</td>
                                         </tr>
                                     `).join('')}
-                                    ${guests.length === 0 ? '<tr><td colspan="4">✨ Sin invitados aún. ¡Agrega el primero!</td></tr>' : ''}
                                 </tbody>
                             </table>
                         </div>
                     </div>
-
-                    <!-- ITINERARIO -->
-                    <div class="card">
-                        <h2>⏰ Itinerario del día</h2>
-                        <div id="itineraryList">
-                            ${itinerarios.map(ev => `
-                                <div class="itinerary-item" data-id="${ev.id}">
-                                    <div style="flex:3;">
-                                        <span class="time">🕐 ${escapeHtml(ev.time)}</span>
-                                        <strong>${escapeHtml(ev.title)}</strong><br>
-                                        <small>📍 ${escapeHtml(ev.location)}</small>
-                                        <p style="font-size:0.9rem;">📌 ${escapeHtml(ev.description)}</p>
-                                    </div>
-                                    <div class="action-buttons">
-                                        <button class="edit-itinerary" data-id="${ev.id}" style="background:#ffc107; color:#1e3a5f;">✏️ Editar</button>
-                                        <button class="delete-itinerary" data-id="${ev.id}" style="background:#dc3545;">🗑️</button>
-                                    </div>
-                                </div>
-                            `).join('')}
-                            ${itinerarios.length === 0 ? '<p>📅 No hay eventos, crea uno nuevo.</p>' : ''}
-                        </div>
-                        <hr style="margin: 20px 0;">
-                        <h3>➕ Nuevo evento</h3>
-                        <input type="text" id="newEventTime" placeholder="Hora (ej: 10:00 AM)">
-                        <input type="text" id="newEventTitle" placeholder="Título (ej: Llegada novios)">
-                        <input type="text" id="newEventLocation" placeholder="Ubicación">
-                        <textarea id="newEventDesc" rows="2" placeholder="Descripción"></textarea>
-                        <button id="addEventBtn">Añadir al Itinerario</button>
-                    </div>
                 </div>
+            `;
+            document.getElementById('logoutBtn')?.addEventListener('click', logout);
+            return;
+        }
 
-                <div class="card">
-                    <h3>💾 Respaldo de datos</h3>
-                    <button id="exportDataBtn" class="btn-outline">📎 Exportar todo (JSON)</button>
-                    <button id="importDataBtn" class="btn-outline" style="margin-left:12px;">📂 Importar respaldo</button>
-                    <input type="file" id="importFileInput" accept=".json" style="display:none;">
-                    <p style="margin-top:12px; font-size:0.85rem;">💡 Los datos se guardan automáticamente en tu navegador.</p>
+        // ========== PERFIL DEL INVITADO ==========
+        const respuestas = currentUser.respuestas || {};
+        const ubicacion = obtenerUbicacion(currentUser.email);
+        
+        root.innerHTML = `
+            <div class="app-container">
+                <div class="logo">
+                    <h1>💙 Mi Boda - Portal de Invitados 🤍</h1>
+                    <button id="logoutBtn" class="btn-danger">Salir</button>
                 </div>
                 
-                <footer>💙🤍 Administrador de Boda - Azul Marino & Blanco - Diseñado para todas las edades</footer>
-                <button id="easyModeBtn" class="mode-toggle">${easyMode ? '🔍 Modo Normal' : '👴 Modo Fácil (Letras grandes)'}</button>
+                <!-- Perfil del invitado -->
+                <div class="perfil-header">
+                    <h2>👋 ¡Hola, ${escapeHtml(currentUser.nombre)} ${escapeHtml(currentUser.apellido || '')}!</h2>
+                    <p>📍 Nos acompañas desde: ${escapeHtml(currentUser.ciudad || 'No especificado')}</p>
+                    <p>📧 ${currentUser.email}</p>
+                </div>
+                
+                <!-- Pregunta 1 ya está respondida en registro -->
+                
+                <!-- PREGUNTA 2: Asistirán a misa (bautizo y boda) -->
+                <div class="card">
+                    <h3>⛪ Pregunta 2: ¿Asistirán a las ceremonias religiosas?</h3>
+                    <p><strong>Bautizo:</strong> ${FECHAS.BAUTIZO} | <strong>Boda:</strong> ${FECHAS.BODA}</p>
+                    ${respuestas.asisteMisa === undefined ? `
+                        <div style="display:flex; gap:10px; margin-top:15px;">
+                            <button id="misaSiBtn" class="btn-success">✅ Sí, asistiremos</button>
+                            <button id="misaNoBtn" class="btn-danger">❌ No podremos asistir</button>
+                        </div>
+                    ` : `
+                        <div class="${respuestas.asisteMisa ? 'puntualidad' : ''}">
+                            <strong>${respuestas.asisteMisa ? '✅ Confirmaste asistencia a las ceremonias' : '❌ No asistirás a las ceremonias'}</strong>
+                            ${respuestas.asisteMisa ? `
+                                <div class="puntualidad">
+                                    🕐 <strong>Horario:</strong> ${HORAS_MISA.BAUTIZO} (Bautizo) y ${HORAS_MISA.BODA} (Boda)<br>
+                                    💫 <strong>Frase motivacional:</strong> "La puntualidad es el alma de los negocios y el respeto por los demás. ¡Te esperamos con alegría!"
+                                </div>
+                            ` : ''}
+                        </div>
+                    `}
+                </div>
+                
+                <!-- PREGUNTA 3: Asistirán al salón + botón ubicación -->
+                <div class="card">
+                    <h3>🍽️ Pregunta 3: ¿Nos acompañarán a la comida en el salón?</h3>
+                    <p><strong>Horario:</strong> ${FECHAS.SALON}</p>
+                    ${respuestas.asisteSalon === undefined ? `
+                        <div style="display:flex; gap:10px; margin-top:15px;">
+                            <button id="salonSiBtn" class="btn-success">✅ Sí, iremos al salón</button>
+                            <button id="salonNoBtn" class="btn-danger">❌ No iremos al salón</button>
+                        </div>
+                    ` : `
+                        <div>
+                            <strong>${respuestas.asisteSalon ? '✅ Confirmaste asistencia al salón' : '❌ No asistirás al salón'}</strong>
+                            ${respuestas.asisteSalon && !respuestas.ubicacionAsignada ? `
+                                <button id="asignarUbicacionBtn" class="ubicacion-btn">📍 Asignar mi ubicación en el salón</button>
+                            ` : ''}
+                            ${respuestas.ubicacionAsignada ? `
+                                <div class="mesa-info">
+                                    🪑 <strong>Tu ubicación asignada:</strong> ${respuestas.ubicacionAsignada}<br>
+                                    ¡Te esperamos en tu mesa especial!
+                                </div>
+                            ` : ''}
+                        </div>
+                    `}
+                </div>
+                
+                <!-- PREGUNTA 4: Cuántas personas los acompañan -->
+                <div class="card">
+                    <h3>👥 Pregunta 4: ¿Cuántas personas los acompañan?</h3>
+                    ${respuestas.cantidadAcompanantes === undefined ? `
+                        <input type="number" id="cantidadAcompanantes" min="0" max="20" placeholder="Número de acompañantes (incluyéndolos a ustedes)">
+                        <button id="guardarAcompanantesBtn">Guardar</button>
+                    ` : `
+                        <p><strong>📊 Acompañantes totales:</strong> ${respuestas.cantidadAcompanantes} personas</p>
+                        <button id="editarAcompanantesBtn" class="btn-warning">✏️ Editar número</button>
+                    `}
+                </div>
+                
+                <!-- SECCIÓN DE ITINERARIO, NUESTROS NOMBRES Y FECHAS -->
+                <div class="card">
+                    <h2>📅 Información del Gran Día</h2>
+                    <div class="grid-2">
+                        <div>
+                            <h3>💑 Los Novios</h3>
+                            <p><strong>Novio:</strong> ${PAREJA.novio}</p>
+                            <p><strong>Novia:</strong> ${PAREJA.novia}</p>
+                            <p><strong>Fecha de Boda:</strong> ${PAREJA.fechaBoda}</p>
+                            <p><strong>Fecha de Bautizo:</strong> ${PAREJA.fechaBautizo}</p>
+                            <p><strong>👥 Acompañantes registrados:</strong> ${respuestas.cantidadAcompanantes || 0} personas</p>
+                        </div>
+                        <div>
+                            <h3>⏰ Itinerario del Día</h3>
+                            ${ITINERARIO_GENERAL.map(item => `
+                                <div class="itinerario-item">
+                                    <strong>🕐 ${item.hora}</strong><br>
+                                    ${item.evento}<br>
+                                    <small>📍 ${item.lugar}</small>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+                
+                <footer style="text-align:center; padding:20px; color:var(--navy);">
+                    💙 ¡Gracias por ser parte de nuestro día especial! 🤍
+                </footer>
             </div>
         `;
-
-        // Eventos
+        
+        // Event listeners
         document.getElementById('logoutBtn')?.addEventListener('click', logout);
-        document.getElementById('easyModeBtn')?.addEventListener('click', toggleEasyMode);
         
-        document.getElementById('addGuestBtn')?.addEventListener('click', () => {
-            const nombre = document.getElementById('newGuestName').value;
-            const tipo = document.getElementById('newGuestType').value;
-            if (!nombre.trim()) return alert("✏️ Escribe el nombre del invitado");
-            agregarInvitado(nombre, tipo);
-            document.getElementById('newGuestName').value = '';
-        });
-
-        document.querySelectorAll('.toggle-confirm').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const id = btn.getAttribute('data-id');
-                toggleConfirmacion(id);
+        // Pregunta 2 - Misa
+        if (respuestas.asisteMisa === undefined) {
+            document.getElementById('misaSiBtn')?.addEventListener('click', () => {
+                actualizarRespuesta(currentUser.email, 'asisteMisa', true);
             });
+            document.getElementById('misaNoBtn')?.addEventListener('click', () => {
+                actualizarRespuesta(currentUser.email, 'asisteMisa', false);
+            });
+        }
+        
+        // Pregunta 3 - Salón
+        if (respuestas.asisteSalon === undefined) {
+            document.getElementById('salonSiBtn')?.addEventListener('click', () => {
+                actualizarRespuesta(currentUser.email, 'asisteSalon', true);
+            });
+            document.getElementById('salonNoBtn')?.addEventListener('click', () => {
+                actualizarRespuesta(currentUser.email, 'asisteSalon', false);
+            });
+        }
+        
+        // Botón asignar ubicación
+        document.getElementById('asignarUbicacionBtn')?.addEventListener('click', () => {
+            const mesasDisponibles = ["Mesa 1 - Familia", "Mesa 2 - Amigos", "Mesa 3 - Compañeros", "Mesa 4 - VIP", "Mesa 5 - Especial"];
+            const seleccion = prompt("Elige tu ubicación:\n" + mesasDisponibles.join("\n"), mesasDisponibles[0]);
+            if (seleccion && mesasDisponibles.includes(seleccion)) {
+                asignarUbicacion(currentUser.email, seleccion);
+            } else if (seleccion) {
+                alert("Por favor elige una de las opciones disponibles");
+            }
         });
         
-        document.querySelectorAll('.delete-guest').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                if(confirm("¿Eliminar este invitado?")) eliminarInvitado(btn.getAttribute('data-id'));
+        // Pregunta 4 - Cantidad de acompañantes
+        if (respuestas.cantidadAcompanantes === undefined) {
+            document.getElementById('guardarAcompanantesBtn')?.addEventListener('click', () => {
+                const cantidad = parseInt(document.getElementById('cantidadAcompanantes').value);
+                if (isNaN(cantidad) || cantidad < 0) {
+                    alert("Por ingresa un número válido");
+                    return;
+                }
+                actualizarRespuesta(currentUser.email, 'cantidadAcompanantes', cantidad);
             });
-        });
-
-        document.querySelectorAll('.delete-itinerary').forEach(btn => {
-            btn.addEventListener('click', () => {
-                if(confirm("¿Eliminar evento del itinerario?")) eliminarEventoItinerario(btn.getAttribute('data-id'));
-            });
-        });
-        
-        document.querySelectorAll('.edit-itinerary').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const id = btn.getAttribute('data-id');
-                const evento = itinerarios.find(ev => ev.id === id);
-                if(evento) {
-                    const newTime = prompt("Editar hora:", evento.time);
-                    const newTitle = prompt("Editar título:", evento.title);
-                    const newLoc = prompt("Editar ubicación:", evento.location);
-                    const newDesc = prompt("Editar descripción:", evento.description);
-                    if(newTime && newTitle) actualizarEventoItinerario(id, newTime, newTitle, newLoc || "", newDesc || "");
+        } else {
+            document.getElementById('editarAcompanantesBtn')?.addEventListener('click', () => {
+                const nuevaCantidad = prompt("Editar número de acompañantes:", respuestas.cantidadAcompanantes);
+                if (nuevaCantidad !== null) {
+                    const cantidad = parseInt(nuevaCantidad);
+                    if (!isNaN(cantidad) && cantidad >= 0) {
+                        actualizarRespuesta(currentUser.email, 'cantidadAcompanantes', cantidad);
+                    } else {
+                        alert("Número inválido");
+                    }
                 }
             });
-        });
-
-        document.getElementById('addEventBtn')?.addEventListener('click', () => {
-            const time = document.getElementById('newEventTime').value;
-            const title = document.getElementById('newEventTitle').value;
-            const loc = document.getElementById('newEventLocation').value;
-            const desc = document.getElementById('newEventDesc').value;
-            if(!time || !title) return alert("⏰ Hora y título son obligatorios");
-            agregarEventoItinerario(time, title, loc, desc);
-            document.getElementById('newEventTime').value = '';
-            document.getElementById('newEventTitle').value = '';
-            document.getElementById('newEventLocation').value = '';
-            document.getElementById('newEventDesc').value = '';
-        });
-
-        // Exportar
-        document.getElementById('exportDataBtn')?.addEventListener('click', () => {
-            const exportData = {
-                guests: getGuests(),
-                itinerary: getItinerary(),
-                exportDate: new Date().toISOString()
-            };
-            const dataStr = JSON.stringify(exportData, null, 2);
-            const blob = new Blob([dataStr], {type: "application/json"});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `boda_backup_${Date.now()}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-        });
-
-        // Importar
-        const importBtn = document.getElementById('importDataBtn');
-        const fileInput = document.getElementById('importFileInput');
-        importBtn?.addEventListener('click', () => fileInput.click());
-        fileInput?.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if(!file) return;
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                try {
-                    const data = JSON.parse(ev.target.result);
-                    if(data.guests) saveGuests(data.guests);
-                    if(data.itinerary) saveItinerary(data.itinerary);
-                    alert("✅ Restauración exitosa");
-                    renderApp();
-                } catch(e) { alert("❌ Archivo inválido"); }
-            };
-            reader.readAsText(file);
-            fileInput.value = '';
-        });
-
-        // Inicializar carrusel después de renderizar
-        setTimeout(() => {
-            initCarousel();
-        }, 100);
+        }
     }
-
+    
     function escapeHtml(str) {
         if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
+        return String(str).replace(/[&<>]/g, function(m) {
             if (m === '&') return '&amp;';
             if (m === '<') return '&lt;';
             if (m === '>') return '&gt;';
             return m;
         });
     }
-
-    // Arranque
+    
+    // Inicializar
     initDatabase();
     checkSession();
 </script>
