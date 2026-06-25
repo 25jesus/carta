@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boda y Bautizo - María del Carmen & Jesús Eduardo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0b2b4a;
+            --primary-light: #1e4a6b;
+            --accent: #4f8bc9;
+            --accent-light: #a0c8e8;
+            --white: #ffffff;
+            --ice: #f0f6fc;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --glass-bg-blue: rgba(11, 43, 74, 0.3);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.25);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--white);
+            min-height: 100vh;
+            background: #0a1a2b;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ========== VIDEO BACKGROUND ========== */
+        .video-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+        .video-bg-container video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            filter: brightness(0.55);
+        }
+        .video-fallback {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a1f33 0%, #0e2c48 25%, #163a5c 50%, #0b2338 75%, #0a1f33 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+            z-index: -1;
+        }
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 100% 0%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+        }
+        .overlay-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.65) 100%),
+                radial-gradient(ellipse at 30% 20%, rgba(79,139,201,0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(160,200,232,0.08) 0%, transparent 50%);
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 50px;
+            padding-bottom: 80px;
+        }
+
+        /* ========== HERO ========== */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+        .hero-badge {
+            display: inline-block;
+            padding: 10px 28px;
+            border: 1.5px solid var(--accent-light);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent-light);
+            margin-bottom: 30px;
+            backdrop-filter: blur(8px);
+            background: rgba(255,255,255,0.06);
+            animation: fadeInDown 1s ease forwards;
+        }
+        .hero-names {
+            font-family: 'Great Vibes', 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6.5vw, 5.5rem);
+            font-weight: 400;
+            color: var(--white);
+            text-shadow: 0 4px 30px rgba(0,0,0,0.6);
+            line-height: 1.2;
+            margin-bottom: 8px;
+            animation: fadeInUp 1s ease 0.2s forwards;
+            opacity: 0;
+            animation-fill-mode: forwards;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px 15px;
+        }
+        .hero-ampersand {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            color: var(--accent);
+            font-style: italic;
+            display: inline-block;
+            margin: 0 5px;
+        }
+        .hero-date {
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            color: var(--accent-light);
+            margin-top: 10px;
+            animation: fadeInUp 1s ease 0.4s forwards;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+        .hero-scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            color: var(--white);
+            font-size: 1.5rem;
+            opacity: 0.8;
+            cursor: pointer;
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(15px); }
+        }
+
+        /* ========== INVITACIÓN TEXTO ========== */
+        .invitacion-section {
+            width: 100%;
+            max-width: 800px;
+            padding: 0 20px;
+            text-align: center;
+            animation: fadeInUp 0.8s ease 0.5s forwards;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+        .invitacion-card {
+            background: var(--glass-bg-blue);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 40px 30px;
+            box-shadow: var(--shadow-lg);
+        }
+        .invitacion-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--white);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .invitacion-card p {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            line-height: 1.8;
+        }
+        .invitacion-card .firma {
+            font-family: 'Great Vibes', serif;
+            font-size: 2.2rem;
+            color: var(--accent-light);
+            margin-top: 25px;
+        }
+
+        /* ========== BAUTIZO SECTION ========== */
+        .bautizo-section {
+            width: 100%;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        .bautizo-card {
+            background: var(--glass-bg-blue);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+        .bautizo-icon {
+            font-size: 2.8rem;
+            color: var(--accent-light);
+            margin-bottom: 15px;
+        }
+        .bautizo-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--white);
+        }
+        .bautizo-card .baby-name {
+            font-family: 'Great Vibes', serif;
+            font-size: 3rem;
+            color: var(--accent-light);
+            margin: 20px 0;
+            line-height: 1.2;
+        }
+        .bautizo-card p {
+            color: rgba(255,255,255,0.9);
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .padrinos {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        .padrino-item {
+            background: rgba(255,255,255,0.08);
+            border-radius: var(--radius-sm);
+            padding: 20px 25px;
+            min-width: 150px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .padrino-item span {
+            display: block;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            color: var(--accent-light);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .padrino-item strong {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        /* ========== COUNTDOWN ========== */
+        .countdown-section {
+            width: 100%;
+            max-width: 750px;
+            padding: 0 20px;
+        }
+        .countdown-card {
+            background: var(--glass-bg-blue);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+        .countdown-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: var(--white);
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
+        .countdown-title i { color: var(--accent-light); margin: 0 8px; }
+        .countdown-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .countdown-item {
+            background: rgba(255,255,255,0.08);
+            border-radius: var(--radius-sm);
+            padding: 20px 18px;
+            min-width: 90px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: var(--transition);
+        }
+        .countdown-item:hover {
+            background: rgba(255,255,255,0.14);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.4);
+        }
+        .countdown-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1;
+        }
+        .countdown-label {
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent-light);
+            margin-top: 8px;
+        }
+        .countdown-separator {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            font-weight: 300;
+        }
+        @media (max-width: 600px) {
+            .countdown-grid { gap: 10px; }
+            .countdown-item { min-width: 65px; padding: 15px 10px; }
+            .countdown-number { font-size: 2rem; }
+            .countdown-label { font-size: 0.65rem; }
+            .countdown-separator { font-size: 1.8rem; }
+        }
+
+        /* ========== GALLERY ========== */
+        .gallery-section {
+            width: 100%;
+            max-width: 900px;
+            padding: 0 20px;
+        }
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            text-align: center;
+            color: var(--white);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: var(--accent-light);
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .gallery-item {
+            position: relative;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 3/4;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 2px solid rgba(255,255,255,0.25);
+        }
+        .gallery-item:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .gallery-item:hover img { transform: scale(1.08); }
+        .gallery-item::after {
+            content: '\f00e';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 1.5rem;
+            color: white;
+            background: rgba(0,0,0,0.5);
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .gallery-item:hover::after { transform: translate(-50%, -50%) scale(1); }
+        @media (max-width: 768px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 480px) { .gallery-grid { grid-template-columns: 1fr 1fr; } }
+
+        /* LIGHTBOX */
+        .lightbox-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.92); z-index: 1000;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+        }
+        .lightbox-overlay.active { opacity: 1; pointer-events: all; }
+        .lightbox-content { position: relative; max-width: 90vw; max-height: 85vh; }
+        .lightbox-content img { max-width: 100%; max-height: 85vh; border-radius: 12px; }
+        .lightbox-close { position: absolute; top: -50px; right: 0; font-size: 2rem; color: white; background: none; border: none; cursor: pointer; }
+        .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); font-size: 2rem; color: white; background: rgba(255,255,255,0.1); border: none; width: 55px; height: 55px; border-radius: 50%; cursor: pointer; }
+        .lightbox-prev { left: -70px; } .lightbox-next { right: -70px; }
+        @media (max-width: 768px) { .lightbox-prev { left: 10px; } .lightbox-next { right: 10px; } }
+
+        /* LOCATIONS */
+        .locations-section {
+            width: 100%; max-width: 900px; padding: 0 20px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 25px;
+        }
+        .location-card {
+            background: var(--glass-bg-blue); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: var(--radius);
+            padding: 35px 28px; text-align: center; box-shadow: var(--shadow); transition: var(--transition);
+        }
+        .location-card:hover { transform: translateY(-5px); background: rgba(11,43,74,0.45); }
+        .location-icon { font-size: 2.8rem; color: var(--accent-light); margin-bottom: 15px; }
+        .location-card h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; }
+        .location-label { font-size: 0.8rem; letter-spacing: 3px; color: var(--accent-light); }
+        .btn-maps {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 12px 28px; background: var(--accent); color: white;
+            border-radius: 50px; text-decoration: none; font-weight: 600;
+            transition: var(--transition);
+        }
+        .btn-maps:hover { background: #3a6fa8; }
+        @media (max-width: 700px) { .locations-section { grid-template-columns: 1fr; } }
+
+        /* ========== CONFIRMACIÓN (RSVP) ========== */
+        .rsvp-section {
+            width: 100%; max-width: 700px; padding: 0 20px;
+        }
+        .rsvp-card {
+            background: var(--glass-bg-blue); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: var(--radius);
+            padding: 40px 30px; box-shadow: var(--shadow-lg); text-align: center;
+        }
+        .rsvp-card h2 {
+            font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 20px; text-align: left;
+        }
+        .form-group label {
+            display: block; margin-bottom: 6px; font-weight: 500; color: var(--accent-light); letter-spacing: 1px;
+        }
+        .form-group input, .form-group select {
+            width: 100%; padding: 14px 18px; border-radius: 50px;
+            border: 1px solid var(--glass-border); background: rgba(255,255,255,0.15);
+            color: white; font-size: 1rem; outline: none; backdrop-filter: blur(5px);
+            transition: var(--transition);
+        }
+        .form-group input::placeholder { color: rgba(255,255,255,0.6); }
+        .form-group select option { background: #0b2b4a; color: white; }
+        .btn-rsvp {
+            background: var(--accent); color: white; border: none;
+            padding: 14px 35px; border-radius: 50px; font-weight: 600;
+            letter-spacing: 1px; cursor: pointer; transition: var(--transition);
+            font-size: 1rem; margin-top: 10px;
+        }
+        .btn-rsvp:hover { background: #3a6fa8; transform: translateY(-2px); }
+
+        /* Modal de agradecimiento */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 2000;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal-content {
+            background: rgba(11,43,74,0.9); backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border); border-radius: var(--radius);
+            padding: 40px 30px; max-width: 500px; width: 90%; text-align: center;
+            color: white; box-shadow: var(--shadow-lg);
+        }
+        .modal-content h3 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 20px; }
+        .modal-content p { margin: 15px 0; font-size: 1rem; }
+        .btn-whatsapp-modal {
+            background: #25D366; color: white; border: none;
+            padding: 14px 32px; border-radius: 50px; font-weight: 600;
+            letter-spacing: 1px; cursor: pointer; transition: var(--transition);
+            display: inline-flex; align-items: center; gap: 10px; margin-top: 20px;
+            text-decoration: none;
+        }
+        .btn-close-modal {
+            background: transparent; border: 1px solid var(--accent-light); color: var(--accent-light);
+            padding: 10px 25px; border-radius: 50px; cursor: pointer; margin-top: 15px;
+        }
+
+        /* FOOTER */
+        .footer-message {
+            text-align: center; padding: 20px; color: var(--accent-light);
+            font-family: 'Playfair Display', serif; font-style: italic;
+        }
+
+        /* PETALOS */
+        .petal {
+            position: fixed; pointer-events: none; z-index: 0; opacity: 0.6;
+            animation: fall linear infinite; color: var(--accent-light);
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0.7; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+        }
+
+        .music-toggle {
+            position: fixed; bottom: 25px; right: 25px; z-index: 100;
+            width: 50px; height: 50px; border-radius: 50%;
+            background: var(--glass-bg-blue); backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border); color: white;
+            cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-bg-container">
+        <video id="bgVideo" autoplay muted loop playsinline>
+            <source src="https://videos.pexels.com/video-files/4064787/4064787-uhd_2560_1440_25fps.mp4" type="video/mp4">
+            <source src="https://videos.pexels.com/video-files/3194277/3194277-uhd_2560_1440_25fps.mp4" type="video/mp4">
+        </video>
+        <div class="video-fallback"></div>
+    </div>
+    <div class="overlay-texture"></div>
+    <div id="petalsContainer"></div>
+
+    <div class="main-content">
+        <section class="hero-section">
+            <div class="hero-badge">Boda & Bautizo</div>
+            <h1 class="hero-names">María del Carmen<span class="hero-ampersand">&</span>Jesús Eduardo</h1>
+            <p class="hero-date">10 · OCTUBRE · 2026</p>
+            <div class="hero-scroll-indicator" onclick="document.getElementById('invitacion').scrollIntoView({behavior:'smooth'})">
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+        </section>
+
+        <!-- TEXTO DE INVITACIÓN -->
+        <section class="invitacion-section" id="invitacion">
+            <div class="invitacion-card">
+                <h2>Con la bendición de nuestras familias</h2>
+                <p>
+                    Tenemos el honor de invitarte a compartir la alegría de nuestro amor, 
+                    en el día en que uniremos nuestras vidas para siempre. 
+                    También celebraremos la luz de nuestro hijo, quien recibirá el santo sacramento del bautismo.
+                </p>
+                <p>
+                    Será un día doblemente especial, donde el amor de pareja y el amor de padres se funden en una sola celebración. 
+                    Queremos que formes parte de esta historia y nos acompañes con tu cariño.
+                </p>
+                <p class="firma">María del Carmen & Jesús Eduardo</p>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DEL BAUTIZO -->
+        <section class="bautizo-section" id="bautizo">
+            <div class="bautizo-card">
+                <div class="bautizo-icon">🕊️</div>
+                <h2>Bautizo de nuestro hijo</h2>
+                <div class="baby-name">Alan Jesús Caporal González</div>
+                <p>Recibirá el sacramento del bautismo el mismo día,<br>en la misma ceremonia religiosa.</p>
+                <p style="color: var(--accent-light); font-style: italic;">10 de octubre de 2026 · 1:00 pm</p>
+                <div class="padrinos">
+                    <div class="padrino-item">
+                        <span>Madrina</span>
+                        <strong>Por confirmar</strong>
+                    </div>
+                    <div class="padrino-item">
+                        <span>Padrino</span>
+                        <strong>Por confirmar</strong>
+                    </div>
+                </div>
+                <p style="font-size:0.8rem; margin-top:15px; color:rgba(255,255,255,0.7);">
+                    (Los nombres de los padrinos se actualizarán pronto)
+                </p>
+            </div>
+        </section>
+
+        <!-- COUNTDOWN -->
+        <section class="countdown-section" id="countdown">
+            <div class="countdown-card">
+                <h2 class="countdown-title"><i class="fa-regular fa-heart"></i> Cuenta Regresiva <i class="fa-regular fa-heart"></i></h2>
+                <div class="countdown-grid">
+                    <div class="countdown-item"><span class="countdown-number" id="days">00</span><span class="countdown-label">Días</span></div>
+                    <span class="countdown-separator">:</span>
+                    <div class="countdown-item"><span class="countdown-number" id="hours">00</span><span class="countdown-label">Horas</span></div>
+                    <span class="countdown-separator">:</span>
+                    <div class="countdown-item"><span class="countdown-number" id="minutes">00</span><span class="countdown-label">Minutos</span></div>
+                    <span class="countdown-separator">:</span>
+                    <div class="countdown-item"><span class="countdown-number" id="seconds">00</span><span class="countdown-label">Segundos</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GALERÍA -->
+        <section class="gallery-section">
+            <h2 class="section-title">Nuestros Momentos</h2>
+            <p class="section-subtitle">Galería de Recuerdos</p>
+            <div class="gallery-grid" id="galleryGrid"></div>
+        </section>
+
+        <!-- UBICACIONES -->
+        <section class="locations-section">
+            <div class="location-card">
+                <span class="location-icon">⛪</span>
+                <span class="location-label">Ceremonia (Boda y Bautizo)</span>
+                <h3>Arroyozarco</h3>
+                <p class="location-address">Iglesia de Arroyozarco, Amealco, Qro.</p>
+                <p class="location-time"><i class="fa-regular fa-clock"></i> 1:00 pm</p>
+                <a href="https://maps.google.com/?q=Arroyozarco+Iglesia" target="_blank" class="btn-maps"><i class="fa-solid fa-location-dot"></i> Cómo llegar</a>
+            </div>
+            <div class="location-card">
+                <span class="location-icon">🥂</span>
+                <span class="location-label">Recepción & Comida</span>
+                <h3>Bimbo</h3>
+                <p class="location-address">Salón Bimbo, Carretera Principal, Qro.</p>
+                <p class="location-time"><i class="fa-regular fa-clock"></i> 3:00 pm</p>
+                <a href="https://maps.google.com/?q=Bimbo+Salon+Eventos+Queretaro" target="_blank" class="btn-maps"><i class="fa-solid fa-location-dot"></i> Cómo llegar</a>
+            </div>
+        </section>
+
+        <!-- CONFIRMACIÓN -->
+        <section class="rsvp-section" id="rsvp">
+            <div class="rsvp-card">
+                <h2>Confirma tu Asistencia</h2>
+                <p style="color:var(--accent-light); margin-bottom:25px;">Queremos saber si nos acompañarás en este doble festejo</p>
+                <div class="form-group">
+                    <label>Nombre de la familia</label>
+                    <input type="text" id="familiaNombre" placeholder="Ej. Familia Pérez">
+                </div>
+                <div class="form-group">
+                    <label>Número de invitados</label>
+                    <input type="number" id="numInvitados" min="1" value="1" placeholder="Total de personas">
+                </div>
+                <div class="form-group">
+                    <label>¿A qué evento nos acompañarás?</label>
+                    <select id="asistenciaEvento">
+                        <option value="ambos">A ambos (Ceremonia y Comida)</option>
+                        <option value="soloCeremonia">Solo a la Ceremonia</option>
+                        <option value="soloComida">Solo a la Comida</option>
+                    </select>
+                </div>
+                <button class="btn-rsvp" onclick="prepararMensaje()">Preparar Confirmación</button>
+            </div>
+        </section>
+
+        <div class="footer-message">
+            <p>"Dos corazones, una familia, un mismo amor."</p>
+        </div>
+    </div>
+
+    <!-- MODAL DE AGRADECIMIENTO -->
+    <div class="modal-overlay" id="modalAgradecimiento">
+        <div class="modal-content">
+            <h3 id="modalTitulo">¡Gracias!</h3>
+            <p id="modalMensaje"></p>
+            <a href="#" id="whatsappLink" class="btn-whatsapp-modal" target="_blank">
+                <i class="fa-brands fa-whatsapp"></i> Enviar confirmación por WhatsApp
+            </a>
+            <br>
+            <button class="btn-close-modal" onclick="cerrarModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox-overlay" id="lightboxOverlay">
+        <button class="lightbox-close" id="lightboxClose"><i class="fa-solid fa-times"></i></button>
+        <button class="lightbox-nav lightbox-prev" id="lightboxPrev"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="lightbox-content"><img src="" id="lightboxImg"></div>
+        <button class="lightbox-nav lightbox-next" id="lightboxNext"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+
+    <button class="music-toggle" id="musicToggle"><i class="fa-solid fa-volume-xmark" id="musicIcon"></i></button>
+
+    <script>
+        const CONFIG = {
+            weddingDate: new Date('2026-10-10T13:00:00'),
+            galleryPhotos: [
+                'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80',
+                'https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?w=600&q=80',
+                'https://images.unsplash.com/photo-1529636798458-92182e662485?w=600&q=80',
+                'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&q=80',
+                'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&q=80',
+                'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&q=80',
+            ],
+            whatsappNumber: '5215512345678', // Cambia por tu número
+        };
+
+        // COUNTDOWN
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const target = CONFIG.weddingDate.getTime();
+            const diff = target - now;
+            if (diff <= 0) {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                return;
+            }
+            document.getElementById('days').textContent = String(Math.floor(diff / (1000*60*60*24))).padStart(2,'0');
+            document.getElementById('hours').textContent = String(Math.floor((diff % (1000*60*60*24)) / (1000*60*60))).padStart(2,'0');
+            document.getElementById('minutes').textContent = String(Math.floor((diff % (1000*60*60)) / (1000*60))).padStart(2,'0');
+            document.getElementById('seconds').textContent = String(Math.floor((diff % (1000*60)) / 1000)).padStart(2,'0');
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // GALERÍA
+        const galleryGrid = document.getElementById('galleryGrid');
+        const lightboxOverlay = document.getElementById('lightboxOverlay');
+        const lightboxImg = document.getElementById('lightboxImg');
+        let currentIndex = 0;
+        CONFIG.galleryPhotos.forEach((url, i) => {
+            const div = document.createElement('div');
+            div.className = 'gallery-item';
+            div.innerHTML = `<img src="${url}" alt="Foto">`;
+            div.onclick = () => { currentIndex = i; lightboxImg.src = url; lightboxOverlay.classList.add('active'); };
+            galleryGrid.appendChild(div);
+        });
+        document.getElementById('lightboxClose').onclick = () => lightboxOverlay.classList.remove('active');
+        document.getElementById('lightboxPrev').onclick = () => {
+            currentIndex = (currentIndex - 1 + CONFIG.galleryPhotos.length) % CONFIG.galleryPhotos.length;
+            lightboxImg.src = CONFIG.galleryPhotos[currentIndex];
+        };
+        document.getElementById('lightboxNext').onclick = () => {
+            currentIndex = (currentIndex + 1) % CONFIG.galleryPhotos.length;
+            lightboxImg.src = CONFIG.galleryPhotos[currentIndex];
+        };
+        lightboxOverlay.addEventListener('click', (e) => { if (e.target === lightboxOverlay) lightboxOverlay.classList.remove('active'); });
+
+        // PÉTALOS
+        function createPetals() {
+            const container = document.getElementById('petalsContainer');
+            const emojis = ['🌸','💮','🌷','🪷','🌺','💐','🌼'];
+            for (let i=0; i<18; i++) {
+                const p = document.createElement('span');
+                p.className = 'petal';
+                p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+                p.style.left = Math.random()*100+'%';
+                p.style.fontSize = (Math.random()*20+12)+'px';
+                p.style.animationDuration = (Math.random()*12+10)+'s';
+                p.style.animationDelay = (Math.random()*15)+'s';
+                container.appendChild(p);
+            }
+        }
+        createPetals();
+
+        // TOGGLE SONIDO
+        const bgVideo = document.getElementById('bgVideo');
+        const musicIcon = document.getElementById('musicIcon');
+        let muted = true;
+        document.getElementById('musicToggle').onclick = () => {
+            muted = !muted;
+            bgVideo.muted = muted;
+            musicIcon.className = muted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
+            if (!muted) bgVideo.play().catch(()=>{});
+        };
+
+        // LÓGICA DE CONFIRMACIÓN
+        function prepararMensaje() {
+            const familia = document.getElementById('familiaNombre').value.trim();
+            const num = document.getElementById('numInvitados').value;
+            const evento = document.getElementById('asistenciaEvento').value;
+
+            if (!familia) {
+                alert('Por favor ingresa el nombre de tu familia.');
+                return;
+            }
+            if (!num || num < 1) {
+                alert('Indica cuántos invitados asistirán.');
+                return;
+            }
+
+            let eventoTexto = '';
+            if (evento === 'ambos') eventoTexto = 'los acompañaremos en ambos eventos: Ceremonia (Boda y Bautizo) y Comida';
+            else if (evento === 'soloCeremonia') eventoTexto = 'los acompañaremos solo en la Ceremonia (Boda y Bautizo)';
+            else if (evento === 'soloComida') eventoTexto = 'los acompañaremos solo en la Comida';
+
+            let agradecimiento = `¡Muchas gracias, Familia ${familia}! `;
+            if (evento === 'ambos') {
+                agradecimiento += `Nos llena de alegría que nos acompañen en este día tan especial, compartiendo la boda y el bautizo de Alan Jesús. Será un honor contar con ustedes en cada momento.`;
+            } else if (evento === 'soloCeremonia') {
+                agradecimiento += `Agradecemos profundamente que estén presentes en la ceremonia donde uniremos nuestras vidas y bautizaremos a nuestro hijo. Su presencia significa mucho.`;
+            } else {
+                agradecimiento += `Qué felicidad que puedan compartir la mesa y la fiesta con nosotros. Será un placer celebrar juntos en la comida.`;
+            }
+
+            const mensajeWhatsApp = `Hola, somos la Familia ${familia}. Confirmamos nuestra asistencia: ${num} invitado(s). ${eventoTexto}. ¡Gracias por invitarnos!`;
+            const url = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(mensajeWhatsApp)}`;
+
+            document.getElementById('modalTitulo').textContent = `¡Gracias, Familia ${familia}!`;
+            document.getElementById('modalMensaje').textContent = agradecimiento;
+            document.getElementById('whatsappLink').href = url;
+            document.getElementById('modalAgradecimiento').classList.add('active');
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalAgradecimiento').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
