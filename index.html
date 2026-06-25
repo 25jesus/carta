@@ -1,23 +1,26 @@
 
-<!DOCTYPE html>
+           
+      <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nos Casamos - Ana & Carlos</title>
+    <title>Nos Casamos - María del Carmen & Jesús Eduardo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #d4a574;
-            --gold-light: #e8d5c4;
-            --cream: #faf7f2;
-            --dark: #2c2416;
+            --primary: #0b2b4a;
+            --primary-light: #1e4a6b;
+            --accent: #4f8bc9;
+            --accent-light: #a0c8e8;
             --white: #ffffff;
-            --glass-bg: rgba(255, 255, 255, 0.12);
+            --ice: #f0f6fc;
+            --glass-bg: rgba(255, 255, 255, 0.1);
             --glass-border: rgba(255, 255, 255, 0.25);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
-            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.3);
+            --glass-bg-blue: rgba(11, 43, 74, 0.25);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.25);
             --radius: 20px;
             --radius-sm: 12px;
             --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -37,7 +40,7 @@
             font-family: 'Montserrat', sans-serif;
             color: var(--white);
             min-height: 100vh;
-            background: #1a1a1a;
+            background: #0a1a2b;
             line-height: 1.7;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
@@ -64,10 +67,10 @@
             height: auto;
             transform: translate(-50%, -50%);
             object-fit: cover;
-            filter: brightness(0.55);
+            filter: brightness(0.65);
         }
 
-        /* Fallback si el video no carga */
+        /* Fallback animado en azul */
         .video-fallback {
             position: absolute;
             top: 0;
@@ -75,7 +78,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(135deg,
-                    #1a1a2e 0%, #16213e 25%, #0f3460 50%, #1a1a2e 75%, #16213e 100%);
+                    #0a1f33 0%, #0e2c48 25%, #163a5c 50%, #0b2338 75%, #0a1f33 100%);
             background-size: 400% 400%;
             animation: gradientShift 20s ease infinite;
             z-index: -1;
@@ -97,7 +100,6 @@
             }
         }
 
-        /* Overlay de textura */
         .overlay-texture {
             position: fixed;
             top: 0;
@@ -107,9 +109,9 @@
             z-index: -1;
             pointer-events: none;
             background:
-                radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.5) 100%),
-                radial-gradient(ellipse at 30% 20%, rgba(212, 165, 116, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 80%, rgba(212, 165, 116, 0.06) 0%, transparent 50%);
+                radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.55) 100%),
+                radial-gradient(ellipse at 30% 20%, rgba(79, 139, 201, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(160, 200, 232, 0.08) 0%, transparent 50%);
         }
 
         /* ========== MAIN CONTENT WRAPPER ========== */
@@ -134,18 +136,18 @@
             text-align: center;
             padding: 40px 20px;
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
         }
 
         .hero-badge {
             display: inline-block;
             padding: 10px 28px;
-            border: 1.5px solid var(--gold-light);
+            border: 1.5px solid var(--accent-light);
             border-radius: 50px;
             font-size: 0.85rem;
             letter-spacing: 4px;
             text-transform: uppercase;
-            color: var(--gold-light);
+            color: var(--accent-light);
             margin-bottom: 30px;
             backdrop-filter: blur(8px);
             background: rgba(255, 255, 255, 0.06);
@@ -154,30 +156,35 @@
 
         .hero-names {
             font-family: 'Great Vibes', 'Playfair Display', serif;
-            font-size: clamp(3rem, 7vw, 6rem);
+            font-size: clamp(2.5rem, 6.5vw, 5.5rem);
             font-weight: 400;
             color: var(--white);
-            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-            line-height: 1.1;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+            line-height: 1.2;
             margin-bottom: 8px;
             animation: fadeInUp 1s ease 0.2s forwards;
             opacity: 0;
             animation-fill-mode: forwards;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px 15px;
         }
 
         .hero-ampersand {
             font-family: 'Playfair Display', serif;
             font-size: clamp(2rem, 4vw, 3.5rem);
-            color: var(--gold);
-            display: block;
+            color: var(--accent);
             font-style: italic;
-            margin: 5px 0;
+            display: inline-block;
+            margin: 0 5px;
         }
 
         .hero-date {
             font-size: 1.1rem;
             letter-spacing: 3px;
-            color: var(--gold-light);
+            color: var(--accent-light);
             margin-top: 10px;
             animation: fadeInUp 1s ease 0.4s forwards;
             opacity: 0;
@@ -192,7 +199,7 @@
             animation: bounce 2s infinite;
             color: var(--white);
             font-size: 1.5rem;
-            opacity: 0.7;
+            opacity: 0.8;
             cursor: pointer;
         }
 
@@ -237,7 +244,7 @@
         }
 
         .countdown-card {
-            background: var(--glass-bg);
+            background: var(--glass-bg-blue);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
@@ -257,7 +264,7 @@
         }
 
         .countdown-title i {
-            color: var(--gold);
+            color: var(--accent-light);
             margin: 0 8px;
         }
 
@@ -281,7 +288,7 @@
         .countdown-item:hover {
             background: rgba(255, 255, 255, 0.14);
             transform: translateY(-4px);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
         }
 
         .countdown-number {
@@ -298,7 +305,7 @@
             font-size: 0.75rem;
             letter-spacing: 3px;
             text-transform: uppercase;
-            color: var(--gold-light);
+            color: var(--accent-light);
             margin-top: 8px;
             display: block;
         }
@@ -306,7 +313,7 @@
         .countdown-separator {
             font-family: 'Playfair Display', serif;
             font-size: 2.5rem;
-            color: var(--gold);
+            color: var(--accent);
             display: flex;
             align-items: center;
             font-weight: 300;
@@ -351,7 +358,7 @@
 
         .section-subtitle {
             text-align: center;
-            color: var(--gold-light);
+            color: var(--accent-light);
             font-size: 0.9rem;
             letter-spacing: 3px;
             margin-bottom: 30px;
@@ -372,13 +379,13 @@
             aspect-ratio: 3/4;
             box-shadow: var(--shadow);
             transition: var(--transition);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.25);
         }
 
         .gallery-item:hover {
             transform: translateY(-6px);
             box-shadow: var(--shadow-lg);
-            border-color: var(--gold);
+            border-color: var(--accent);
         }
 
         .gallery-item img {
@@ -493,7 +500,7 @@
         }
 
         .lightbox-close:hover {
-            color: var(--gold);
+            color: var(--accent-light);
             transform: scale(1.1);
         }
 
@@ -519,7 +526,7 @@
 
         .lightbox-nav:hover {
             background: rgba(255, 255, 255, 0.25);
-            color: var(--gold);
+            color: var(--accent-light);
         }
         .lightbox-prev {
             left: -70px;
@@ -558,7 +565,7 @@
         }
 
         .location-card {
-            background: var(--glass-bg);
+            background: var(--glass-bg-blue);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
@@ -572,12 +579,12 @@
         .location-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-lg);
-            background: rgba(255, 255, 255, 0.16);
+            background: rgba(11, 43, 74, 0.4);
         }
 
         .location-icon {
             font-size: 2.8rem;
-            color: var(--gold);
+            color: var(--accent-light);
             margin-bottom: 15px;
             display: block;
         }
@@ -595,21 +602,21 @@
             font-size: 0.8rem;
             letter-spacing: 3px;
             text-transform: uppercase;
-            color: var(--gold-light);
+            color: var(--accent-light);
             margin-bottom: 12px;
             display: block;
         }
 
         .location-address {
             font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.85);
             margin-bottom: 8px;
             line-height: 1.5;
         }
 
         .location-time {
             font-size: 0.85rem;
-            color: var(--gold-light);
+            color: var(--accent-light);
             margin-bottom: 18px;
             font-weight: 500;
         }
@@ -619,8 +626,8 @@
             align-items: center;
             gap: 10px;
             padding: 12px 28px;
-            background: var(--gold);
-            color: var(--dark);
+            background: var(--accent);
+            color: var(--white);
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
@@ -633,10 +640,10 @@
         }
 
         .btn-maps:hover {
-            background: #c9955e;
+            background: #3a6fa8;
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(212, 165, 116, 0.4);
-            color: #1a1a1a;
+            box-shadow: 0 10px 25px rgba(79, 139, 201, 0.5);
+            color: #ffffff;
         }
 
         .btn-maps i {
@@ -662,7 +669,7 @@
             font-family: 'Playfair Display', serif;
             font-style: italic;
             font-size: 1.2rem;
-            color: var(--gold-light);
+            color: var(--accent-light);
             margin-bottom: 20px;
             letter-spacing: 1px;
         }
@@ -698,26 +705,27 @@
             position: fixed;
             pointer-events: none;
             z-index: 0;
-            opacity: 0.5;
+            opacity: 0.6;
             animation: fall linear infinite;
+            color: var(--accent-light);
         }
 
         @keyframes fall {
             0% {
                 transform: translateY(-10vh) rotate(0deg) translateX(0px);
-                opacity: 0.6;
+                opacity: 0.7;
             }
             25% {
                 transform: translateY(25vh) rotate(90deg) translateX(40px);
-                opacity: 0.5;
+                opacity: 0.55;
             }
             50% {
                 transform: translateY(50vh) rotate(180deg) translateX(-30px);
-                opacity: 0.35;
+                opacity: 0.4;
             }
             75% {
                 transform: translateY(75vh) rotate(270deg) translateX(20px);
-                opacity: 0.2;
+                opacity: 0.25;
             }
             100% {
                 transform: translateY(105vh) rotate(360deg) translateX(-10px);
@@ -725,7 +733,7 @@
             }
         }
 
-        /* ========== MÚSICA TOGGLE (OPCIONAL) ========== */
+        /* ========== MÚSICA TOGGLE ========== */
         .music-toggle {
             position: fixed;
             bottom: 25px;
@@ -734,7 +742,7 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: var(--glass-bg);
+            background: var(--glass-bg-blue);
             backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
             color: var(--white);
@@ -748,7 +756,7 @@
         }
 
         .music-toggle:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(11, 43, 74, 0.5);
             transform: scale(1.08);
         }
     </style>
@@ -757,14 +765,13 @@
 
     <!-- ==================== VIDEO DE FONDO ==================== -->
     <div class="video-bg-container">
-        <!-- Video de fondo (cambia el src por tu propio video) -->
+        <!-- Video de fondo (puedes reemplazar el src con tu propio video) -->
         <video id="bgVideo" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80">
-            <!-- Video gratuito de Pexels: pétalos / flores -->
+            <!-- Video gratuito de Pexels con tonos azules / flores -->
             <source src="https://videos.pexels.com/video-files/4064787/4064787-uhd_2560_1440_25fps.mp4" type="video/mp4">
-            <!-- Fallback: otro video de naturaleza romántica -->
             <source src="https://videos.pexels.com/video-files/3194277/3194277-uhd_2560_1440_25fps.mp4" type="video/mp4">
         </video>
-        <!-- Fondo de gradiente animado como fallback -->
+        <!-- Fondo de gradiente azul como respaldo -->
         <div class="video-fallback"></div>
     </div>
 
@@ -781,9 +788,9 @@
         <section class="hero-section" id="inicio">
             <div class="hero-badge">Nos Casamos</div>
             <h1 class="hero-names">
-                Ana<span class="hero-ampersand">&</span>Carlos
+                María del Carmen<span class="hero-ampersand">&</span>Jesús Eduardo
             </h1>
-            <p class="hero-date">15 · OCTUBRE · 2026</p>
+            <p class="hero-date">10 · OCTUBRE · 2026</p>
             <div class="hero-scroll-indicator" onclick="document.getElementById('countdown').scrollIntoView({behavior:'smooth'})">
                 <i class="fa-solid fa-chevron-down"></i>
             </div>
@@ -824,40 +831,40 @@
             <h2 class="section-title">Nuestros Momentos</h2>
             <p class="section-subtitle">Galería de Recuerdos</p>
             <div class="gallery-grid" id="galleryGrid">
-                <!-- Las imágenes se generan con JS para facilitar cambios -->
+                <!-- Las imágenes se generan dinámicamente -->
             </div>
         </section>
 
         <!-- LUGARES: CEREMONIA + COMIDA -->
         <section class="locations-section" id="lugares">
-            <!-- Ceremonia -->
+            <!-- Ceremonia en Arroyozarco -->
             <div class="location-card">
                 <span class="location-icon">⛪</span>
                 <span class="location-label">Ceremonia</span>
-                <h3>Iglesia de Santa María</h3>
+                <h3>Arroyozarco</h3>
                 <p class="location-address">
-                    Calle Principal #123<br>Col. Centro, Ciudad de México
+                    Iglesia de Arroyozarco<br>Municipio de Amealco, Querétaro
                 </p>
                 <p class="location-time">
-                    <i class="fa-regular fa-clock"></i> 16:00 hrs
+                    <i class="fa-regular fa-clock"></i> 1:00 pm
                 </p>
-                <a href="https://maps.google.com/?q=Iglesia+Santa+Maria+Centro+CDMX" target="_blank" rel="noopener" class="btn-maps">
+                <a href="https://maps.google.com/?q=Arroyozarco+Iglesia" target="_blank" rel="noopener" class="btn-maps">
                     <i class="fa-solid fa-location-dot"></i> Cómo llegar
                 </a>
             </div>
 
-            <!-- Recepción / Comida -->
+            <!-- Recepción / Comida en Bimbo -->
             <div class="location-card">
                 <span class="location-icon">🥂</span>
                 <span class="location-label">Recepción &amp; Comida</span>
-                <h3>Salón Jardín Las Rosas</h3>
+                <h3>Bimbo</h3>
                 <p class="location-address">
-                    Av. de las Flores #456<br>Col. Jardines, Ciudad de México
+                    Salón Bimbo<br>Carretera Principal, Querétaro
                 </p>
                 <p class="location-time">
-                    <i class="fa-regular fa-clock"></i> 18:00 hrs
+                    <i class="fa-regular fa-clock"></i> 3:00 pm
                 </p>
-                <a href="https://maps.google.com/?q=Salon+Jardin+Las+Rosas+CDMX" target="_blank" rel="noopener" class="btn-maps">
+                <a href="https://maps.google.com/?q=Bimbo+Salon+Eventos+Queretaro" target="_blank" rel="noopener" class="btn-maps">
                     <i class="fa-solid fa-location-dot"></i> Cómo llegar
                 </a>
             </div>
@@ -865,8 +872,8 @@
 
         <!-- MENSAJE FINAL + WHATSAPP -->
         <section class="footer-message">
-            <p>"El amor es la fuerza más grande del universo,<br>y hoy queremos compartir la nuestra contigo."</p>
-            <a href="https://wa.me/5215512345678?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20su%20boda%20🎉" target="_blank" rel="noopener" class="btn-whatsapp">
+            <p>"El amor es el reflejo más puro del alma,<br>y hoy queremos compartir el nuestro contigo."</p>
+            <a href="https://wa.me/5215512345678?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20boda%20de%20María%20del%20Carmen%20y%20Jesús%20Eduardo%20🎉" target="_blank" rel="noopener" class="btn-whatsapp">
                 <i class="fa-brands fa-whatsapp"></i> Confirmar Asistencia
             </a>
             <p style="margin-top:18px;font-size:0.75rem;color:rgba(255,255,255,0.5);letter-spacing:2px;">
@@ -891,7 +898,7 @@
         </button>
     </div>
 
-    <!-- ==================== BOTÓN DE MÚSICA (TOGGLE) ==================== -->
+    <!-- ==================== BOTÓN DE MÚSICA ==================== -->
     <button class="music-toggle" id="musicToggle" title="Activar/Desactivar sonido del video" aria-label="Toggle audio">
         <i class="fa-solid fa-volume-xmark" id="musicIcon"></i>
     </button>
@@ -900,8 +907,8 @@
         // ==================== CONFIGURACIÓN ====================
         // ⚠️ CAMBIA ESTOS VALORES CON TUS DATOS REALES ⚠️
         const CONFIG = {
-            // Fecha de la boda: 15 de octubre de 2026 a las 16:00 hrs
-            weddingDate: new Date('2026-10-15T16:00:00-06:00'), // UTC-6 (hora de CDMX)
+            // Fecha de la boda: 10 de octubre de 2026 a la 1:00 pm (hora local)
+            weddingDate: new Date('2026-10-10T13:00:00'),
             // Fotos de la galería (reemplaza con las URLs de tus fotos reales)
             galleryPhotos: [
                 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80',
@@ -927,12 +934,10 @@
             const secondsEl = document.getElementById('seconds');
 
             if (diff <= 0) {
-                // ¡Ya es el día de la boda!
                 daysEl.textContent = '00';
                 hoursEl.textContent = '00';
                 minutesEl.textContent = '00';
                 secondsEl.textContent = '00';
-                // Mostrar mensaje especial
                 const title = document.querySelector('.countdown-title');
                 if (title) title.innerHTML =
                     '<i class="fa-solid fa-champagne-glasses"></i> ¡Es Hoy! <i class="fa-solid fa-champagne-glasses"></i>';
@@ -950,7 +955,6 @@
             secondsEl.textContent = String(seconds).padStart(2, '0');
         }
 
-        // Iniciar countdown
         updateCountdown();
         setInterval(updateCountdown, 1000);
 
@@ -1002,7 +1006,6 @@
             lightboxNext.style.display = CONFIG.galleryPhotos.length > 1 ? 'flex' : 'none';
         }
 
-        // Eventos del lightbox
         lightboxClose.addEventListener('click', closeLightbox);
         lightboxPrev.addEventListener('click', prevPhoto);
         lightboxNext.addEventListener('click', nextPhoto);
@@ -1010,7 +1013,6 @@
             if (e.target === lightboxOverlay) closeLightbox();
         });
 
-        // Navegación con teclado
         document.addEventListener('keydown', (e) => {
             if (!lightboxOverlay.classList.contains('active')) return;
             if (e.key === 'Escape') closeLightbox();
@@ -1053,7 +1055,6 @@
             } else {
                 musicIcon.className = 'fa-solid fa-volume-high';
                 musicToggle.setAttribute('aria-label', 'Desactivar sonido del video');
-                // Intentar reproducir si estaba pausado
                 bgVideo.play().catch(() => {});
             }
         });
@@ -1061,23 +1062,23 @@
         // ==================== ACTUALIZAR LINK DE WHATSAPP ====================
         const whatsappBtn = document.querySelector('.btn-whatsapp');
         if (whatsappBtn && CONFIG.whatsappNumber) {
-            const msg = encodeURIComponent('¡Hola! Confirmo mi asistencia a su boda 🎉');
+            const msg = encodeURIComponent('¡Hola! Confirmo mi asistencia a la boda de María del Carmen y Jesús Eduardo 🎉');
             whatsappBtn.href = `https://wa.me/${CONFIG.whatsappNumber}?text=${msg}`;
         }
 
         // ==================== LOG EN CONSOLA ====================
-        console.log('%c💍 Invitación de Boda %cAna & Carlos %c💍',
-            'font-size:1.4em;color:#d4a574;',
+        console.log('%c💙 Invitación de Boda %cMaría del Carmen & Jesús Eduardo %c💙',
+            'font-size:1.4em;color:#4f8bc9;',
             'font-size:1.6em;font-family:serif;color:#fff;',
-            'font-size:1.4em;color:#d4a574;');
-        console.log('%c📅 15 de Octubre de 2026 %c| %c⏰ 16:00 hrs',
-            'color:#e8d5c4;', '', 'color:#e8d5c4;');
+            'font-size:1.4em;color:#4f8bc9;');
+        console.log('%c📅 10 de Octubre de 2026 %c| %c⏰ 1:00 pm',
+            'color:#a0c8e8;', '', 'color:#a0c8e8;');
         console.log('%c✨ Personaliza esta invitación editando el objeto CONFIG en el código',
-            'color:#c9a96e;font-style:italic;');
+            'color:#7aa9d4;font-style:italic;');
         console.log('%c📸 Reemplaza las URLs de las fotos en galleryPhotos con tus propias imágenes',
-            'color:#c9a96e;font-style:italic;');
+            'color:#7aa9d4;font-style:italic;');
         console.log('%c📍 Cambia los enlaces de Google Maps y el número de WhatsApp',
-            'color:#c9a96e;font-style:italic;');
+            'color:#7aa9d4;font-style:italic;');
     </script>
 </body>
-</html>
+</html>      
