@@ -1,413 +1,1083 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Boda - Con Base de Datos Supabase</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>Nos Casamos - Ana & Carlos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --gold: #d4a574;
+            --gold-light: #e8d5c4;
+            --cream: #faf7f2;
+            --dark: #2c2416;
+            --white: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+            --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.3);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f0f4f8;
-            color: #1e3a5f;
-            padding: 20px;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--white);
+            min-height: 100vh;
+            background: #1a1a1a;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        button {
-            background: #1e3a5f;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            margin: 5px;
-        }
-        input, select {
+
+        /* ========== VIDEO BACKGROUND ========== */
+        .video-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 10px;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
         }
-        .grid-2 {
+
+        .video-bg-container video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            filter: brightness(0.55);
+        }
+
+        /* Fallback si el video no carga */
+        .video-fallback {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg,
+                    #1a1a2e 0%, #16213e 25%, #0f3460 50%, #1a1a2e 75%, #16213e 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
+            z-index: -1;
+        }
+
+        @keyframes gradientShift {
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+            25% {
+                background-position: 100% 0%;
+            }
+            50% {
+                background-position: 100% 100%;
+            }
+            75% {
+                background-position: 0% 100%;
+            }
+        }
+
+        /* Overlay de textura */
+        .overlay-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            background:
+                radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.5) 100%),
+                radial-gradient(ellipse at 30% 20%, rgba(212, 165, 116, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(212, 165, 116, 0.06) 0%, transparent 50%);
+        }
+
+        /* ========== MAIN CONTENT WRAPPER ========== */
+        .main-content {
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            padding-bottom: 60px;
+        }
+
+        /* ========== HERO SECTION ========== */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 10px 28px;
+            border: 1.5px solid var(--gold-light);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 30px;
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.06);
+            animation: fadeInDown 1s ease forwards;
+        }
+
+        .hero-names {
+            font-family: 'Great Vibes', 'Playfair Display', serif;
+            font-size: clamp(3rem, 7vw, 6rem);
+            font-weight: 400;
+            color: var(--white);
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            line-height: 1.1;
+            margin-bottom: 8px;
+            animation: fadeInUp 1s ease 0.2s forwards;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .hero-ampersand {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            color: var(--gold);
+            display: block;
+            font-style: italic;
+            margin: 5px 0;
+        }
+
+        .hero-date {
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            color: var(--gold-light);
+            margin-top: 10px;
+            animation: fadeInUp 1s ease 0.4s forwards;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .hero-scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            color: var(--white);
+            font-size: 1.5rem;
+            opacity: 0.7;
+            cursor: pointer;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes bounce {
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(15px);
+            }
+        }
+
+        /* ========== COUNTDOWN SECTION ========== */
+        .countdown-section {
+            width: 100%;
+            max-width: 750px;
+            padding: 0 20px;
+            animation: fadeInUp 0.8s ease 0.5s forwards;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+
+        .countdown-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .countdown-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: var(--white);
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+        }
+
+        .countdown-title i {
+            color: var(--gold);
+            margin: 0 8px;
+        }
+
+        .countdown-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 20px 18px;
+            min-width: 90px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: var(--transition);
+        }
+
+        .countdown-item:hover {
+            background: rgba(255, 255, 255, 0.14);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+        }
+
+        .countdown-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1;
+            display: block;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .countdown-label {
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-top: 8px;
+            display: block;
+        }
+
+        .countdown-separator {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            font-weight: 300;
+        }
+
+        @media (max-width: 600px) {
+            .countdown-grid {
+                gap: 10px;
+            }
+            .countdown-item {
+                min-width: 65px;
+                padding: 15px 10px;
+            }
+            .countdown-number {
+                font-size: 2rem;
+            }
+            .countdown-label {
+                font-size: 0.65rem;
+                letter-spacing: 2px;
+            }
+            .countdown-separator {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* ========== GALLERY SECTION ========== */
+        .gallery-section {
+            width: 100%;
+            max-width: 900px;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            text-align: center;
+            color: var(--white);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--gold-light);
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 3/4;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--gold);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .gallery-item::after {
+            content: '\f00e';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 1.5rem;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .gallery-item:hover::after {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* ========== LIGHTBOX ========== */
+        .lightbox-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .lightbox-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 85vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        .lightbox-close:hover {
+            color: var(--gold);
+            transform: scale(1.1);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            z-index: 10;
+            backdrop-filter: blur(5px);
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.25);
+            color: var(--gold);
+        }
+        .lightbox-prev {
+            left: -70px;
+        }
+        .lightbox-next {
+            right: -70px;
+        }
+
+        @media (max-width: 768px) {
+            .lightbox-prev {
+                left: 10px;
+            }
+            .lightbox-next {
+                right: 10px;
+            }
+            .lightbox-nav {
+                width: 45px;
+                height: 45px;
+                font-size: 1.5rem;
+            }
+            .lightbox-close {
+                top: -45px;
+                right: 5px;
+                font-size: 1.5rem;
+            }
+        }
+
+        /* ========== LOCATIONS SECTION ========== */
+        .locations-section {
+            width: 100%;
+            max-width: 900px;
+            padding: 0 20px;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 25px;
         }
-        @media (max-width: 768px) {
-            .grid-2 { grid-template-columns: 1fr; }
+
+        .location-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 35px 28px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
         }
-        .config-box {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
+
+        .location-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            background: rgba(255, 255, 255, 0.16);
+        }
+
+        .location-icon {
+            font-size: 2.8rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .location-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+
+        .location-label {
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .location-address {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .location-time {
+            font-size: 0.85rem;
+            color: var(--gold-light);
+            margin-bottom: 18px;
+            font-weight: 500;
+        }
+
+        .btn-maps {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 28px;
+            background: var(--gold);
+            color: var(--dark);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-maps:hover {
+            background: #c9955e;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(212, 165, 116, 0.4);
+            color: #1a1a1a;
+        }
+
+        .btn-maps i {
+            font-size: 1rem;
+        }
+
+        @media (max-width: 700px) {
+            .locations-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        /* ========== FOOTER / MESSAGE ========== */
+        .footer-message {
+            text-align: center;
+            padding: 30px 20px;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .footer-message p {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1.2rem;
+            color: var(--gold-light);
             margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .btn-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            background: #25D366;
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.35);
+        }
+
+        .btn-whatsapp:hover {
+            background: #1fb855;
+            transform: translateY(-3px);
+            box-shadow: 0 14px 35px rgba(37, 211, 102, 0.45);
+        }
+
+        .btn-whatsapp i {
+            font-size: 1.3rem;
+        }
+
+        /* ========== PETALOS DECORATIVOS (CSS) ========== */
+        .petal {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg) translateX(0px);
+                opacity: 0.6;
+            }
+            25% {
+                transform: translateY(25vh) rotate(90deg) translateX(40px);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateY(50vh) rotate(180deg) translateX(-30px);
+                opacity: 0.35;
+            }
+            75% {
+                transform: translateY(75vh) rotate(270deg) translateX(20px);
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg) translateX(-10px);
+                opacity: 0;
+            }
+        }
+
+        /* ========== MÚSICA TOGGLE (OPCIONAL) ========== */
+        .music-toggle {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 100;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            color: var(--white);
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .music-toggle:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.08);
         }
     </style>
 </head>
 <body>
-<div id="app"></div>
 
-<script>
-    // ⚠️ CONFIGURACIÓN DE SUPABASE - CAMBIA ESTOS VALORES ⚠️
-    // Ve a tu proyecto en supabase.com -> Settings -> API
-    const SUPABASE_URL = "https://TU_PROYECTO.supabase.co";  // <-- CAMBIA ESTO
-    const SUPABASE_ANON_KEY = "TU_ANON_KEY";                // <-- CAMBIA ESTO
-    
-    // Si no tienes Supabase, puedes usar localStorage como respaldo
-    const USAR_SUPABASE = false; // Cambia a true cuando tengas las credenciales
-    
-    let supabase = null;
-    let currentUser = null;
-    
-    // Inicializar Supabase si está configurado
-    if (USAR_SUPABASE && SUPABASE_URL !== "https://TU_PROYECTO.supabase.co") {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        console.log("✅ Conectado a Supabase");
-    } else {
-        console.log("📦 Usando localStorage como base de datos");
-    }
-    
-    // Funciones de base de datos (funcionan con Supabase o localStorage)
-    async function guardarUsuario(usuario) {
-        if (supabase) {
-            const { data, error } = await supabase.from('users').insert([usuario]);
-            if (error) throw error;
-            return data;
-        } else {
-            const users = JSON.parse(localStorage.getItem('users_boda') || '[]');
-            users.push(usuario);
-            localStorage.setItem('users_boda', JSON.stringify(users));
-            return usuario;
-        }
-    }
-    
-    async function obtenerUsuario(email, password) {
-        if (supabase) {
-            const { data, error } = await supabase
-                .from('users')
-                .select('*')
-                .eq('email', email)
-                .eq('password', password);
-            if (error) throw error;
-            return data[0];
-        } else {
-            const users = JSON.parse(localStorage.getItem('users_boda') || '[]');
-            return users.find(u => u.email === email && u.password === password);
-        }
-    }
-    
-    async function actualizarRespuesta(email, campo, valor) {
-        if (supabase) {
-            const { error } = await supabase
-                .from('users')
-                .update({ respuestas: { [campo]: valor } })
-                .eq('email', email);
-            if (error) throw error;
-        } else {
-            const users = JSON.parse(localStorage.getItem('users_boda') || '[]');
-            const index = users.findIndex(u => u.email === email);
-            if (index !== -1) {
-                if (!users[index].respuestas) users[index].respuestas = {};
-                users[index].respuestas[campo] = valor;
-                localStorage.setItem('users_boda', JSON.stringify(users));
-            }
-        }
-    }
-    
-    async function registrarInvitado(email, password, nombre, apellido, ciudad) {
-        const nuevoUsuario = {
-            email, password, nombre, apellido, ciudad,
-            rol: 'invitado',
-            respuestas: {},
-            created_at: new Date().toISOString()
-        };
-        
-        try {
-            await guardarUsuario(nuevoUsuario);
-            return { success: true };
-        } catch (error) {
-            return { success: false, message: error.message };
-        }
-    }
-    
-    async function login(email, password) {
-        const user = await obtenerUsuario(email, password);
-        if (user) {
-            currentUser = user;
-            localStorage.setItem('current_user', JSON.stringify(currentUser));
-            renderApp();
-            return true;
-        }
-        return false;
-    }
-    
-    // Datos de la boda
-    const PAREJA = {
-        novio: "Carlos Martínez",
-        novia: "Ana González",
-        fechaBoda: "15 de Diciembre de 2025"
-    };
-    
-    const ITINERARIO = [
-        { hora: "10:00 AM", evento: "Bautizo", lugar: "Iglesia San José" },
-        { hora: "12:00 PM", evento: "Boda", lugar: "Iglesia San José" },
-        { hora: "2:00 PM", evento: "Comida", lugar: "Salón Jardín Real" },
-        { hora: "5:00 PM", evento: "Baile", lugar: "Salón Jardín Real" }
-    ];
-    
-    function renderApp() {
-        const root = document.getElementById('app');
-        if (!root) return;
-        
-        // Verificar sesión guardada
-        const stored = localStorage.getItem('current_user');
-        if (stored && !currentUser) {
-            currentUser = JSON.parse(stored);
-        }
-        
-        if (!currentUser) {
-            // Pantalla de login/registro
-            root.innerHTML = `
-                <div style="max-width:500px; margin:50px auto;">
-                    <div class="card">
-                        <h1>💍 Mi Boda</h1>
-                        <p>${PAREJA.novio} 💙 ${PAREJA.novia}</p>
-                        <p>📅 ${PAREJA.fechaBoda}</p>
-                        
-                        ${!USAR_SUPABASE ? `
-                            <div class="config-box">
-                                ⚠️ <strong>Modo Demostración</strong><br>
-                                Los datos se guardan en tu navegador (localStorage).
-                                Para usar base de datos real, configura Supabase.
-                            </div>
-                        ` : ''}
-                        
-                        <div id="loginPanel">
-                            <h3>Iniciar Sesión</h3>
-                            <input type="email" id="loginEmail" placeholder="Correo">
-                            <input type="password" id="loginPassword" placeholder="Contraseña">
-                            <button id="loginBtn">Ingresar</button>
-                            <button id="showRegisterBtn" style="background:#6c757d;">Registrarse</button>
-                        </div>
-                        
-                        <div id="registerPanel" style="display:none;">
-                            <h3>Registro</h3>
-                            <input type="text" id="regNombre" placeholder="Nombre">
-                            <input type="text" id="regApellido" placeholder="Apellido">
-                            <input type="text" id="regCiudad" placeholder="Ciudad de origen">
-                            <input type="email" id="regEmail" placeholder="Correo">
-                            <input type="password" id="regPassword" placeholder="Contraseña">
-                            <button id="registerBtn">Registrarse</button>
-                            <button id="showLoginBtn" style="background:#6c757d;">Volver</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('loginBtn')?.addEventListener('click', async () => {
-                const email = document.getElementById('loginEmail').value;
-                const pwd = document.getElementById('loginPassword').value;
-                const success = await login(email, pwd);
-                if (!success) alert("❌ Credenciales incorrectas");
-            });
-            
-            document.getElementById('showRegisterBtn')?.addEventListener('click', () => {
-                document.getElementById('loginPanel').style.display = 'none';
-                document.getElementById('registerPanel').style.display = 'block';
-            });
-            
-            document.getElementById('showLoginBtn')?.addEventListener('click', () => {
-                document.getElementById('registerPanel').style.display = 'none';
-                document.getElementById('loginPanel').style.display = 'block';
-            });
-            
-            document.getElementById('registerBtn')?.addEventListener('click', async () => {
-                const nombre = document.getElementById('regNombre').value;
-                const apellido = document.getElementById('regApellido').value;
-                const ciudad = document.getElementById('regCiudad').value;
-                const email = document.getElementById('regEmail').value;
-                const password = document.getElementById('regPassword').value;
-                
-                if (!nombre || !apellido || !ciudad || !email || !password) {
-                    alert("Completa todos los campos");
-                    return;
-                }
-                
-                const result = await registrarInvitado(email, password, nombre, apellido, ciudad);
-                if (result.success) {
-                    alert("✅ Registro exitoso. Ahora inicia sesión.");
-                    document.getElementById('registerPanel').style.display = 'none';
-                    document.getElementById('loginPanel').style.display = 'block';
-                } else {
-                    alert("❌ Error: " + result.message);
-                }
-            });
-            return;
-        }
-        
-        // Panel del invitado
-        const respuestas = currentUser.respuestas || {};
-        
-        root.innerHTML = `
-            <div style="max-width:1200px; margin:0 auto;">
-                <div class="card">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <h1>💙 ¡Hola ${currentUser.nombre}! 🤍</h1>
-                        <button id="logoutBtn" style="background:#dc3545;">Cerrar Sesión</button>
-                    </div>
-                    <p>📍 Nos acompañas desde: ${currentUser.ciudad}</p>
-                </div>
-                
-                <!-- Pregunta 2: Misa -->
-                <div class="card">
-                    <h3>⛪ ¿Asistirán a las ceremonias?</h3>
-                    ${respuestas.asisteMisa === undefined ? `
-                        <button id="misaSiBtn" style="background:#28a745;">✅ Sí</button>
-                        <button id="misaNoBtn" style="background:#dc3545;">❌ No</button>
-                    ` : `
-                        <p>${respuestas.asisteMisa ? '✅ Asistirán a las ceremonias' : '❌ No asistirán'}</p>
-                        ${respuestas.asisteMisa ? `
-                            <div style="background:#fff3cd; padding:12px; border-radius:10px; margin-top:10px;">
-                                🕐 Horario: Bautizo 10:00 AM | Boda 12:00 PM<br>
-                                💫 ¡La puntualidad es importante! Te esperamos con mucho cariño.
-                            </div>
-                        ` : ''}
-                    `}
-                </div>
-                
-                <!-- Pregunta 3: Salón -->
-                <div class="card">
-                    <h3>🍽️ ¿Nos acompañarán al salón?</h3>
-                    ${respuestas.asisteSalon === undefined ? `
-                        <button id="salonSiBtn" style="background:#28a745;">✅ Sí</button>
-                        <button id="salonNoBtn" style="background:#dc3545;">❌ No</button>
-                    ` : `
-                        <p>${respuestas.asisteSalon ? '✅ Asistirán al salón' : '❌ No asistirán'}</p>
-                        ${respuestas.asisteSalon && !respuestas.ubicacion ? `
-                            <button id="ubicacionBtn" style="background:#17a2b8;">📍 Asignar mi ubicación</button>
-                        ` : ''}
-                        ${respuestas.ubicacion ? `<p>🪑 Tu mesa: ${respuestas.ubicacion}</p>` : ''}
-                    `}
-                </div>
-                
-                <!-- Pregunta 4: Acompañantes -->
-                <div class="card">
-                    <h3>👥 ¿Cuántas personas los acompañan?</h3>
-                    ${respuestas.cantidad === undefined ? `
-                        <input type="number" id="cantidadInput" min="0" max="20" placeholder="Número de acompañantes">
-                        <button id="guardarCantidadBtn">Guardar</button>
-                    ` : `
-                        <p>📊 Acompañantes: ${respuestas.cantidad} personas</p>
-                        <button id="editarCantidadBtn">✏️ Editar</button>
-                    `}
-                </div>
-                
-                <!-- Información del día -->
-                <div class="card">
-                    <h2>📅 El Gran Día</h2>
-                    <div class="grid-2">
-                        <div>
-                            <p><strong>💑 Novios:</strong> ${PAREJA.novio} y ${PAREJA.novia}</p>
-                            <p><strong>📅 Fecha:</strong> ${PAREJA.fechaBoda}</p>
-                            <p><strong>👥 Tus acompañantes:</strong> ${respuestas.cantidad || 0}</p>
-                        </div>
-                        <div>
-                            <h3>⏰ Itinerario</h3>
-                            ${ITINERARIO.map(i => `
-                                <div style="margin:8px 0;">
-                                    <strong>🕐 ${i.hora}</strong> - ${i.evento}<br>
-                                    <small>📍 ${i.lugar}</small>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-                
-                <footer style="text-align:center; padding:20px;">
-                    💙 ¡Gracias por compartir este día especial! 🤍
-                </footer>
+    <!-- ==================== VIDEO DE FONDO ==================== -->
+    <div class="video-bg-container">
+        <!-- Video de fondo (cambia el src por tu propio video) -->
+        <video id="bgVideo" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80">
+            <!-- Video gratuito de Pexels: pétalos / flores -->
+            <source src="https://videos.pexels.com/video-files/4064787/4064787-uhd_2560_1440_25fps.mp4" type="video/mp4">
+            <!-- Fallback: otro video de naturaleza romántica -->
+            <source src="https://videos.pexels.com/video-files/3194277/3194277-uhd_2560_1440_25fps.mp4" type="video/mp4">
+        </video>
+        <!-- Fondo de gradiente animado como fallback -->
+        <div class="video-fallback"></div>
+    </div>
+
+    <!-- Overlay de textura -->
+    <div class="overlay-texture"></div>
+
+    <!-- ==================== PÉTALOS DECORATIVOS ==================== -->
+    <div id="petalsContainer"></div>
+
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+    <div class="main-content">
+
+        <!-- HERO -->
+        <section class="hero-section" id="inicio">
+            <div class="hero-badge">Nos Casamos</div>
+            <h1 class="hero-names">
+                Ana<span class="hero-ampersand">&</span>Carlos
+            </h1>
+            <p class="hero-date">15 · OCTUBRE · 2026</p>
+            <div class="hero-scroll-indicator" onclick="document.getElementById('countdown').scrollIntoView({behavior:'smooth'})">
+                <i class="fa-solid fa-chevron-down"></i>
             </div>
-        `;
-        
-        // Event listeners
-        document.getElementById('logoutBtn')?.addEventListener('click', () => {
-            currentUser = null;
-            localStorage.removeItem('current_user');
-            renderApp();
+        </section>
+
+        <!-- COUNTDOWN -->
+        <section class="countdown-section" id="countdown">
+            <div class="countdown-card">
+                <h2 class="countdown-title">
+                    <i class="fa-regular fa-heart"></i> Cuenta Regresiva <i class="fa-regular fa-heart"></i>
+                </h2>
+                <div class="countdown-grid" id="countdownGrid">
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="days">00</span>
+                        <span class="countdown-label">Días</span>
+                    </div>
+                    <span class="countdown-separator">:</span>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="hours">00</span>
+                        <span class="countdown-label">Horas</span>
+                    </div>
+                    <span class="countdown-separator">:</span>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="minutes">00</span>
+                        <span class="countdown-label">Minutos</span>
+                    </div>
+                    <span class="countdown-separator">:</span>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="seconds">00</span>
+                        <span class="countdown-label">Segundos</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GALERÍA DE FOTOS -->
+        <section class="gallery-section" id="galeria">
+            <h2 class="section-title">Nuestros Momentos</h2>
+            <p class="section-subtitle">Galería de Recuerdos</p>
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Las imágenes se generan con JS para facilitar cambios -->
+            </div>
+        </section>
+
+        <!-- LUGARES: CEREMONIA + COMIDA -->
+        <section class="locations-section" id="lugares">
+            <!-- Ceremonia -->
+            <div class="location-card">
+                <span class="location-icon">⛪</span>
+                <span class="location-label">Ceremonia</span>
+                <h3>Iglesia de Santa María</h3>
+                <p class="location-address">
+                    Calle Principal #123<br>Col. Centro, Ciudad de México
+                </p>
+                <p class="location-time">
+                    <i class="fa-regular fa-clock"></i> 16:00 hrs
+                </p>
+                <a href="https://maps.google.com/?q=Iglesia+Santa+Maria+Centro+CDMX" target="_blank" rel="noopener" class="btn-maps">
+                    <i class="fa-solid fa-location-dot"></i> Cómo llegar
+                </a>
+            </div>
+
+            <!-- Recepción / Comida -->
+            <div class="location-card">
+                <span class="location-icon">🥂</span>
+                <span class="location-label">Recepción &amp; Comida</span>
+                <h3>Salón Jardín Las Rosas</h3>
+                <p class="location-address">
+                    Av. de las Flores #456<br>Col. Jardines, Ciudad de México
+                </p>
+                <p class="location-time">
+                    <i class="fa-regular fa-clock"></i> 18:00 hrs
+                </p>
+                <a href="https://maps.google.com/?q=Salon+Jardin+Las+Rosas+CDMX" target="_blank" rel="noopener" class="btn-maps">
+                    <i class="fa-solid fa-location-dot"></i> Cómo llegar
+                </a>
+            </div>
+        </section>
+
+        <!-- MENSAJE FINAL + WHATSAPP -->
+        <section class="footer-message">
+            <p>"El amor es la fuerza más grande del universo,<br>y hoy queremos compartir la nuestra contigo."</p>
+            <a href="https://wa.me/5215512345678?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20su%20boda%20🎉" target="_blank" rel="noopener" class="btn-whatsapp">
+                <i class="fa-brands fa-whatsapp"></i> Confirmar Asistencia
+            </a>
+            <p style="margin-top:18px;font-size:0.75rem;color:rgba(255,255,255,0.5);letter-spacing:2px;">
+                ¡TE ESPERAMOS!
+            </p>
+        </section>
+    </div>
+
+    <!-- ==================== LIGHTBOX PARA GALERÍA ==================== -->
+    <div class="lightbox-overlay" id="lightboxOverlay">
+        <button class="lightbox-close" id="lightboxClose" title="Cerrar">
+            <i class="fa-solid fa-times"></i>
+        </button>
+        <button class="lightbox-nav lightbox-prev" id="lightboxPrev" title="Anterior">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <div class="lightbox-content" id="lightboxContent">
+            <img src="" alt="Foto de la boda" id="lightboxImg">
+        </div>
+        <button class="lightbox-nav lightbox-next" id="lightboxNext" title="Siguiente">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- ==================== BOTÓN DE MÚSICA (TOGGLE) ==================== -->
+    <button class="music-toggle" id="musicToggle" title="Activar/Desactivar sonido del video" aria-label="Toggle audio">
+        <i class="fa-solid fa-volume-xmark" id="musicIcon"></i>
+    </button>
+
+    <script>
+        // ==================== CONFIGURACIÓN ====================
+        // ⚠️ CAMBIA ESTOS VALORES CON TUS DATOS REALES ⚠️
+        const CONFIG = {
+            // Fecha de la boda: 15 de octubre de 2026 a las 16:00 hrs
+            weddingDate: new Date('2026-10-15T16:00:00-06:00'), // UTC-6 (hora de CDMX)
+            // Fotos de la galería (reemplaza con las URLs de tus fotos reales)
+            galleryPhotos: [
+                'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80',
+                'https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?w=600&q=80',
+                'https://images.unsplash.com/photo-1529636798458-92182e662485?w=600&q=80',
+                'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&q=80',
+                'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&q=80',
+                'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&q=80',
+            ],
+            // Número de WhatsApp para confirmación (cambia por el tuyo)
+            whatsappNumber: '5215512345678',
+        };
+
+        // ==================== COUNTDOWN TIMER ====================
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const target = CONFIG.weddingDate.getTime();
+            const diff = target - now;
+
+            const daysEl = document.getElementById('days');
+            const hoursEl = document.getElementById('hours');
+            const minutesEl = document.getElementById('minutes');
+            const secondsEl = document.getElementById('seconds');
+
+            if (diff <= 0) {
+                // ¡Ya es el día de la boda!
+                daysEl.textContent = '00';
+                hoursEl.textContent = '00';
+                minutesEl.textContent = '00';
+                secondsEl.textContent = '00';
+                // Mostrar mensaje especial
+                const title = document.querySelector('.countdown-title');
+                if (title) title.innerHTML =
+                    '<i class="fa-solid fa-champagne-glasses"></i> ¡Es Hoy! <i class="fa-solid fa-champagne-glasses"></i>';
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            daysEl.textContent = String(days).padStart(2, '0');
+            hoursEl.textContent = String(hours).padStart(2, '0');
+            minutesEl.textContent = String(minutes).padStart(2, '0');
+            secondsEl.textContent = String(seconds).padStart(2, '0');
+        }
+
+        // Iniciar countdown
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // ==================== GALERÍA DE FOTOS ====================
+        const galleryGrid = document.getElementById('galleryGrid');
+        const lightboxOverlay = document.getElementById('lightboxOverlay');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxClose = document.getElementById('lightboxClose');
+        const lightboxPrev = document.getElementById('lightboxPrev');
+        const lightboxNext = document.getElementById('lightboxNext');
+        let currentPhotoIndex = 0;
+
+        // Generar grid de fotos
+        CONFIG.galleryPhotos.forEach((photoUrl, index) => {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            item.innerHTML = `<img src="${photoUrl}" alt="Foto de boda ${index + 1}" loading="lazy">`;
+            item.addEventListener('click', () => openLightbox(index));
+            galleryGrid.appendChild(item);
         });
-        
-        if (respuestas.asisteMisa === undefined) {
-            document.getElementById('misaSiBtn')?.addEventListener('click', () => {
-                actualizarRespuesta(currentUser.email, 'asisteMisa', true);
-                currentUser.respuestas.asisteMisa = true;
-                renderApp();
-            });
-            document.getElementById('misaNoBtn')?.addEventListener('click', () => {
-                actualizarRespuesta(currentUser.email, 'asisteMisa', false);
-                currentUser.respuestas.asisteMisa = false;
-                renderApp();
-            });
+
+        function openLightbox(index) {
+            currentPhotoIndex = index;
+            lightboxImg.src = CONFIG.galleryPhotos[index];
+            lightboxOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            updateNavButtons();
         }
-        
-        if (respuestas.asisteSalon === undefined) {
-            document.getElementById('salonSiBtn')?.addEventListener('click', () => {
-                actualizarRespuesta(currentUser.email, 'asisteSalon', true);
-                currentUser.respuestas.asisteSalon = true;
-                renderApp();
-            });
-            document.getElementById('salonNoBtn')?.addEventListener('click', () => {
-                actualizarRespuesta(currentUser.email, 'asisteSalon', false);
-                currentUser.respuestas.asisteSalon = false;
-                renderApp();
-            });
+
+        function closeLightbox() {
+            lightboxOverlay.classList.remove('active');
+            document.body.style.overflow = '';
         }
-        
-        document.getElementById('ubicacionBtn')?.addEventListener('click', () => {
-            const mesas = ["Mesa 1 - Familia", "Mesa 2 - Amigos", "Mesa 3 - Compañeros", "Mesa 4 - VIP"];
-            const seleccion = prompt("Elige tu mesa:\n" + mesas.join("\n"), mesas[0]);
-            if (seleccion && mesas.includes(seleccion)) {
-                actualizarRespuesta(currentUser.email, 'ubicacion', seleccion);
-                currentUser.respuestas.ubicacion = seleccion;
-                renderApp();
-                alert(`✅ Ubicación asignada: ${seleccion}`);
+
+        function prevPhoto() {
+            currentPhotoIndex = (currentPhotoIndex - 1 + CONFIG.galleryPhotos.length) % CONFIG.galleryPhotos.length;
+            lightboxImg.src = CONFIG.galleryPhotos[currentPhotoIndex];
+            updateNavButtons();
+        }
+
+        function nextPhoto() {
+            currentPhotoIndex = (currentPhotoIndex + 1) % CONFIG.galleryPhotos.length;
+            lightboxImg.src = CONFIG.galleryPhotos[currentPhotoIndex];
+            updateNavButtons();
+        }
+
+        function updateNavButtons() {
+            lightboxPrev.style.display = CONFIG.galleryPhotos.length > 1 ? 'flex' : 'none';
+            lightboxNext.style.display = CONFIG.galleryPhotos.length > 1 ? 'flex' : 'none';
+        }
+
+        // Eventos del lightbox
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightboxPrev.addEventListener('click', prevPhoto);
+        lightboxNext.addEventListener('click', nextPhoto);
+        lightboxOverlay.addEventListener('click', (e) => {
+            if (e.target === lightboxOverlay) closeLightbox();
+        });
+
+        // Navegación con teclado
+        document.addEventListener('keydown', (e) => {
+            if (!lightboxOverlay.classList.contains('active')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') prevPhoto();
+            if (e.key === 'ArrowRight') nextPhoto();
+        });
+
+        // ==================== PÉTALOS DECORATIVOS ====================
+        function createPetals() {
+            const container = document.getElementById('petalsContainer');
+            const petalEmojis = ['🌸', '💮', '🌷', '🪷', '🌺', '💐', '🌼'];
+            const numPetals = 18;
+
+            for (let i = 0; i < numPetals; i++) {
+                const petal = document.createElement('span');
+                petal.className = 'petal';
+                petal.textContent = petalEmojis[Math.floor(Math.random() * petalEmojis.length)];
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.fontSize = (Math.random() * 20 + 12) + 'px';
+                petal.style.animationDuration = (Math.random() * 12 + 10) + 's';
+                petal.style.animationDelay = (Math.random() * 15) + 's';
+                petal.style.opacity = Math.random() * 0.45 + 0.15;
+                container.appendChild(petal);
+            }
+        }
+        createPetals();
+
+        // ==================== TOGGLE SONIDO DEL VIDEO ====================
+        const bgVideo = document.getElementById('bgVideo');
+        const musicToggle = document.getElementById('musicToggle');
+        const musicIcon = document.getElementById('musicIcon');
+        let videoMuted = true;
+
+        musicToggle.addEventListener('click', () => {
+            videoMuted = !videoMuted;
+            bgVideo.muted = videoMuted;
+            if (videoMuted) {
+                musicIcon.className = 'fa-solid fa-volume-xmark';
+                musicToggle.setAttribute('aria-label', 'Activar sonido del video');
+            } else {
+                musicIcon.className = 'fa-solid fa-volume-high';
+                musicToggle.setAttribute('aria-label', 'Desactivar sonido del video');
+                // Intentar reproducir si estaba pausado
+                bgVideo.play().catch(() => {});
             }
         });
-        
-        if (respuestas.cantidad === undefined) {
-            document.getElementById('guardarCantidadBtn')?.addEventListener('click', () => {
-                const cantidad = parseInt(document.getElementById('cantidadInput').value);
-                if (!isNaN(cantidad) && cantidad >= 0) {
-                    actualizarRespuesta(currentUser.email, 'cantidad', cantidad);
-                    currentUser.respuestas.cantidad = cantidad;
-                    renderApp();
-                } else {
-                    alert("Ingresa un número válido");
-                }
-            });
-        } else {
-            document.getElementById('editarCantidadBtn')?.addEventListener('click', () => {
-                const nueva = prompt("Número de acompañantes:", respuestas.cantidad);
-                if (nueva !== null) {
-                    const cantidad = parseInt(nueva);
-                    if (!isNaN(cantidad) && cantidad >= 0) {
-                        actualizarRespuesta(currentUser.email, 'cantidad', cantidad);
-                        currentUser.respuestas.cantidad = cantidad;
-                        renderApp();
-                    }
-                }
-            });
+
+        // ==================== ACTUALIZAR LINK DE WHATSAPP ====================
+        const whatsappBtn = document.querySelector('.btn-whatsapp');
+        if (whatsappBtn && CONFIG.whatsappNumber) {
+            const msg = encodeURIComponent('¡Hola! Confirmo mi asistencia a su boda 🎉');
+            whatsappBtn.href = `https://wa.me/${CONFIG.whatsappNumber}?text=${msg}`;
         }
-    }
-    
-    renderApp();
-</script>
+
+        // ==================== LOG EN CONSOLA ====================
+        console.log('%c💍 Invitación de Boda %cAna & Carlos %c💍',
+            'font-size:1.4em;color:#d4a574;',
+            'font-size:1.6em;font-family:serif;color:#fff;',
+            'font-size:1.4em;color:#d4a574;');
+        console.log('%c📅 15 de Octubre de 2026 %c| %c⏰ 16:00 hrs',
+            'color:#e8d5c4;', '', 'color:#e8d5c4;');
+        console.log('%c✨ Personaliza esta invitación editando el objeto CONFIG en el código',
+            'color:#c9a96e;font-style:italic;');
+        console.log('%c📸 Reemplaza las URLs de las fotos en galleryPhotos con tus propias imágenes',
+            'color:#c9a96e;font-style:italic;');
+        console.log('%c📍 Cambia los enlaces de Google Maps y el número de WhatsApp',
+            'color:#c9a96e;font-style:italic;');
+    </script>
 </body>
 </html>
