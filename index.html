@@ -216,7 +216,6 @@
                 transform: rotateY(360deg) rotateX(-25deg) rotateZ(0deg);
             }
         }
-        /* Brillo central de los anillos */
         .rings-sparkle {
             position: absolute;
             width: 12px;
@@ -242,7 +241,6 @@
                 opacity: 1;
             }
         }
-        /* Partículas brillantes alrededor de los anillos */
         .ring-particle {
             position: absolute;
             width: 4px;
@@ -681,160 +679,6 @@
             }
         }
 
-        /* ========== GALLERY ========== */
-        .gallery-section {
-            width: 100%;
-            max-width: 900px;
-            padding: 0 20px;
-        }
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            text-align: center;
-            color: var(--white);
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-        .section-subtitle {
-            text-align: center;
-            color: var(--accent-light);
-            font-size: 0.9rem;
-            letter-spacing: 3px;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-        }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-        }
-        .gallery-item {
-            position: relative;
-            border-radius: var(--radius-sm);
-            overflow: hidden;
-            cursor: pointer;
-            aspect-ratio: 3/4;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            border: 2px solid rgba(255, 255, 255, 0.25);
-        }
-        .gallery-item:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--accent);
-        }
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s ease;
-        }
-        .gallery-item:hover img {
-            transform: scale(1.08);
-        }
-        .gallery-item::after {
-            content: '\f00e';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            font-size: 1.5rem;
-            color: white;
-            background: rgba(0, 0, 0, 0.5);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.3s ease;
-            pointer-events: none;
-            z-index: 2;
-        }
-        .gallery-item:hover::after {
-            transform: translate(-50%, -50%) scale(1);
-        }
-        @media (max-width: 768px) {
-            .gallery-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (max-width: 480px) {
-            .gallery-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        /* LIGHTBOX */
-        .lightbox-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.92);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease;
-        }
-        .lightbox-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-        .lightbox-content {
-            position: relative;
-            max-width: 90vw;
-            max-height: 85vh;
-        }
-        .lightbox-content img {
-            max-width: 100%;
-            max-height: 85vh;
-            border-radius: 12px;
-        }
-        .lightbox-close {
-            position: absolute;
-            top: -50px;
-            right: 0;
-            font-size: 2rem;
-            color: white;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-        .lightbox-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 2rem;
-            color: white;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        .lightbox-prev {
-            left: -70px;
-        }
-        .lightbox-next {
-            right: -70px;
-        }
-        @media (max-width: 768px) {
-            .lightbox-prev {
-                left: 10px;
-            }
-            .lightbox-next {
-                right: 10px;
-            }
-        }
-
         /* LOCATIONS */
         .locations-section {
             width: 100%;
@@ -1177,15 +1021,16 @@
     <div id="petalsContainer"></div>
     <div id="sparklesContainer"></div>
 
+    <!-- Reproductor de YouTube oculto para la canción -->
+    <div id="youtubePlayer" style="position:fixed; top:-9999px; left:-9999px;"></div>
+
     <div class="main-content">
         <!-- HERO CON ANILLOS ANIMADOS -->
         <section class="hero-section">
-            <!-- Anillos entrelazados con brillo -->
             <div class="rings-container" id="ringsContainer">
                 <div class="ring ring-gold"></div>
                 <div class="ring ring-silver"></div>
                 <div class="rings-sparkle"></div>
-                <!-- Partículas orbitantes generadas por JS -->
             </div>
 
             <div class="hero-badge">Boda & Bautizo</div>
@@ -1282,13 +1127,6 @@
             </div>
         </section>
 
-        <!-- GALERÍA -->
-        <section class="gallery-section" id="gallery">
-            <h2 class="section-title">Nuestra Historia</h2>
-            <p class="section-subtitle">Momentos que atesoramos</p>
-            <div class="gallery-grid" id="galleryGrid"></div>
-        </section>
-
         <!-- UBICACIONES -->
         <section class="locations-section">
             <div class="location-card">
@@ -1359,15 +1197,7 @@
         </div>
     </div>
 
-    <!-- LIGHTBOX -->
-    <div class="lightbox-overlay" id="lightboxOverlay">
-        <button class="lightbox-close" id="lightboxClose"><i class="fa-solid fa-times"></i></button>
-        <button class="lightbox-nav lightbox-prev" id="lightboxPrev"><i class="fa-solid fa-chevron-left"></i></button>
-        <div class="lightbox-content"><img src="" id="lightboxImg" alt="Galería"></div>
-        <button class="lightbox-nav lightbox-next" id="lightboxNext"><i class="fa-solid fa-chevron-right"></i></button>
-    </div>
-
-    <button class="music-toggle" id="musicToggle" aria-label="Toggle music">
+    <button class="music-toggle" id="musicToggle" aria-label="Activar música">
         <i class="fa-solid fa-volume-xmark" id="musicIcon"></i>
     </button>
 
@@ -1375,14 +1205,7 @@
         // ==================== CONFIGURACIÓN ====================
         const CONFIG = {
             weddingDate: new Date('2026-10-10T13:00:00'),
-            galleryPhotos: [
-                'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=80',
-                'https://images.unsplash.com/photo-1542037104857-ffbb0b9155fb?w=600&q=80',
-                'https://images.unsplash.com/photo-1529636798458-92182e662485?w=600&q=80',
-                'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=600&q=80',
-                'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&q=80',
-                'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&q=80',
-            ],
+            youtubeVideoId: 'DF3XjEhJ40Y', // ID del video de YouTube
             whatsappNovia: '525647578035',
             whatsappNovio: '525667996334',
         };
@@ -1433,41 +1256,6 @@
         updateCountdown();
         setInterval(updateCountdown, 1000);
 
-        // ==================== GALERÍA ====================
-        const galleryGrid = document.getElementById('galleryGrid');
-        const lightboxOverlay = document.getElementById('lightboxOverlay');
-        const lightboxImg = document.getElementById('lightboxImg');
-        let currentIndex = 0;
-        CONFIG.galleryPhotos.forEach((url, i) => {
-            const div = document.createElement('div');
-            div.className = 'gallery-item';
-            div.innerHTML = `<img src="${url}" alt="Foto ${i+1}" loading="lazy">`;
-            div.onclick = () => {
-                currentIndex = i;
-                lightboxImg.src = url;
-                lightboxOverlay.classList.add('active');
-            };
-            galleryGrid.appendChild(div);
-        });
-        document.getElementById('lightboxClose').onclick = () => lightboxOverlay.classList.remove('active');
-        document.getElementById('lightboxPrev').onclick = () => {
-            currentIndex = (currentIndex - 1 + CONFIG.galleryPhotos.length) % CONFIG.galleryPhotos.length;
-            lightboxImg.src = CONFIG.galleryPhotos[currentIndex];
-        };
-        document.getElementById('lightboxNext').onclick = () => {
-            currentIndex = (currentIndex + 1) % CONFIG.galleryPhotos.length;
-            lightboxImg.src = CONFIG.galleryPhotos[currentIndex];
-        };
-        lightboxOverlay.addEventListener('click', (e) => {
-            if (e.target === lightboxOverlay) lightboxOverlay.classList.remove('active');
-        });
-        document.addEventListener('keydown', (e) => {
-            if (!lightboxOverlay.classList.contains('active')) return;
-            if (e.key === 'ArrowLeft') document.getElementById('lightboxPrev').click();
-            if (e.key === 'ArrowRight') document.getElementById('lightboxNext').click();
-            if (e.key === 'Escape') lightboxOverlay.classList.remove('active');
-        });
-
         // ==================== PÉTALOS DE ROSAS AZULES ====================
         function createBluePetals() {
             const container = document.getElementById('petalsContainer');
@@ -1486,7 +1274,8 @@
                 const petalShape = document.createElement('div');
                 petalShape.className = 'petal-shape';
                 const shade = blueShades[Math.floor(Math.random() * blueShades.length)];
-                petalShape.style.background = `radial-gradient(ellipse at 30% 20%, ${shade} 0%, rgba(30,74,107,0.7) 100%)`;
+                petalShape.style.background =
+                    `radial-gradient(ellipse at 30% 20%, ${shade} 0%, rgba(30,74,107,0.7) 100%)`;
                 petalShape.style.width = (16 + Math.random() * 22) + 'px';
                 petalShape.style.height = (20 + Math.random() * 28) + 'px';
                 petalShape.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
@@ -1497,7 +1286,7 @@
         }
         createBluePetals();
 
-        // ==================== SPARKLES FLOTANTES (SUBIENDO) ====================
+        // ==================== SPARKLES FLOTANTES ====================
         function createSparkles() {
             const container = document.getElementById('sparklesContainer');
             const sparkleCount = 20;
@@ -1514,16 +1303,80 @@
         }
         createSparkles();
 
-        // ==================== TOGGLE SONIDO ====================
-        const bgVideo = document.getElementById('bgVideo');
-        const musicIcon = document.getElementById('musicIcon');
-        let muted = true;
-        document.getElementById('musicToggle').onclick = () => {
-            muted = !muted;
-            bgVideo.muted = muted;
-            musicIcon.className = muted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
-            if (!muted) bgVideo.play().catch(() => {});
-        };
+        // ==================== REPRODUCTOR DE YOUTUBE (MÚSICA DE FONDO) ====================
+        let ytPlayer = null;
+        let isMusicMuted = true; // inicia silenciado
+
+        // Cargar la API de YouTube IFrame
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        function onYouTubeIframeAPIReady() {
+            ytPlayer = new YT.Player('youtubePlayer', {
+                videoId: CONFIG.youtubeVideoId,
+                playerVars: {
+                    autoplay: 1,
+                    controls: 0,
+                    showinfo: 0,
+                    rel: 0,
+                    loop: 1,
+                    playlist: CONFIG.youtubeVideoId,
+                    modestbranding: 1,
+                    iv_load_policy: 3,
+                    fs: 0,
+                    disablekb: 1,
+                    start: 0,
+                },
+                events: {
+                    onReady: onPlayerReady,
+                    onStateChange: onPlayerStateChange,
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // Iniciar reproducción silenciada
+            event.target.setVolume(0);
+            event.target.playVideo();
+            updateMusicIcon();
+        }
+
+        function onPlayerStateChange(event) {
+            // Si termina, el loop con playlist ya lo maneja, pero aseguramos reproducción continua
+            if (event.data === YT.PlayerState.ENDED && ytPlayer) {
+                ytPlayer.playVideo();
+            }
+        }
+
+        // Control de música con el botón toggle
+        const musicToggleBtn = document.getElementById('musicToggle');
+        const musicIconElement = document.getElementById('musicIcon');
+
+        musicToggleBtn.addEventListener('click', () => {
+            if (!ytPlayer || typeof ytPlayer.setVolume !== 'function') {
+                // Si el reproductor aún no está listo, simplemente alternamos el ícono (se actualizará cuando esté listo)
+                isMusicMuted = !isMusicMuted;
+                updateMusicIcon();
+                return;
+            }
+            isMusicMuted = !isMusicMuted;
+            if (isMusicMuted) {
+                ytPlayer.setVolume(0);
+            } else {
+                ytPlayer.setVolume(70); // volumen agradable
+            }
+            updateMusicIcon();
+        });
+
+        function updateMusicIcon() {
+            if (isMusicMuted) {
+                musicIconElement.className = 'fa-solid fa-volume-xmark';
+            } else {
+                musicIconElement.className = 'fa-solid fa-volume-high';
+            }
+        }
 
         // ==================== LÓGICA DE CONFIRMACIÓN ====================
         function prepararMensaje() {
@@ -1589,10 +1442,10 @@
 
         // ==================== LOG EN CONSOLA ====================
         console.log('%c💙 Invitación de Boda y Bautizo %cMaría del Carmen & Jesús Eduardo %c💙',
-            'font-size:1.4em;color:#4f8bc9;', 'font-size:1.6em;font-family:serif;color:#fff;', 'font-size:1.4em;color:#4f8bc9;'
-            );
+            'font-size:1.4em;color:#4f8bc9;', 'font-size:1.6em;font-family:serif;color:#fff;',
+            'font-size:1.4em;color:#4f8bc9;');
         console.log('%c📅 10 de Octubre de 2026 %c| %c⏰ 1:00 pm', 'color:#a0c8e8;', '', 'color:#a0c8e8;');
-        console.log('%c✨ Personaliza los números de WhatsApp en el objeto CONFIG', 'color:#7aa9d4;font-style:italic;');
+        console.log('%c🎵 Canción de fondo lista. Toca el ícono de audio para escucharla.', 'color:#7aa9d4;');
     </script>
 </body>
 </html>
