@@ -951,7 +951,7 @@
             }
         }
 
-        /* MUSIC TOGGLE */
+        /* ========== MUSIC TOGGLE ========== */
         .music-toggle {
             position: fixed;
             bottom: 25px;
@@ -969,18 +969,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
-
-        /* YouTube iframe oculto */
-        #youtubePlayer {
-            position: fixed;
-            bottom: 0;
-            right: 0;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
-            z-index: -999;
+        .music-toggle:hover {
+            background: rgba(11, 43, 74, 0.6);
+            transform: scale(1.08);
+        }
+        .music-toggle.playing {
+            border-color: var(--accent);
+            box-shadow: 0 0 25px rgba(79, 139, 201, 0.5);
         }
 
         @media (max-width: 480px) {
@@ -1022,6 +1020,11 @@
     </style>
 </head>
 <body>
+    <!-- YouTube Player oculto -->
+    <div id="youtubePlayerContainer" style="position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;z-index:-999;">
+        <div id="youtubePlayer"></div>
+    </div>
+
     <div class="video-bg-container">
         <video id="bgVideo" autoplay muted loop playsinline>
             <source src="https://videos.pexels.com/video-files/4064787/4064787-uhd_2560_1440_25fps.mp4" type="video/mp4">
@@ -1034,9 +1037,6 @@
     <!-- Contenedor de pétalos y sparkles -->
     <div id="petalsContainer"></div>
     <div id="sparklesContainer"></div>
-
-    <!-- YouTube iframe para la canción de fondo -->
-    <iframe id="youtubePlayer" src="https://www.youtube.com/embed/DF3XjEhJ40Y?autoplay=1&controls=0&loop=1&playlist=DF3XjEhJ40Y&enablejsapi=1&mute=0" allow="autoplay" allowfullscreen></iframe>
 
     <div class="main-content">
         <!-- HERO CON ANILLOS ANIMADOS -->
@@ -1213,17 +1213,174 @@
         </div>
     </div>
 
-    <button class="music-toggle" id="musicToggle" aria-label="Toggle music">
-        <i class="fa-solid fa-volume-high" id="musicIcon"></i>
+    <!-- Botón de música -->
+    <button class="music-toggle playing" id="musicToggle" aria-label="Controlar música" title="Activar/Desactivar música">
+        <i class="fa-solid fa-music" id="musicIcon"></i>
     </button>
+
+    <!-- Script de la API de YouTube -->
+    <script src="https://www.youtube.com/iframe_api"></script>
 
     <script>
         // ==================== CONFIGURACIÓN ====================
         const CONFIG = {
             weddingDate: new Date('2026-10-10T13:00:00'),
+            youtubeVideoId: 'WikAeXGsmHY', // ID del video de YouTube
             whatsappNovia: '525647578035',
             whatsappNovio: '525667996334',
         };
+
+        // ==================== YOUTUBE PLAYER ====================
+        let ytPlayer = null;
+        let ytReady = false;
+        let isMusicPlaying = true; // Inicia reproduciendo
+
+        // Esta función es llamada automáticamente por la API de YouTube cuando está lista
+        function onYouTubeIframeAPIReady() {
+            ytPlayer = new YT.Player('youtubePlayer', {
+                videoId: CONFIG.youtubeVideoId,
+                playerVars: {
+                    autoplay: 1,
+                    mute: 0, // Inicia sin mute para que se escuche
+                    controls: 0,
+                    loop: 1,
+                    playlist: CONFIG.youtubeVideoId, // Necesario para loop
+                    enablejsapi: 1,
+                    modestbranding: 1,
+                    rel: 0,
+                    showinfo: 0,
+                    iv_load_policy: 3,
+                    fs: 0,
+                },
+                events: {
+                    onReady: function(event) {
+                        ytReady = true;
+                        event.target.playVideo();
+                        event.target.unMute();
+                        updateMusicIcon(true);
+                        console.log('🎵 Música iniciada automáticamente');
+                    },
+                    onStateChange: function(event) {
+                        // Si el video termina, se reinicia automáticamente gracias a loop
+                        if (event.data === YT.PlayerState.ENDED) {
+                            ytPlayer.playVideo();
+                        }
+                    },
+                    onError: function(event) {
+                        console.warn('⚠️ Error al cargar la música. Intentando de nuevo...');
+                        // Reintentar después de 3 segundos
+                        setTimeout(() => {
+                            if (ytPlayer && ytPlayer.loadVideoById) {
+                                ytPlayer.loadVideoById(CONFIG.youtubeVideoId);
+                            }
+                        }, 3000);
+                    }
+                }
+            });
+        }
+
+        // Fallback por si la API tarda o falla: crear iframe manualmente
+        function createFallbackPlayer() {
+            if (ytPlayer) return;
+            const container = document.getElementById('youtubePlayerContainer');
+            const iframe = document.createElement('iframe');
+            iframe.id = 'youtubePlayerFallback';
+            iframe.width = '1';
+            iframe.height = '1';
+            iframe.src = `https://www.youtube.com/embed/${CONFIG.youtubeVideoId}?autoplay=1&mute=0&loop=1&playlist=${CONFIG.youtubeVideoId}&enablejsapi=1&controls=0&modestbranding=1&rel=0`;
+            iframe.allow = 'autoplay; encrypted-media';
+            iframe.style.border = 'none';
+            container.appendChild(iframe);
+            console.log('🎵 Fallback: reproductor de música cargado por iframe');
+            ytReady = true;
+            updateMusicIcon(true);
+        }
+
+        // Si después de 4 segundos la API no ha cargado, usar fallback
+        setTimeout(() => {
+            if (!ytReady && !ytPlayer) {
+                createFallbackPlayer();
+            }
+        }, 4000);
+
+        // ==================== CONTROL DE MÚSICA ====================
+        function updateMusicIcon(playing) {
+            const icon = document.getElementById('musicIcon');
+            const toggle = document.getElementById('musicToggle');
+            if (playing) {
+                icon.className = 'fa-solid fa-music';
+                toggle.classList.add('playing');
+            } else {
+                icon.className = 'fa-solid fa-music';
+                toggle.classList.remove('playing');
+                icon.style.opacity = '0.5';
+            }
+            if (playing && icon.style.opacity === '0.5') {
+                icon.style.opacity = '1';
+            }
+        }
+
+        function toggleMusic() {
+            if (!ytReady) {
+                // Si no está listo, intentar crear fallback
+                if (!ytPlayer) {
+                    createFallbackPlayer();
+                    isMusicPlaying = true;
+                    updateMusicIcon(true);
+                    return;
+                }
+                return;
+            }
+
+            if (isMusicPlaying) {
+                // Pausar/mutear
+                if (ytPlayer && ytPlayer.mute) {
+                    ytPlayer.mute();
+                }
+                // También intentar con el iframe fallback
+                const fallbackIframe = document.getElementById('youtubePlayerFallback');
+                if (fallbackIframe) {
+                    fallbackIframe.contentWindow.postMessage(
+                        '{"event":"command","func":"mute","args":""}', '*'
+                    );
+                }
+                isMusicPlaying = false;
+                updateMusicIcon(false);
+                document.getElementById('musicIcon').style.opacity = '0.5';
+            } else {
+                // Reanudar/desmutear
+                if (ytPlayer && ytPlayer.unMute) {
+                    ytPlayer.unMute();
+                    ytPlayer.playVideo();
+                }
+                const fallbackIframe = document.getElementById('youtubePlayerFallback');
+                if (fallbackIframe) {
+                    fallbackIframe.contentWindow.postMessage(
+                        '{"event":"command","func":"unMute","args":""}', '*'
+                    );
+                    fallbackIframe.contentWindow.postMessage(
+                        '{"event":"command","func":"playVideo","args":""}', '*'
+                    );
+                }
+                isMusicPlaying = true;
+                updateMusicIcon(true);
+                document.getElementById('musicIcon').style.opacity = '1';
+            }
+        }
+
+        document.getElementById('musicToggle').addEventListener('click', toggleMusic);
+
+        // Intentar iniciar la reproducción al primer click/toque en la página (para navegadores restrictivos)
+        let userInteracted = false;
+        document.addEventListener('click', function initAudioOnInteraction() {
+            if (!userInteracted && ytPlayer && ytReady) {
+                ytPlayer.unMute();
+                ytPlayer.playVideo();
+                userInteracted = true;
+                updateMusicIcon(true);
+                isMusicPlaying = true;
+            }
+        }, { once: false });
 
         // ==================== PARTÍCULAS ORBITANTES EN LOS ANILLOS ====================
         function createRingParticles() {
@@ -1266,7 +1423,7 @@
             document.getElementById('minutes').textContent = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)))
                 .padStart(2, '0');
             document.getElementById('seconds').textContent = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2,
-            '0');
+                '0');
         }
         updateCountdown();
         setInterval(updateCountdown, 1000);
@@ -1289,7 +1446,8 @@
                 const petalShape = document.createElement('div');
                 petalShape.className = 'petal-shape';
                 const shade = blueShades[Math.floor(Math.random() * blueShades.length)];
-                petalShape.style.background = `radial-gradient(ellipse at 30% 20%, ${shade} 0%, rgba(30,74,107,0.7) 100%)`;
+                petalShape.style.background =
+                    `radial-gradient(ellipse at 30% 20%, ${shade} 0%, rgba(30,74,107,0.7) 100%)`;
                 petalShape.style.width = (16 + Math.random() * 22) + 'px';
                 petalShape.style.height = (20 + Math.random() * 28) + 'px';
                 petalShape.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
@@ -1316,35 +1474,6 @@
             }
         }
         createSparkles();
-
-        // ==================== CONTROL DE MÚSICA (YOUTUBE) ====================
-        const ytPlayer = document.getElementById('youtubePlayer');
-        const musicIcon = document.getElementById('musicIcon');
-        let isMuted = false; // Comienza sin silenciar (intentará sonar)
-
-        // Intentamos pausar el video de fondo para que solo se escuche YouTube
-        const bgVideo = document.getElementById('bgVideo');
-        bgVideo.volume = 0;
-        bgVideo.muted = true;
-
-        document.getElementById('musicToggle').addEventListener('click', () => {
-            isMuted = !isMuted;
-            if (isMuted) {
-                // Silenciar YouTube
-                ytPlayer.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
-                musicIcon.className = 'fa-solid fa-volume-xmark';
-            } else {
-                // Activar sonido YouTube
-                ytPlayer.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
-                musicIcon.className = 'fa-solid fa-volume-high';
-            }
-        });
-
-        // Pequeña ayuda: al hacer clic en cualquier parte de la página, si el navegador bloqueó el autoplay,
-        // el usuario podrá desbloquearlo y la canción comenzará.
-        document.body.addEventListener('click', function() {
-            ytPlayer.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-        }, { once: true });
 
         // ==================== LÓGICA DE CONFIRMACIÓN ====================
         function prepararMensaje() {
@@ -1393,7 +1522,8 @@
 
             const mensajeWhatsApp =
                 `Hola ${nombreAnfitrion}, somos la Familia ${familia}. Confirmamos nuestra asistencia: ${num} invitado(s). ${eventoTexto}. ¡Gracias por invitarnos!`;
-            const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensajeWhatsApp)}`;
+            const url =
+                `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensajeWhatsApp)}`;
 
             document.getElementById('modalTitulo').textContent = `¡Gracias, Familia ${familia}!`;
             document.getElementById('modalMensaje').textContent = agradecimiento;
@@ -1410,10 +1540,10 @@
 
         // ==================== LOG EN CONSOLA ====================
         console.log('%c💙 Invitación de Boda y Bautizo %cMaría del Carmen & Jesús Eduardo %c💙',
-            'font-size:1.4em;color:#4f8bc9;', 'font-size:1.6em;font-family:serif;color:#fff;', 'font-size:1.4em;color:#4f8bc9;'
-            );
+            'font-size:1.4em;color:#4f8bc9;', 'font-size:1.6em;font-family:serif;color:#fff;',
+            'font-size:1.4em;color:#4f8bc9;');
         console.log('%c📅 10 de Octubre de 2026 %c| %c⏰ 1:00 pm', 'color:#a0c8e8;', '', 'color:#a0c8e8;');
-        console.log('%c🎵 Canción de fondo: YouTube · DF3XjEhJ40Y', 'color:#7aa9d4;font-style:italic;');
+        console.log('%c🎵 Música: Se está cargando la canción...', 'color:#7aa9d4;font-style:italic;');
     </script>
 </body>
 </html>
