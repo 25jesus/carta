@@ -138,6 +138,7 @@
             position: relative;
         }
 
+        /* Contenedor de anillos */
         .rings-container {
             position: relative;
             width: 180px;
@@ -215,6 +216,7 @@
                 transform: rotateY(360deg) rotateX(-25deg) rotateZ(0deg);
             }
         }
+        /* Brillo central de los anillos */
         .rings-sparkle {
             position: absolute;
             width: 12px;
@@ -240,6 +242,7 @@
                 opacity: 1;
             }
         }
+        /* Partículas brillantes alrededor de los anillos */
         .ring-particle {
             position: absolute;
             width: 4px;
@@ -948,11 +951,31 @@
             }
         }
 
-        /* Reproductor de YouTube oculto */
-        .yt-player-hidden {
+        /* MUSIC TOGGLE */
+        .music-toggle {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 100;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--glass-bg-blue);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* YouTube iframe oculto */
+        #youtubePlayer {
             position: fixed;
             bottom: 0;
-            left: 0;
+            right: 0;
             width: 1px;
             height: 1px;
             opacity: 0;
@@ -1012,17 +1035,20 @@
     <div id="petalsContainer"></div>
     <div id="sparklesContainer"></div>
 
-    <!-- Reproductor de YouTube oculto (sin opción de silencio) -->
-    <div id="yt-player" class="yt-player-hidden"></div>
+    <!-- YouTube iframe para la canción de fondo -->
+    <iframe id="youtubePlayer" src="https://www.youtube.com/embed/DF3XjEhJ40Y?autoplay=1&controls=0&loop=1&playlist=DF3XjEhJ40Y&enablejsapi=1&mute=0" allow="autoplay" allowfullscreen></iframe>
 
     <div class="main-content">
         <!-- HERO CON ANILLOS ANIMADOS -->
         <section class="hero-section">
+            <!-- Anillos entrelazados con brillo -->
             <div class="rings-container" id="ringsContainer">
                 <div class="ring ring-gold"></div>
                 <div class="ring ring-silver"></div>
                 <div class="rings-sparkle"></div>
+                <!-- Partículas orbitantes generadas por JS -->
             </div>
+
             <div class="hero-badge">Boda & Bautizo</div>
             <h1 class="hero-names">María del Carmen<span class="hero-ampersand">&</span>Jesús Eduardo</h1>
             <p class="hero-date">10 · OCTUBRE · 2026</p>
@@ -1187,67 +1213,17 @@
         </div>
     </div>
 
+    <button class="music-toggle" id="musicToggle" aria-label="Toggle music">
+        <i class="fa-solid fa-volume-high" id="musicIcon"></i>
+    </button>
+
     <script>
         // ==================== CONFIGURACIÓN ====================
         const CONFIG = {
             weddingDate: new Date('2026-10-10T13:00:00'),
             whatsappNovia: '525647578035',
             whatsappNovio: '525667996334',
-            youtubeVideoId: 'DF3XjEhJ40Y', // ID del video de YouTube
         };
-
-        // ==================== REPRODUCTOR DE YOUTUBE OCULTO ====================
-        // Cargar la API de YouTube IFrame dinámicamente
-        const tag = document.createElement('script');
-        tag.src = 'https://www.youtube.com/iframe_api';
-        const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        let ytPlayer;
-        function onYouTubeIframeAPIReady() {
-            ytPlayer = new YT.Player('yt-player', {
-                videoId: CONFIG.youtubeVideoId,
-                playerVars: {
-                    autoplay: 1,
-                    controls: 0,
-                    mute: 0,
-                    loop: 1,
-                    playlist: CONFIG.youtubeVideoId,
-                    enablejsapi: 1,
-                    modestbranding: 1,
-                    rel: 0,
-                    showinfo: 0,
-                    iv_load_policy: 3,
-                },
-                events: {
-                    onReady: onPlayerReady,
-                    onError: onPlayerError,
-                },
-            });
-        }
-
-        function onPlayerReady(event) {
-            event.target.setVolume(70);
-            event.target.playVideo();
-            // Intentar reproducir si hay bloqueo de autoplay
-            setTimeout(() => {
-                if (ytPlayer && ytPlayer.getPlayerState() !== 1) {
-                    ytPlayer.playVideo();
-                }
-            }, 1000);
-        }
-
-        function onPlayerError(event) {
-            console.warn('Error al cargar el reproductor de YouTube. Intentando de nuevo...');
-            setTimeout(() => {
-                if (ytPlayer && ytPlayer.loadVideoById) {
-                    ytPlayer.loadVideoById({
-                        videoId: CONFIG.youtubeVideoId,
-                        startSeconds: 0,
-                    });
-                }
-            }, 3000);
-        }
 
         // ==================== PARTÍCULAS ORBITANTES EN LOS ANILLOS ====================
         function createRingParticles() {
@@ -1290,7 +1266,7 @@
             document.getElementById('minutes').textContent = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)))
                 .padStart(2, '0');
             document.getElementById('seconds').textContent = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2,
-                '0');
+            '0');
         }
         updateCountdown();
         setInterval(updateCountdown, 1000);
@@ -1313,8 +1289,7 @@
                 const petalShape = document.createElement('div');
                 petalShape.className = 'petal-shape';
                 const shade = blueShades[Math.floor(Math.random() * blueShades.length)];
-                petalShape.style.background =
-                    `radial-gradient(ellipse at 30% 20%, ${shade} 0%, rgba(30,74,107,0.7) 100%)`;
+                petalShape.style.background = `radial-gradient(ellipse at 30% 20%, ${shade} 0%, rgba(30,74,107,0.7) 100%)`;
                 petalShape.style.width = (16 + Math.random() * 22) + 'px';
                 petalShape.style.height = (20 + Math.random() * 28) + 'px';
                 petalShape.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
@@ -1325,7 +1300,7 @@
         }
         createBluePetals();
 
-        // ==================== SPARKLES FLOTANTES ====================
+        // ==================== SPARKLES FLOTANTES (SUBIENDO) ====================
         function createSparkles() {
             const container = document.getElementById('sparklesContainer');
             const sparkleCount = 20;
@@ -1341,6 +1316,35 @@
             }
         }
         createSparkles();
+
+        // ==================== CONTROL DE MÚSICA (YOUTUBE) ====================
+        const ytPlayer = document.getElementById('youtubePlayer');
+        const musicIcon = document.getElementById('musicIcon');
+        let isMuted = false; // Comienza sin silenciar (intentará sonar)
+
+        // Intentamos pausar el video de fondo para que solo se escuche YouTube
+        const bgVideo = document.getElementById('bgVideo');
+        bgVideo.volume = 0;
+        bgVideo.muted = true;
+
+        document.getElementById('musicToggle').addEventListener('click', () => {
+            isMuted = !isMuted;
+            if (isMuted) {
+                // Silenciar YouTube
+                ytPlayer.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
+                musicIcon.className = 'fa-solid fa-volume-xmark';
+            } else {
+                // Activar sonido YouTube
+                ytPlayer.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+                musicIcon.className = 'fa-solid fa-volume-high';
+            }
+        });
+
+        // Pequeña ayuda: al hacer clic en cualquier parte de la página, si el navegador bloqueó el autoplay,
+        // el usuario podrá desbloquearlo y la canción comenzará.
+        document.body.addEventListener('click', function() {
+            ytPlayer.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+        }, { once: true });
 
         // ==================== LÓGICA DE CONFIRMACIÓN ====================
         function prepararMensaje() {
@@ -1389,8 +1393,7 @@
 
             const mensajeWhatsApp =
                 `Hola ${nombreAnfitrion}, somos la Familia ${familia}. Confirmamos nuestra asistencia: ${num} invitado(s). ${eventoTexto}. ¡Gracias por invitarnos!`;
-            const url =
-                `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensajeWhatsApp)}`;
+            const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensajeWhatsApp)}`;
 
             document.getElementById('modalTitulo').textContent = `¡Gracias, Familia ${familia}!`;
             document.getElementById('modalMensaje').textContent = agradecimiento;
@@ -1407,13 +1410,10 @@
 
         // ==================== LOG EN CONSOLA ====================
         console.log('%c💙 Invitación de Boda y Bautizo %cMaría del Carmen & Jesús Eduardo %c💙',
-            'font-size:1.4em;color:#4f8bc9;',
-            'font-size:1.6em;font-family:serif;color:#fff;',
-            'font-size:1.4em;color:#4f8bc9;'
-        );
+            'font-size:1.4em;color:#4f8bc9;', 'font-size:1.6em;font-family:serif;color:#fff;', 'font-size:1.4em;color:#4f8bc9;'
+            );
         console.log('%c📅 10 de Octubre de 2026 %c| %c⏰ 1:00 pm', 'color:#a0c8e8;', '', 'color:#a0c8e8;');
-        console.log('%c🎵 Canción de fondo: YouTube - ID ' + CONFIG.youtubeVideoId,
-            'color:#7aa9d4;font-style:italic;');
+        console.log('%c🎵 Canción de fondo: YouTube · DF3XjEhJ40Y', 'color:#7aa9d4;font-style:italic;');
     </script>
 </body>
 </html>
