@@ -21,13 +21,7 @@
             --radius: 20px;
             --radius-sm: 12px;
             --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            --rose-blue-1: #6baed6;
-            --rose-blue-2: #4f8bc9;
-            --rose-blue-3: #3a7bc8;
-            --rose-blue-4: #a0c8e8;
-            --rose-blue-5: #7eb8da;
             --gold-ring: #d4b872;
-            --gold-ring-2: #e0c97f;
             --silver-ring: #c0c8d4;
         }
 
@@ -120,7 +114,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 50px;
+            gap: 40px;
             padding-bottom: 80px;
         }
 
@@ -138,7 +132,6 @@
             position: relative;
         }
 
-        /* Contenedor de anillos */
         .rings-container {
             position: relative;
             width: 180px;
@@ -216,7 +209,6 @@
                 transform: rotateY(360deg) rotateX(-25deg) rotateZ(0deg);
             }
         }
-        /* Brillo central de los anillos */
         .rings-sparkle {
             position: absolute;
             width: 12px;
@@ -242,7 +234,6 @@
                 opacity: 1;
             }
         }
-        /* Partículas brillantes alrededor de los anillos */
         .ring-particle {
             position: absolute;
             width: 4px;
@@ -377,20 +368,16 @@
             }
         }
 
-        /* ========== INVITACIÓN TEXTO ========== */
+        /* ========== INVITACIÓN ========== */
         .invitacion-section {
             width: 100%;
             max-width: 800px;
             padding: 0 20px;
             text-align: center;
-            animation: fadeInUp 0.8s ease 0.5s forwards;
-            opacity: 0;
-            animation-fill-mode: forwards;
         }
         .invitacion-card {
             background: var(--glass-bg-blue);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius);
             padding: 40px 30px;
@@ -417,7 +404,7 @@
             margin-top: 25px;
         }
 
-        /* ========== PADRINOS Y PADRES ========== */
+        /* ========== FAMILIA ========== */
         .familia-section {
             width: 100%;
             max-width: 800px;
@@ -527,7 +514,7 @@
             }
         }
 
-        /* ========== BAUTIZO SECTION ========== */
+        /* ========== BAUTIZO ========== */
         .bautizo-section {
             width: 100%;
             max-width: 800px;
@@ -681,7 +668,7 @@
             }
         }
 
-        /* ========== ITINERARIO (NUEVO) ========== */
+        /* ========== ITINERARIO (compacto) ========== */
         .itinerario-section {
             width: 100%;
             max-width: 800px;
@@ -692,30 +679,31 @@
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius);
-            padding: 35px 30px;
+            padding: 22px 18px;
             box-shadow: var(--shadow-lg);
             text-align: center;
         }
         .itinerario-card h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            margin-bottom: 10px;
+            font-size: 1.5rem;
+            margin-bottom: 3px;
             color: var(--white);
         }
         .itinerario-sub {
             color: var(--accent-light);
             letter-spacing: 2px;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
         }
         .itinerario-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 10px;
         }
         .itinerario-item {
             background: rgba(255, 255, 255, 0.06);
             border-radius: var(--radius-sm);
-            padding: 18px 15px;
+            padding: 10px 8px;
             border: 1px solid rgba(255, 255, 255, 0.12);
             transition: var(--transition);
             display: flex;
@@ -724,39 +712,39 @@
         }
         .itinerario-item:hover {
             background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-4px);
+            transform: translateY(-2px);
         }
         .itinerario-item i {
-            font-size: 2rem;
+            font-size: 1.3rem;
             color: var(--accent-light);
-            margin-bottom: 8px;
+            margin-bottom: 2px;
         }
         .itinerario-item .hora {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: 600;
             color: var(--accent-light);
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
         .itinerario-item .actividad {
             font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
+            font-size: 0.85rem;
             font-weight: 500;
             color: var(--white);
-            margin: 4px 0;
+            margin: 1px 0;
         }
         .itinerario-item .detalle {
-            font-size: 0.75rem;
+            font-size: 0.6rem;
             color: rgba(255, 255, 255, 0.7);
-            letter-spacing: 1px;
+            letter-spacing: 0.3px;
         }
         @media (max-width: 600px) {
             .itinerario-grid {
                 grid-template-columns: 1fr;
-                gap: 15px;
+                gap: 8px;
             }
         }
 
-        /* ========== CALENDARIO (NUEVO) ========== */
+        /* ========== CALENDARIO ========== */
         .calendario-section {
             width: 100%;
             max-width: 700px;
@@ -767,21 +755,21 @@
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius);
-            padding: 35px 25px;
+            padding: 30px 20px;
             box-shadow: var(--shadow-lg);
             text-align: center;
         }
         .calendario-card h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: var(--white);
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
         .calendario-card .mes {
             color: var(--accent-light);
-            font-size: 1.1rem;
+            font-size: 1rem;
             letter-spacing: 3px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .calendario-tabla {
             width: 100%;
@@ -790,8 +778,8 @@
             font-family: 'Montserrat', sans-serif;
         }
         .calendario-tabla th {
-            padding: 10px 5px;
-            font-size: 0.75rem;
+            padding: 8px 4px;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: var(--accent-light);
@@ -799,8 +787,8 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
         .calendario-tabla td {
-            padding: 12px 5px;
-            font-size: 1rem;
+            padding: 10px 4px;
+            font-size: 0.95rem;
             font-weight: 400;
             color: rgba(255, 255, 255, 0.8);
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -810,9 +798,9 @@
             color: #fff;
             border-radius: 50%;
             display: inline-block;
-            width: 38px;
-            height: 38px;
-            line-height: 38px;
+            width: 34px;
+            height: 34px;
+            line-height: 34px;
             font-weight: 700;
             box-shadow: 0 0 20px rgba(79, 139, 201, 0.5);
         }
@@ -824,17 +812,17 @@
         }
         @media (max-width: 480px) {
             .calendario-tabla td {
-                padding: 8px 3px;
-                font-size: 0.85rem;
+                padding: 6px 2px;
+                font-size: 0.8rem;
             }
             .calendario-tabla .dia-resaltado {
-                width: 32px;
-                height: 32px;
-                line-height: 32px;
+                width: 28px;
+                height: 28px;
+                line-height: 28px;
             }
         }
 
-        /* ========== RECOMENDACIONES (NUEVO) ========== */
+        /* ========== RECOMENDACIONES ========== */
         .recomendaciones-section {
             width: 100%;
             max-width: 800px;
@@ -845,36 +833,36 @@
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius);
-            padding: 40px 30px;
+            padding: 30px 25px;
             box-shadow: var(--shadow-lg);
         }
         .recomendaciones-card h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: var(--white);
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         .recomendacion-item {
             display: flex;
             align-items: flex-start;
-            gap: 18px;
-            padding: 15px 0;
+            gap: 14px;
+            padding: 12px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
         .recomendacion-item:last-child {
             border-bottom: none;
         }
         .recomendacion-item i {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             color: var(--accent-light);
-            min-width: 30px;
-            margin-top: 3px;
+            min-width: 26px;
+            margin-top: 2px;
         }
         .recomendacion-item .texto {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.9);
-            line-height: 1.6;
+            line-height: 1.5;
         }
         .recomendacion-item .texto strong {
             color: var(--accent-light);
@@ -882,12 +870,12 @@
         .recomendacion-item .texto .etiqueta {
             display: inline-block;
             background: rgba(79, 139, 201, 0.2);
-            padding: 2px 12px;
+            padding: 1px 12px;
             border-radius: 20px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             letter-spacing: 1px;
             color: var(--accent-light);
-            margin-top: 5px;
+            margin-top: 4px;
         }
 
         /* ========== LOCATIONS ========== */
@@ -904,7 +892,7 @@
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius);
-            padding: 35px 28px;
+            padding: 30px 25px;
             text-align: center;
             box-shadow: var(--shadow);
             transition: var(--transition);
@@ -914,30 +902,31 @@
             background: rgba(11, 43, 74, 0.45);
         }
         .location-icon {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             color: var(--accent-light);
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         .location-card h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
         }
         .location-label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             letter-spacing: 3px;
             color: var(--accent-light);
         }
         .btn-maps {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            padding: 12px 28px;
+            gap: 8px;
+            padding: 10px 24px;
             background: var(--accent);
             color: white;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
             transition: var(--transition);
+            font-size: 0.9rem;
         }
         .btn-maps:hover {
             background: #3a6fa8;
@@ -948,7 +937,7 @@
             }
         }
 
-        /* ========== CONFIRMACIÓN (RSVP) ========== */
+        /* ========== RSVP ========== */
         .rsvp-section {
             width: 100%;
             max-width: 700px;
@@ -959,35 +948,36 @@
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius);
-            padding: 40px 30px;
+            padding: 35px 25px;
             box-shadow: var(--shadow-lg);
             text-align: center;
         }
         .rsvp-card h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            margin-bottom: 10px;
+            font-size: 1.6rem;
+            margin-bottom: 8px;
         }
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             text-align: left;
         }
         .form-group label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             font-weight: 500;
             color: var(--accent-light);
             letter-spacing: 1px;
+            font-size: 0.85rem;
         }
         .form-group input,
         .form-group select {
             width: 100%;
-            padding: 14px 18px;
+            padding: 12px 16px;
             border-radius: 50px;
             border: 1px solid var(--glass-border);
             background: rgba(255, 255, 255, 0.15);
             color: white;
-            font-size: 1rem;
+            font-size: 0.95rem;
             outline: none;
             backdrop-filter: blur(5px);
             transition: var(--transition);
@@ -1003,21 +993,21 @@
             background: var(--accent);
             color: white;
             border: none;
-            padding: 14px 35px;
+            padding: 12px 30px;
             border-radius: 50px;
             font-weight: 600;
             letter-spacing: 1px;
             cursor: pointer;
             transition: var(--transition);
-            font-size: 1rem;
-            margin-top: 10px;
+            font-size: 0.95rem;
+            margin-top: 8px;
         }
         .btn-rsvp:hover {
             background: #3a6fa8;
             transform: translateY(-2px);
         }
 
-        /* Modal de agradecimiento */
+        /* ========== MODAL ========== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -1042,7 +1032,7 @@
             backdrop-filter: blur(30px);
             border: 1px solid var(--glass-border);
             border-radius: var(--radius);
-            padding: 40px 30px;
+            padding: 35px 25px;
             max-width: 500px;
             width: 90%;
             text-align: center;
@@ -1051,18 +1041,18 @@
         }
         .modal-content h3 {
             font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
         }
         .modal-content p {
-            margin: 15px 0;
-            font-size: 1rem;
+            margin: 12px 0;
+            font-size: 0.95rem;
         }
         .btn-whatsapp-modal {
             background: #25D366;
             color: white;
             border: none;
-            padding: 14px 32px;
+            padding: 12px 28px;
             border-radius: 50px;
             font-weight: 600;
             letter-spacing: 1px;
@@ -1070,21 +1060,23 @@
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-top: 15px;
             text-decoration: none;
+            font-size: 0.95rem;
         }
         .btn-close-modal {
             background: transparent;
             border: 1px solid var(--accent-light);
             color: var(--accent-light);
-            padding: 10px 25px;
+            padding: 8px 22px;
             border-radius: 50px;
             cursor: pointer;
-            margin-top: 15px;
+            margin-top: 12px;
+            font-size: 0.9rem;
         }
 
-        /* FOOTER */
+        /* ========== FOOTER ========== */
         .footer-message {
             text-align: center;
             padding: 20px;
@@ -1093,7 +1085,7 @@
             font-style: italic;
         }
 
-        /* ========== PÉTALOS DE ROSAS AZULES ========== */
+        /* ========== PÉTALOS ========== */
         .blue-petal {
             position: fixed;
             pointer-events: none;
@@ -1129,7 +1121,7 @@
             }
         }
 
-        /* ========== SPARKLES FLOTANTES ========== */
+        /* ========== SPARKLES ========== */
         .floating-sparkle {
             position: fixed;
             pointer-events: none;
@@ -1243,21 +1235,17 @@
     </div>
     <div class="overlay-texture"></div>
 
-    <!-- Contenedor de pétalos y sparkles -->
     <div id="petalsContainer"></div>
     <div id="sparklesContainer"></div>
 
     <div class="main-content">
-        <!-- HERO CON ANILLOS ANIMADOS -->
+        <!-- HERO -->
         <section class="hero-section">
-            <!-- Anillos entrelazados con brillo -->
             <div class="rings-container" id="ringsContainer">
                 <div class="ring ring-gold"></div>
                 <div class="ring ring-silver"></div>
                 <div class="rings-sparkle"></div>
-                <!-- Partículas orbitantes generadas por JS -->
             </div>
-
             <div class="hero-badge">Boda & Bautizo</div>
             <h1 class="hero-names">María del Carmen<span class="hero-ampersand">&</span>Jesús Eduardo</h1>
             <p class="hero-date">10 · OCTUBRE · 2026</p>
@@ -1266,7 +1254,7 @@
             </div>
         </section>
 
-        <!-- TEXTO DE INVITACIÓN -->
+        <!-- INVITACIÓN -->
         <section class="invitacion-section" id="invitacion">
             <div class="invitacion-card">
                 <h2>Con la bendición de nuestras familias</h2>
@@ -1283,7 +1271,7 @@
             </div>
         </section>
 
-        <!-- SECCIÓN DE PADRINOS DE BODA Y PADRES -->
+        <!-- FAMILIA -->
         <section class="familia-section" id="familia">
             <div class="familia-card">
                 <h2>Nuestras Familias</h2>
@@ -1319,7 +1307,7 @@
             </div>
         </section>
 
-        <!-- SECCIÓN DEL BAUTIZO -->
+        <!-- BAUTIZO -->
         <section class="bautizo-section" id="bautizo">
             <div class="bautizo-card">
                 <div class="bautizo-icon">🕊️</div>
@@ -1352,65 +1340,77 @@
             </div>
         </section>
 
-        <!-- ===== NUEVO: ITINERARIO ===== -->
+        <!-- ITINERARIO (actualizado y compacto) -->
         <section class="itinerario-section" id="itinerario">
             <div class="itinerario-card">
                 <h2>Itinerario del Día</h2>
                 <p class="itinerario-sub"><i class="fa-regular fa-clock"></i> 10 de octubre de 2026</p>
                 <div class="itinerario-grid">
                     <div class="itinerario-item">
+                        <i class="fa-regular fa-calendar-check"></i>
+                        <span class="hora">12:10 pm</span>
+                        <span class="actividad">Llegada a la ceremonia</span>
+                        <span class="detalle">Acomodo pre‑ceremonia</span>
+                    </div>
+                    <div class="itinerario-item">
                         <i class="fa-regular fa-images"></i>
-                        <span class="hora">1:00 pm</span>
-                        <span class="actividad">Fotos</span>
-                        <span class="detalle">Sesión pre-ceremonia</span>
-                    </div>
-                    <div class="itinerario-item">
-                        <i class="fa-regular fa-handshake"></i>
-                        <span class="hora">1:30 pm</span>
-                        <span class="actividad">Felicitaciones</span>
-                        <span class="detalle">Llegada de invitados</span>
-                    </div>
-                    <div class="itinerario-item">
-                        <i class="fa-solid fa-champagne-glasses"></i>
-                        <span class="hora">2:00 pm</span>
-                        <span class="actividad">Brindis</span>
-                        <span class="detalle">Celebración inicial</span>
-                    </div>
-                    <div class="itinerario-item">
-                        <i class="fa-solid fa-music"></i>
                         <span class="hora">2:30 pm</span>
-                        <span class="actividad">Música</span>
-                        <span class="detalle">Ambiente festivo</span>
-                    </div>
-                    <div class="itinerario-item">
-                        <i class="fa-regular fa-images"></i>
-                        <span class="hora">3:30 pm</span>
-                        <span class="actividad">Fotos</span>
-                        <span class="detalle">Sesión con familia</span>
+                        <span class="actividad">Sesión de fotos</span>
+                        <span class="detalle">Con invitados en la iglesia</span>
                     </div>
                     <div class="itinerario-item">
                         <i class="fa-solid fa-people-arrows"></i>
+                        <span class="hora">4:00 pm</span>
+                        <span class="actividad">Llegada al salón</span>
+                        <span class="detalle">Recepción de invitados</span>
+                    </div>
+                    <div class="itinerario-item">
+                        <i class="fa-solid fa-utensils"></i>
                         <span class="hora">4:30 pm</span>
+                        <span class="actividad">Comida</span>
+                        <span class="detalle">Música de ambiente festivo</span>
+                    </div>
+                    <div class="itinerario-item">
+                        <i class="fa-solid fa-champagne-glasses"></i>
+                        <span class="hora">6:00 pm</span>
+                        <span class="actividad">Brindis del niño</span>
+                        <span class="detalle">Padrino – Celebración inicial</span>
+                    </div>
+                    <div class="itinerario-item">
+                        <i class="fa-solid fa-cake-candles"></i>
+                        <span class="hora">6:30 pm</span>
+                        <span class="actividad">Postre del niño</span>
+                        <span class="detalle">Corte del pastel (Alén)</span>
+                    </div>
+                    <div class="itinerario-item">
+                        <i class="fa-solid fa-wine-glass"></i>
+                        <span class="hora">7:30 pm</span>
+                        <span class="actividad">Brindis general</span>
+                        <span class="detalle">Celebración en conjunto</span>
+                    </div>
+                    <div class="itinerario-item">
+                        <i class="fa-solid fa-people-arrows"></i>
+                        <span class="hora">8:00 pm</span>
                         <span class="actividad">Baile de Vals</span>
                         <span class="detalle">Primer baile</span>
                     </div>
                     <div class="itinerario-item">
                         <i class="fa-solid fa-cake-candles"></i>
-                        <span class="hora">5:30 pm</span>
-                        <span class="actividad">Corte del Pastel</span>
-                        <span class="detalle">¡y más sorpresas!</span>
+                        <span class="hora">9:00 pm</span>
+                        <span class="actividad">Corte del pastel</span>
+                        <span class="detalle">Pastel de los novios</span>
                     </div>
                     <div class="itinerario-item">
                         <i class="fa-regular fa-star"></i>
-                        <span class="hora">6:00 pm</span>
-                        <span class="actividad">Celebración Continua</span>
+                        <span class="hora">9:30 pm</span>
+                        <span class="actividad">Celebración continua</span>
                         <span class="detalle">Fiesta y convivencia</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ===== NUEVO: CALENDARIO ===== -->
+        <!-- CALENDARIO -->
         <section class="calendario-section" id="calendario">
             <div class="calendario-card">
                 <h2>Reserva la fecha</h2>
@@ -1428,7 +1428,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Semana 1 -->
                         <tr>
                             <td class="dia-vacio"></td>
                             <td class="dia-vacio"></td>
@@ -1438,7 +1437,6 @@
                             <td>3</td>
                             <td>4</td>
                         </tr>
-                        <!-- Semana 2 -->
                         <tr>
                             <td>5</td>
                             <td>6</td>
@@ -1448,7 +1446,6 @@
                             <td><span class="dia-resaltado">10</span></td>
                             <td>11</td>
                         </tr>
-                        <!-- Semana 3 -->
                         <tr>
                             <td>12</td>
                             <td>13</td>
@@ -1458,7 +1455,6 @@
                             <td>17</td>
                             <td>18</td>
                         </tr>
-                        <!-- Semana 4 -->
                         <tr>
                             <td>19</td>
                             <td>20</td>
@@ -1468,7 +1464,6 @@
                             <td>24</td>
                             <td>25</td>
                         </tr>
-                        <!-- Semana 5 -->
                         <tr>
                             <td>26</td>
                             <td>27</td>
@@ -1480,17 +1475,16 @@
                         </tr>
                     </tbody>
                 </table>
-                <p style="margin-top:20px; color:var(--accent-light); letter-spacing:1px; font-size:0.9rem;">
+                <p style="margin-top:16px; color:var(--accent-light); letter-spacing:1px; font-size:0.85rem;">
                     <i class="fa-regular fa-calendar-check"></i> ¡Te esperamos el 10 de octubre!
                 </p>
             </div>
         </section>
 
-        <!-- ===== NUEVO: RECOMENDACIONES ===== -->
+        <!-- RECOMENDACIONES -->
         <section class="recomendaciones-section" id="recomendaciones">
             <div class="recomendaciones-card">
                 <h2>Recomendaciones</h2>
-
                 <div class="recomendacion-item">
                     <i class="fa-solid fa-child"></i>
                     <div class="texto">
@@ -1498,7 +1492,6 @@
                         Si bien amamos a los niños; celebraremos un evento solo para adultos y para mantener un ambiente tranquilo y cómodo durante la ceremonia y recepción te agradecemos no traer niños, les agradecemos su comprensión.
                     </div>
                 </div>
-
                 <div class="recomendacion-item">
                     <i class="fa-solid fa-mobile-screen-button"></i>
                     <div class="texto">
@@ -1506,7 +1499,6 @@
                         Usar celular en modo vibración para no interrumpir la ceremonia.
                     </div>
                 </div>
-
                 <div class="recomendacion-item">
                     <i class="fa-regular fa-clock"></i>
                     <div class="texto">
@@ -1514,7 +1506,6 @@
                         ¡Llegar a las 3:30 pm para que tener tiempo a acomodación en orden antes de la ceremonia! + la capilla.
                     </div>
                 </div>
-
                 <div class="recomendacion-item">
                     <i class="fa-solid fa-car"></i>
                     <div class="texto">
@@ -1522,7 +1513,6 @@
                         Dentro de la hacienda hay un amplio espacio de estacionamiento de vehículos donde puedes dejar tu carro y hay vigilancia.
                     </div>
                 </div>
-
                 <div class="recomendacion-item">
                     <i class="fa-regular fa-gem"></i>
                     <div class="texto">
@@ -1554,11 +1544,11 @@
             </div>
         </section>
 
-        <!-- CONFIRMACIÓN -->
+        <!-- RSVP -->
         <section class="rsvp-section" id="rsvp">
             <div class="rsvp-card">
                 <h2>Confirma tu Asistencia</h2>
-                <p style="color:var(--accent-light); margin-bottom:25px;">Queremos saber si nos acompañarás en este doble festejo</p>
+                <p style="color:var(--accent-light); margin-bottom:20px;">Queremos saber si nos acompañarás en este doble festejo</p>
                 <div class="form-group">
                     <label>Nombre de la familia</label>
                     <input type="text" id="familiaNombre" placeholder="Ej. Familia Pérez">
@@ -1591,7 +1581,7 @@
         </div>
     </div>
 
-    <!-- MODAL DE AGRADECIMIENTO -->
+    <!-- MODAL -->
     <div class="modal-overlay" id="modalAgradecimiento">
         <div class="modal-content">
             <h3 id="modalTitulo">¡Gracias!</h3>
@@ -1609,14 +1599,13 @@
         <i class="fa-solid fa-music" id="musicIcon"></i>
     </button>
 
-    <!-- Script de la API de YouTube -->
     <script src="https://www.youtube.com/iframe_api"></script>
 
     <script>
         // ==================== CONFIGURACIÓN ====================
         const CONFIG = {
             weddingDate: new Date('2026-10-10T13:00:00'),
-            youtubeVideoId: 'WikAeXGsmHY', // ID del video de YouTube
+            youtubeVideoId: 'WikAeXGsmHY',
             whatsappNovia: '525647578035',
             whatsappNovio: '525667996334',
         };
@@ -1624,18 +1613,17 @@
         // ==================== YOUTUBE PLAYER ====================
         let ytPlayer = null;
         let ytReady = false;
-        let isMusicPlaying = true; // Inicia reproduciendo
+        let isMusicPlaying = true;
 
-        // Esta función es llamada automáticamente por la API de YouTube cuando está lista
         function onYouTubeIframeAPIReady() {
             ytPlayer = new YT.Player('youtubePlayer', {
                 videoId: CONFIG.youtubeVideoId,
                 playerVars: {
                     autoplay: 1,
-                    mute: 0, // Inicia sin mute para que se escuche
+                    mute: 0,
                     controls: 0,
                     loop: 1,
-                    playlist: CONFIG.youtubeVideoId, // Necesario para loop
+                    playlist: CONFIG.youtubeVideoId,
                     enablejsapi: 1,
                     modestbranding: 1,
                     rel: 0,
@@ -1649,17 +1637,13 @@
                         event.target.playVideo();
                         event.target.unMute();
                         updateMusicIcon(true);
-                        console.log('🎵 Música iniciada automáticamente');
                     },
                     onStateChange: function(event) {
-                        // Si el video termina, se reinicia automáticamente gracias a loop
                         if (event.data === YT.PlayerState.ENDED) {
                             ytPlayer.playVideo();
                         }
                     },
-                    onError: function(event) {
-                        console.warn('⚠️ Error al cargar la música. Intentando de nuevo...');
-                        // Reintentar después de 3 segundos
+                    onError: function() {
                         setTimeout(() => {
                             if (ytPlayer && ytPlayer.loadVideoById) {
                                 ytPlayer.loadVideoById(CONFIG.youtubeVideoId);
@@ -1670,7 +1654,6 @@
             });
         }
 
-        // Fallback por si la API tarda o falla: crear iframe manualmente
         function createFallbackPlayer() {
             if (ytPlayer) return;
             const container = document.getElementById('youtubePlayerContainer');
@@ -1678,42 +1661,37 @@
             iframe.id = 'youtubePlayerFallback';
             iframe.width = '1';
             iframe.height = '1';
-            iframe.src = `https://www.youtube.com/embed/${CONFIG.youtubeVideoId}?autoplay=1&mute=0&loop=1&playlist=${CONFIG.youtubeVideoId}&enablejsapi=1&controls=0&modestbranding=1&rel=0`;
+            iframe.src =
+                `https://www.youtube.com/embed/${CONFIG.youtubeVideoId}?autoplay=1&mute=0&loop=1&playlist=${CONFIG.youtubeVideoId}&enablejsapi=1&controls=0&modestbranding=1&rel=0`;
             iframe.allow = 'autoplay; encrypted-media';
             iframe.style.border = 'none';
             container.appendChild(iframe);
-            console.log('🎵 Fallback: reproductor de música cargado por iframe');
             ytReady = true;
             updateMusicIcon(true);
         }
 
-        // Si después de 4 segundos la API no ha cargado, usar fallback
         setTimeout(() => {
             if (!ytReady && !ytPlayer) {
                 createFallbackPlayer();
             }
         }, 4000);
 
-        // ==================== CONTROL DE MÚSICA ====================
         function updateMusicIcon(playing) {
             const icon = document.getElementById('musicIcon');
             const toggle = document.getElementById('musicToggle');
             if (playing) {
                 icon.className = 'fa-solid fa-music';
                 toggle.classList.add('playing');
+                icon.style.opacity = '1';
             } else {
                 icon.className = 'fa-solid fa-music';
                 toggle.classList.remove('playing');
                 icon.style.opacity = '0.5';
             }
-            if (playing && icon.style.opacity === '0.5') {
-                icon.style.opacity = '1';
-            }
         }
 
         function toggleMusic() {
             if (!ytReady) {
-                // Si no está listo, intentar crear fallback
                 if (!ytPlayer) {
                     createFallbackPlayer();
                     isMusicPlaying = true;
@@ -1724,44 +1702,30 @@
             }
 
             if (isMusicPlaying) {
-                // Pausar/mutear
-                if (ytPlayer && ytPlayer.mute) {
-                    ytPlayer.mute();
-                }
-                // También intentar con el iframe fallback
+                if (ytPlayer && ytPlayer.mute) ytPlayer.mute();
                 const fallbackIframe = document.getElementById('youtubePlayerFallback');
                 if (fallbackIframe) {
-                    fallbackIframe.contentWindow.postMessage(
-                        '{"event":"command","func":"mute","args":""}', '*'
-                    );
+                    fallbackIframe.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
                 }
                 isMusicPlaying = false;
                 updateMusicIcon(false);
-                document.getElementById('musicIcon').style.opacity = '0.5';
             } else {
-                // Reanudar/desmutear
                 if (ytPlayer && ytPlayer.unMute) {
                     ytPlayer.unMute();
                     ytPlayer.playVideo();
                 }
                 const fallbackIframe = document.getElementById('youtubePlayerFallback');
                 if (fallbackIframe) {
-                    fallbackIframe.contentWindow.postMessage(
-                        '{"event":"command","func":"unMute","args":""}', '*'
-                    );
-                    fallbackIframe.contentWindow.postMessage(
-                        '{"event":"command","func":"playVideo","args":""}', '*'
-                    );
+                    fallbackIframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+                    fallbackIframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
                 }
                 isMusicPlaying = true;
                 updateMusicIcon(true);
-                document.getElementById('musicIcon').style.opacity = '1';
             }
         }
 
         document.getElementById('musicToggle').addEventListener('click', toggleMusic);
 
-        // Intentar iniciar la reproducción al primer click/toque en la página (para navegadores restrictivos)
         let userInteracted = false;
         document.addEventListener('click', function initAudioOnInteraction() {
             if (!userInteracted && ytPlayer && ytReady) {
@@ -1773,11 +1737,10 @@
             }
         }, { once: false });
 
-        // ==================== PARTÍCULAS ORBITANTES EN LOS ANILLOS ====================
+        // ==================== PARTÍCULAS ====================
         function createRingParticles() {
             const container = document.getElementById('ringsContainer');
-            const particleCount = 8;
-            for (let i = 0; i < particleCount; i++) {
+            for (let i = 0; i < 8; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'ring-particle';
                 particle.style.top = '50%';
@@ -1788,8 +1751,8 @@
                 particle.style.animationDuration = (2.5 + Math.random() * 2) + 's';
                 particle.style.width = (3 + Math.random() * 5) + 'px';
                 particle.style.height = particle.style.width;
-                particle.style.boxShadow =
-                    '0 0 ' + (4 + Math.random() * 8) + 'px ' + (2 + Math.random() * 3) + 'px rgba(212,184,114,0.7)';
+                particle.style.boxShadow = '0 0 ' + (4 + Math.random() * 8) + 'px ' + (2 + Math.random() * 3) +
+                    'px rgba(212,184,114,0.7)';
                 container.appendChild(particle);
             }
         }
@@ -1808,52 +1771,47 @@
                 return;
             }
             document.getElementById('days').textContent = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2,
-                '0');
-            document.getElementById('hours').textContent = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 *
+            '0');
+            document.getElementById('hours').textContent = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 *
+                60 * 60))).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 *
                 60))).padStart(2, '0');
-            document.getElementById('minutes').textContent = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)))
-                .padStart(2, '0');
-            document.getElementById('seconds').textContent = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2,
-                '0');
+            document.getElementById('seconds').textContent = String(Math.floor((diff % (1000 * 60)) / 1000))
+            .padStart(2, '0');
         }
         updateCountdown();
         setInterval(updateCountdown, 1000);
 
-        // ==================== PÉTALOS DE ROSAS AZULES ====================
+        // ==================== PÉTALOS ====================
         function createBluePetals() {
             const container = document.getElementById('petalsContainer');
-            const blueShades = [
-                '#6baed6', '#4f8bc9', '#3a7bc8', '#a0c8e8', '#7eb8da',
-                '#5c9ed4', '#8ab8e0', '#4682b4', '#6495c8', '#92bce0',
+            const blueShades = ['#6baed6', '#4f8bc9', '#3a7bc8', '#a0c8e8', '#7eb8da', '#5c9ed4', '#8ab8e0', '#4682b4',
+                '#6495c8', '#92bce0'
             ];
-            const petalCount = 22;
-            for (let i = 0; i < petalCount; i++) {
-                const petalWrapper = document.createElement('div');
-                petalWrapper.className = 'blue-petal';
-                petalWrapper.style.left = Math.random() * 100 + '%';
-                petalWrapper.style.animationDuration = (Math.random() * 14 + 10) + 's';
-                petalWrapper.style.animationDelay = (Math.random() * 16) + 's';
-
-                const petalShape = document.createElement('div');
-                petalShape.className = 'petal-shape';
+            for (let i = 0; i < 22; i++) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'blue-petal';
+                wrapper.style.left = Math.random() * 100 + '%';
+                wrapper.style.animationDuration = (Math.random() * 14 + 10) + 's';
+                wrapper.style.animationDelay = (Math.random() * 16) + 's';
+                const shape = document.createElement('div');
+                shape.className = 'petal-shape';
                 const shade = blueShades[Math.floor(Math.random() * blueShades.length)];
-                petalShape.style.background =
+                shape.style.background =
                     `radial-gradient(ellipse at 30% 20%, ${shade} 0%, rgba(30,74,107,0.7) 100%)`;
-                petalShape.style.width = (16 + Math.random() * 22) + 'px';
-                petalShape.style.height = (20 + Math.random() * 28) + 'px';
-                petalShape.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
-
-                petalWrapper.appendChild(petalShape);
-                container.appendChild(petalWrapper);
+                shape.style.width = (16 + Math.random() * 22) + 'px';
+                shape.style.height = (20 + Math.random() * 28) + 'px';
+                shape.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+                wrapper.appendChild(shape);
+                container.appendChild(wrapper);
             }
         }
         createBluePetals();
 
-        // ==================== SPARKLES FLOTANTES (SUBIENDO) ====================
+        // ==================== SPARKLES ====================
         function createSparkles() {
             const container = document.getElementById('sparklesContainer');
-            const sparkleCount = 20;
-            for (let i = 0; i < sparkleCount; i++) {
+            for (let i = 0; i < 20; i++) {
                 const sparkle = document.createElement('div');
                 sparkle.className = 'floating-sparkle';
                 sparkle.style.left = Math.random() * 100 + '%';
@@ -1866,7 +1824,7 @@
         }
         createSparkles();
 
-        // ==================== LÓGICA DE CONFIRMACIÓN ====================
+        // ==================== RSVP ====================
         function prepararMensaje() {
             const familia = document.getElementById('familiaNombre').value.trim();
             const num = document.getElementById('numInvitados').value;
@@ -1893,10 +1851,8 @@
             }
 
             let eventoTexto = '';
-            if (evento === 'ambos') eventoTexto =
-                'los acompañaremos en ambos eventos: Ceremonia (Boda y Bautizo) y Comida';
-            else if (evento === 'soloCeremonia') eventoTexto =
-                'los acompañaremos solo en la Ceremonia (Boda y Bautizo)';
+            if (evento === 'ambos') eventoTexto = 'los acompañaremos en ambos eventos: Ceremonia (Boda y Bautizo) y Comida';
+            else if (evento === 'soloCeremonia') eventoTexto = 'los acompañaremos solo en la Ceremonia (Boda y Bautizo)';
             else if (evento === 'soloComida') eventoTexto = 'los acompañaremos solo en la Comida';
 
             let agradecimiento = `¡Muchas gracias, Familia ${familia}! `;
@@ -1913,8 +1869,7 @@
 
             const mensajeWhatsApp =
                 `Hola ${nombreAnfitrion}, somos la Familia ${familia}. Confirmamos nuestra asistencia: ${num} invitado(s). ${eventoTexto}. ¡Gracias por invitarnos!`;
-            const url =
-                `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensajeWhatsApp)}`;
+            const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensajeWhatsApp)}`;
 
             document.getElementById('modalTitulo').textContent = `¡Gracias, Familia ${familia}!`;
             document.getElementById('modalMensaje').textContent = agradecimiento;
@@ -1929,12 +1884,9 @@
             if (e.target === this) cerrarModal();
         });
 
-        // ==================== LOG EN CONSOLA ====================
         console.log('%c💙 Invitación de Boda y Bautizo %cMaría del Carmen & Jesús Eduardo %c💙',
             'font-size:1.4em;color:#4f8bc9;', 'font-size:1.6em;font-family:serif;color:#fff;',
             'font-size:1.4em;color:#4f8bc9;');
-        console.log('%c📅 10 de Octubre de 2026 %c| %c⏰ 1:00 pm', 'color:#a0c8e8;', '', 'color:#a0c8e8;');
-        console.log('%c🎵 Música: Se está cargando la canción...', 'color:#7aa9d4;font-style:italic;');
     </script>
 </body>
 </html>
