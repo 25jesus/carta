@@ -681,7 +681,216 @@
             }
         }
 
-        /* LOCATIONS */
+        /* ========== ITINERARIO (NUEVO) ========== */
+        .itinerario-section {
+            width: 100%;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        .itinerario-card {
+            background: var(--glass-bg-blue);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 35px 30px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+        .itinerario-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--white);
+        }
+        .itinerario-sub {
+            color: var(--accent-light);
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+        .itinerario-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .itinerario-item {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-sm);
+            padding: 18px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .itinerario-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-4px);
+        }
+        .itinerario-item i {
+            font-size: 2rem;
+            color: var(--accent-light);
+            margin-bottom: 8px;
+        }
+        .itinerario-item .hora {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent-light);
+            letter-spacing: 1px;
+        }
+        .itinerario-item .actividad {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--white);
+            margin: 4px 0;
+        }
+        .itinerario-item .detalle {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 1px;
+        }
+        @media (max-width: 600px) {
+            .itinerario-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+
+        /* ========== CALENDARIO (NUEVO) ========== */
+        .calendario-section {
+            width: 100%;
+            max-width: 700px;
+            padding: 0 20px;
+        }
+        .calendario-card {
+            background: var(--glass-bg-blue);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 35px 25px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+        .calendario-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--white);
+            margin-bottom: 5px;
+        }
+        .calendario-card .mes {
+            color: var(--accent-light);
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+        .calendario-tabla {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .calendario-tabla th {
+            padding: 10px 5px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-light);
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .calendario-tabla td {
+            padding: 12px 5px;
+            font-size: 1rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .calendario-tabla .dia-resaltado {
+            background: var(--accent);
+            color: #fff;
+            border-radius: 50%;
+            display: inline-block;
+            width: 38px;
+            height: 38px;
+            line-height: 38px;
+            font-weight: 700;
+            box-shadow: 0 0 20px rgba(79, 139, 201, 0.5);
+        }
+        .calendario-tabla .dia-vacio {
+            color: rgba(255, 255, 255, 0.2);
+        }
+        .calendario-tabla td {
+            text-align: center;
+        }
+        @media (max-width: 480px) {
+            .calendario-tabla td {
+                padding: 8px 3px;
+                font-size: 0.85rem;
+            }
+            .calendario-tabla .dia-resaltado {
+                width: 32px;
+                height: 32px;
+                line-height: 32px;
+            }
+        }
+
+        /* ========== RECOMENDACIONES (NUEVO) ========== */
+        .recomendaciones-section {
+            width: 100%;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        .recomendaciones-card {
+            background: var(--glass-bg-blue);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 40px 30px;
+            box-shadow: var(--shadow-lg);
+        }
+        .recomendaciones-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--white);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .recomendacion-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .recomendacion-item:last-child {
+            border-bottom: none;
+        }
+        .recomendacion-item i {
+            font-size: 1.4rem;
+            color: var(--accent-light);
+            min-width: 30px;
+            margin-top: 3px;
+        }
+        .recomendacion-item .texto {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+        }
+        .recomendacion-item .texto strong {
+            color: var(--accent-light);
+        }
+        .recomendacion-item .texto .etiqueta {
+            display: inline-block;
+            background: rgba(79, 139, 201, 0.2);
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            color: var(--accent-light);
+            margin-top: 5px;
+        }
+
+        /* ========== LOCATIONS ========== */
         .locations-section {
             width: 100%;
             max-width: 900px;
@@ -1139,6 +1348,188 @@
                     <div class="countdown-item"><span class="countdown-number" id="minutes">00</span><span class="countdown-label">Minutos</span></div>
                     <span class="countdown-separator">:</span>
                     <div class="countdown-item"><span class="countdown-number" id="seconds">00</span><span class="countdown-label">Segundos</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== NUEVO: ITINERARIO ===== -->
+        <section class="itinerario-section" id="itinerario">
+            <div class="itinerario-card">
+                <h2>Itinerario del Día</h2>
+                <p class="itinerario-sub"><i class="fa-regular fa-clock"></i> 10 de octubre de 2026</p>
+                <div class="itinerario-grid">
+                    <div class="itinerario-item">
+                        <i class="fa-regular fa-images"></i>
+                        <span class="hora">1:00 pm</span>
+                        <span class="actividad">Fotos</span>
+                        <span class="detalle">Sesión pre-ceremonia</span>
+                    </div>
+                    <div class="itinerario-item">
+                        <i class="fa-regular fa-handshake"></i>
+                        <span class="hora">1:30 pm</span>
+                        <span class="actividad">Felicitaciones</span>
+                        <span class="detalle">Llegada de invitados</span>
+                    </div>
+                    <div class="itinerario-item">
+                        <i class="fa-solid fa-champagne-glasses"></i>
+                        <span class="hora">2:00 pm</span>
+                        <span class="actividad">Brindis</span>
+                        <span class="detalle">Celebración inicial</span>
+                    </div>
+                    <div class="itinerario-item">
+                        <i class="fa-solid fa-music"></i>
+                        <span class="hora">2:30 pm</span>
+                        <span class="actividad">Música</span>
+                        <span class="detalle">Ambiente festivo</span>
+                    </div>
+                    <div class="itinerario-item">
+                        <i class="fa-regular fa-images"></i>
+                        <span class="hora">3:30 pm</span>
+                        <span class="actividad">Fotos</span>
+                        <span class="detalle">Sesión con familia</span>
+                    </div>
+                    <div class="itinerario-item">
+                        <i class="fa-solid fa-people-arrows"></i>
+                        <span class="hora">4:30 pm</span>
+                        <span class="actividad">Baile de Vals</span>
+                        <span class="detalle">Primer baile</span>
+                    </div>
+                    <div class="itinerario-item">
+                        <i class="fa-solid fa-cake-candles"></i>
+                        <span class="hora">5:30 pm</span>
+                        <span class="actividad">Corte del Pastel</span>
+                        <span class="detalle">¡y más sorpresas!</span>
+                    </div>
+                    <div class="itinerario-item">
+                        <i class="fa-regular fa-star"></i>
+                        <span class="hora">6:00 pm</span>
+                        <span class="actividad">Celebración Continua</span>
+                        <span class="detalle">Fiesta y convivencia</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== NUEVO: CALENDARIO ===== -->
+        <section class="calendario-section" id="calendario">
+            <div class="calendario-card">
+                <h2>Reserva la fecha</h2>
+                <p class="mes">OCTUBRE 2026</p>
+                <table class="calendario-tabla">
+                    <thead>
+                        <tr>
+                            <th>Lun</th>
+                            <th>Mar</th>
+                            <th>Mié</th>
+                            <th>Jue</th>
+                            <th>Vie</th>
+                            <th>Sáb</th>
+                            <th>Dom</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Semana 1 -->
+                        <tr>
+                            <td class="dia-vacio"></td>
+                            <td class="dia-vacio"></td>
+                            <td class="dia-vacio"></td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                        </tr>
+                        <!-- Semana 2 -->
+                        <tr>
+                            <td>5</td>
+                            <td>6</td>
+                            <td>7</td>
+                            <td>8</td>
+                            <td>9</td>
+                            <td><span class="dia-resaltado">10</span></td>
+                            <td>11</td>
+                        </tr>
+                        <!-- Semana 3 -->
+                        <tr>
+                            <td>12</td>
+                            <td>13</td>
+                            <td>14</td>
+                            <td>15</td>
+                            <td>16</td>
+                            <td>17</td>
+                            <td>18</td>
+                        </tr>
+                        <!-- Semana 4 -->
+                        <tr>
+                            <td>19</td>
+                            <td>20</td>
+                            <td>21</td>
+                            <td>22</td>
+                            <td>23</td>
+                            <td>24</td>
+                            <td>25</td>
+                        </tr>
+                        <!-- Semana 5 -->
+                        <tr>
+                            <td>26</td>
+                            <td>27</td>
+                            <td>28</td>
+                            <td>29</td>
+                            <td>30</td>
+                            <td>31</td>
+                            <td class="dia-vacio"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin-top:20px; color:var(--accent-light); letter-spacing:1px; font-size:0.9rem;">
+                    <i class="fa-regular fa-calendar-check"></i> ¡Te esperamos el 10 de octubre!
+                </p>
+            </div>
+        </section>
+
+        <!-- ===== NUEVO: RECOMENDACIONES ===== -->
+        <section class="recomendaciones-section" id="recomendaciones">
+            <div class="recomendaciones-card">
+                <h2>Recomendaciones</h2>
+
+                <div class="recomendacion-item">
+                    <i class="fa-solid fa-child"></i>
+                    <div class="texto">
+                        <strong>Evento solo para adultos</strong><br>
+                        Si bien amamos a los niños; celebraremos un evento solo para adultos y para mantener un ambiente tranquilo y cómodo durante la ceremonia y recepción te agradecemos no traer niños, les agradecemos su comprensión.
+                    </div>
+                </div>
+
+                <div class="recomendacion-item">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                    <div class="texto">
+                        <strong>Celular en modo vibración</strong><br>
+                        Usar celular en modo vibración para no interrumpir la ceremonia.
+                    </div>
+                </div>
+
+                <div class="recomendacion-item">
+                    <i class="fa-regular fa-clock"></i>
+                    <div class="texto">
+                        <strong>Llegar puntualmente</strong><br>
+                        ¡Llegar a las 3:30 pm para que tener tiempo a acomodación en orden antes de la ceremonia! + la capilla.
+                    </div>
+                </div>
+
+                <div class="recomendacion-item">
+                    <i class="fa-solid fa-car"></i>
+                    <div class="texto">
+                        <strong>Estacionamiento</strong><br>
+                        Dentro de la hacienda hay un amplio espacio de estacionamiento de vehículos donde puedes dejar tu carro y hay vigilancia.
+                    </div>
+                </div>
+
+                <div class="recomendacion-item">
+                    <i class="fa-regular fa-gem"></i>
+                    <div class="texto">
+                        <strong>Datos de la hacienda</strong><br>
+                        Elegancia del color azul · Ambiente exclusivo · Jardines cuidados · Iluminación natural<br>
+                        <span class="etiqueta">#BodaAzul</span>
+                    </div>
                 </div>
             </div>
         </section>
